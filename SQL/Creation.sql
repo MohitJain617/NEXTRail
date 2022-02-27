@@ -15,12 +15,12 @@ CREATE TABLE credentials (
     last_name VARCHAR(20),
     first_line VARCHAR(255) NOT NULL,
     second_line VARCHAR(255),
-    PIN INT NOT NULL,
+    pin INT NOT NULL,
     age INT,
     phone_no VARCHAR(10),
     PRIMARY KEY(user_id),
     CHECK (age>=18),
-    CHECK ((PIN > 99999) AND (PIN < 1000000)),
+    CHECK ((pin > 99999) AND (pin < 1000000)),
     FOREIGN KEY (user_name) REFERENCES Credentials(user_name)
 );
 
@@ -47,9 +47,7 @@ CREATE TABLE ticket (
     boarding_from VARCHAR(10) NOT NULL,
     going_to VARCHAR(10) NOT NULL,
     fare INT,
-    meal_option VARCHAR(10),
     booking_details VARCHAR(255),
-    CHECK (meal_option in ('veg','non-veg',null)),
     FOREIGN KEY (going_to) REFERENCES Station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES Station(st_code),   
     FOREIGN KEY (train_id) REFERENCES train(id),            
@@ -80,7 +78,9 @@ CREATE TABLE passenger (
     gender VARCHAR(10) NOT NULL,
     age INT NOT NULL,
     stat VARCHAR(20),
+	meal_option VARCHAR(10),
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),       -- Belongs To 
+	CHECK (meal_option in ('veg','non-veg',null)),
     CHECK (stat in ('Confirmed','Waiting','Cancelled')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
