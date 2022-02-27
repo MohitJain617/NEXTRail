@@ -1,129 +1,134 @@
 CREATE database reservation_system;
 use reservation_system;
 
-CREATE TABLE Credentials (
-	userName varchar(20) PRIMARY KEY,
+CREATE TABLE credentials (
+	user_name varchar(20) PRIMARY KEY,
     passcode varchar(20) NOT NULL,
     CHECK (LENGTH(passcode) > 7)
 );
 
- CREATE TABLE user (
-    userID INT NOT NULL AUTO_INCREMENT,
-    userName VARCHAR(20) NOT NULL UNIQUE,
-    firstName VARCHAR(20) NOT NULL,
-    middleName VARCHAR(20),
-    lastName VARCHAR(20),
-    firstLine VARCHAR(255),
-    secondLine VARCHAR(255),
+ CREATE TABLE user_account (
+    user_id INT NOT NULL AUTO_INCREMENT,
+    user_name VARCHAR(20) NOT NULL UNIQUE,
+    first_name VARCHAR(20) NOT NULL,
+    middle_name VARCHAR(20),
+    last_name VARCHAR(20),
+    first_line VARCHAR(255) NOT NULL,
+    second_line VARCHAR(255),
     PIN INT NOT NULL,
     age INT,
     phone_no VARCHAR(10),
-    PRIMARY KEY(userID),
+    PRIMARY KEY(user_id),
     CHECK (age>=18),
-    FOREIGN KEY (userName) REFERENCES Credentials(userName)
+    CHECK ((PIN > 99999) AND (PIN < 1000000)),
+    FOREIGN KEY (user_name) REFERENCES Credentials(user_name)
 );
 
-CREATE TABLE Station (
+CREATE TABLE station (
 	st_code VARCHAR(10) PRIMARY KEY,
-    st_name VARCHAR(30) not null
+    st_name VARCHAR(30) NOT NULL
 );
 
-CREATE TABLE Train (
+CREATE TABLE train (
 	id INT PRIMARY KEY,
-    tr_name VARCHAR(30) NOT NULL,
-    src VARCHAR(10),
-    destination VARCHAR(10),
-    type VARCHAR (30),
+    train_name VARCHAR(30) NOT NULL,
+    src VARCHAR(10) NOT NULL,
+    destination VARCHAR(10) NOT NULL,
+    train_type VARCHAR (30) NOT NULL,
     FOREIGN KEY (src) REFERENCES Station(st_code),
     FOREIGN KEY (destination) REFERENCES Station(st_code)
 );
 
-CREATE TABLE Ticket (
-	PNR VARCHAR(10) PRIMARY KEY,
-    userID INT,
+CREATE TABLE ticket (
+	pnr VARCHAR(10) PRIMARY KEY,
+    user_id INT,
     train_id INT NOT NULL,
-    boardingTime DATETIME,
-    boardingFrom VARCHAR(10) NOT NULL,
-    goingTo VARCHAR(10) NOT NULL,
+    boarding_time DATETIME,
+    boarding_from VARCHAR(10) NOT NULL,
+    going_to VARCHAR(10) NOT NULL,
     fare INT,
-    mealOption VARCHAR(10),
-    bookingDetails VARCHAR(255),
-    CHECK (mealOption in ('veg','non-veg',null)),
-    FOREIGN KEY (goingTo) REFERENCES Station(st_code),
-    FOREIGN KEY (boardingFrom) REFERENCES Station(st_code),
-    FOREIGN KEY (train_id) REFERENCES Train(id)
+    meal_option VARCHAR(10),
+    booking_details VARCHAR(255),
+    CHECK (meal_option in ('veg','non-veg',null)),
+    FOREIGN KEY (going_to) REFERENCES Station(st_code),
+    FOREIGN KEY (boarding_from) REFERENCES Station(st_code),   
+    FOREIGN KEY (train_id) REFERENCES train(id),            
+    FOREIGN KEY (user_id) REFERENCES user_account(user_id)     -- Buys
 );
 
-CREATE TABLE Receipt (
-	receiptNo INT PRIMARY KEY,
-    transactionTime DATETIME DEFAULT now(),
-    paymentMode VARCHAR(20),
-    PNR VARCHAR(10) NOT NULL,
-	userID INT,
-    FOREIGN KEY (PNR) REFERENCES Ticket(PNR),
-    CHECK(paymentMode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer'))
+CREATE TABLE receipt (
+	receipt_no INT PRIMARY KEY,
+    transaction_time DATETIME DEFAULT now(),
+    payment_mode VARCHAR(20),
+    pnr VARCHAR(10) NOT NULL,
+	user_id INT,
+    FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
+    FOREIGN KEY (user_id) REFERENCES user_account(user_id), -- keeps 
+    CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer'))
 );
 
 
-CREATE TABLE Adm (
-	username VARCHAR(20) PRIMARY KEY,
+CREATE TABLE adm (
+	user_name VARCHAR(20) PRIMARY KEY,
     passcode VARCHAR(30),
     CHECK (LENGTH(passcode) > 7)
 );
 
-CREATE TABLE Passenger (
-	UID VARCHAR(20) PRIMARY KEY,
+CREATE TABLE passenger (
+	pnr VARCHAR(10) NOT NULL,
     pname VARCHAR(30) NOT NULL,
-    gender VARCHAR(10),
+    gender VARCHAR(10) NOT NULL,
     age INT NOT NULL,
+    stat VARCHAR(20),
+    FOREIGN KEY (pnr) REFERENCES train(pnr),       -- Belongs To 
+    CHECK (stat in ('Confirmed','Waiting','Cancelled')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
 );
 
 
-CREATE TABLE Seat_no (
+CREATE TABLE seat_no (
 	num INT PRIMARY KEY
-);
-
-CREATE TABLE Class_layout (
-	classType VARCHAR(20) PRIMARY KEY,
-    className VARCHAR(20),
-    capacity INT NOT NULL
 );
 
 -- Relations Table --
 
-CREATE TABLE Owns (
-	UID VARCHAR(20),
-    PNR VARCHAR(10),
-    stat VARCHAR(12),
-    CHECK (stat in ('Waiting','Reserved','Cancelled')),
-    PRIMARY KEY(UID,PNR)
-);
-
-CREATE TABLE Schedule (
-	id INT NOT NULL,
+CREATE TABLE sched (
+	train_id INT NOT NULL,
     st_code VARCHAR(10) NOT NULL,
-	tripNo INT,
+	trip_no INT,
     arrival DATETIME NOT NULL,
     departure DATETIME NOT NULL,
-    PRIMARY KEY(id,st_code),
-    FOREIGN KEY (id) REFERENCES Train(id),
+    PRIMARY KEY(train_id,st_code),
+    FOREIGN KEY (train_id) REFERENCES train(id),
     FOREIGN KEY (st_code) REFERENCES Station(st_code)
     -- TODO : add arrival < departure constraint
 );
 
-CREATE TABLE FareLookup (
-	trainType VARCHAR(30),
-    classType VARCHAR(20),
+CREATE TABLE fare_lookup (
+	train_type VARCHAR(30),
+    class_type VARCHAR(20),
     cost INT NOT NULL
 );
 
-CREATE TABLE Reserve (
+CREATE TABLE reserve (
 	id INT NOT NULL,
-    seatno INT NOT NULL,
-    classType VARCHAR (20) NOT NULL,
-    PNR VARCHAR(10),
-    PRIMARY KEY(PNR,classType,seatno,id),
-    FOREIGN KEY (PNR) REFERENCES Ticket(PNR)
+    seat_no INT NOT NULL,
+    class_type VARCHAR (20) NOT NULL,
+    pnr VARCHAR(10),
+    PRIMARY KEY(pnr,class_type,seat_no,id),
+    FOREIGN KEY (pnr) REFERENCES ticket(pnr)
 );
+
+
+CREATE TABLE Structure (
+	train_id INT NOT NULL,
+    size INT NOT NULL,
+    class_type VARCHAR(20),
+    PRIMARY KEY(train_id, class_type)
+);
+
+
+
+
+
