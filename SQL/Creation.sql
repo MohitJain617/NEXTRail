@@ -80,7 +80,7 @@ CREATE TABLE passenger (
     gender VARCHAR(10) NOT NULL,
     age INT NOT NULL,
     stat VARCHAR(20),
-    FOREIGN KEY (pnr) REFERENCES train(pnr),       -- Belongs To 
+    FOREIGN KEY (pnr) REFERENCES ticket(pnr),       -- Belongs To 
     CHECK (stat in ('Confirmed','Waiting','Cancelled')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
@@ -89,6 +89,12 @@ CREATE TABLE passenger (
 
 CREATE TABLE seat_no (
 	num INT PRIMARY KEY
+);
+
+CREATE TABLE class_layout (
+	class_type VARCHAR(20) PRIMARY KEY,
+    class_name VARCHAR(30) NOT NULL,
+    capacity INT NOT NULL
 );
 
 -- Relations Table --
@@ -121,14 +127,10 @@ CREATE TABLE reserve (
 );
 
 
-CREATE TABLE Structure (
+CREATE TABLE structure (
 	train_id INT NOT NULL,
     size INT NOT NULL,
     class_type VARCHAR(20),
     PRIMARY KEY(train_id, class_type)
 );
-
-
-
-
 
