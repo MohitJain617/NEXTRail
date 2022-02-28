@@ -5,7 +5,7 @@ use reservation_system;
 CREATE TABLE credentials (
 	user_name varchar(20) PRIMARY KEY,
     passcode varchar(20) NOT NULL,
-    CHECK (LENGTH(passcode) > 7)
+    CHECK (LENGTH(passcode) > 5)
 );
 
  CREATE TABLE user_account (
@@ -70,7 +70,7 @@ CREATE TABLE receipt (
 CREATE TABLE adm (
 	user_name VARCHAR(20) PRIMARY KEY,
     passcode VARCHAR(30),
-    CHECK (LENGTH(passcode) > 7)
+    CHECK (LENGTH(passcode) > 5)
 );
 
 CREATE TABLE passenger (
@@ -93,8 +93,9 @@ CREATE TABLE seat_no (
 );
 
 CREATE TABLE class_layout (
-	class_type VARCHAR(20) PRIMARY KEY,
+	class_type VARCHAR(2) PRIMARY KEY,
     class_name VARCHAR(30) NOT NULL,
+    cost_per_km DECIMAL(3,2) NOT NULL,
     capacity INT NOT NULL
 );
 
@@ -114,8 +115,7 @@ CREATE TABLE sched (
 
 CREATE TABLE fare_lookup (
 	train_type VARCHAR(30),
-    class_type VARCHAR(20),
-    cost INT NOT NULL
+    additional_cost INT NOT NULL
 );
 
 CREATE TABLE reserve (
@@ -131,7 +131,7 @@ CREATE TABLE reserve (
 CREATE TABLE structure (
 	train_id INT NOT NULL,
     size INT NOT NULL,
-    class_type VARCHAR(20),
+    class_type VARCHAR(2),
     PRIMARY KEY(train_id, class_type)
 );
 
