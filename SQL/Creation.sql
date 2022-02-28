@@ -1,3 +1,4 @@
+drop database reservation_system;
 CREATE database reservation_system;
 use reservation_system;
 
@@ -107,8 +108,8 @@ CREATE TABLE sched (
     departure DATETIME NOT NULL,
     PRIMARY KEY(train_id,st_code),
     FOREIGN KEY (train_id) REFERENCES train(id),
-    FOREIGN KEY (st_code) REFERENCES Station(st_code)
-    -- TODO : add arrival < departure constraint
+    FOREIGN KEY (st_code) REFERENCES Station(st_code),
+    CHECK (arrival < departure)
 );
 
 CREATE TABLE fare_lookup (
