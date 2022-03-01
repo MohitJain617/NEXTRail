@@ -106,10 +106,10 @@ CREATE TABLE sched (
     arrival DATETIME NOT NULL,
     departure DATETIME NOT NULL,
     dist INT,
-    PRIMARY KEY(train_id,st_code),
+    PRIMARY KEY (train_id,st_code,trip_no),
     FOREIGN KEY (train_id) REFERENCES train(id),
     FOREIGN KEY (st_code) REFERENCES Station(st_code),
-    CHECK (arrival < departure)
+    CHECK (arrival <= departure)
 );
 
 CREATE TABLE fare_lookup (

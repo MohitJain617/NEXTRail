@@ -1,4 +1,4 @@
-INSERT INTO struct VALUES
+INSERT INTO structure VALUES
 (22210,'A',3),
 (22210,'B',9),
 (22210,'H',1),
