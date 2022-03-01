@@ -31,7 +31,7 @@ CREATE TABLE station (
 );
 
 CREATE TABLE train (
-	id INT PRIMARY KEY,
+	id VARCHAR(6) PRIMARY KEY,
     train_name VARCHAR(30) NOT NULL,
     src VARCHAR(10) NOT NULL,
     dest VARCHAR(10) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE train (
 CREATE TABLE ticket (
 	pnr VARCHAR(10) PRIMARY KEY,
     user_id INT,
-    train_id INT NOT NULL,
+    train_id VARCHAR(6) NOT NULL,
     boarding_time DATETIME,
     boarding_from VARCHAR(10) NOT NULL,
     going_to VARCHAR(10) NOT NULL,
@@ -102,11 +102,11 @@ CREATE TABLE class_layout (
 -- Relations Table --
 
 CREATE TABLE sched (
-	train_id INT NOT NULL,
+	train_id VARCHAR(6) NOT NULL,
     st_code VARCHAR(10) NOT NULL,
 	trip_no INT,
-    arrival DATETIME,
-    departure DATETIME,
+    arrival DATETIME NOT NULL,
+    departure DATETIME NOT NULL,
     dist INT,
     PRIMARY KEY(train_id,st_code),
     FOREIGN KEY (train_id) REFERENCES train(id),
@@ -130,7 +130,7 @@ CREATE TABLE reserve (
 
 
 CREATE TABLE structure (
-	train_id INT NOT NULL,
+	train_id VARCHAR(6) NOT NULL,
     class_type VARCHAR(2),
     size INT NOT NULL,
     PRIMARY KEY(train_id, class_type)
