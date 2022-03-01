@@ -34,10 +34,10 @@ CREATE TABLE train (
 	id INT PRIMARY KEY,
     train_name VARCHAR(30) NOT NULL,
     src VARCHAR(10) NOT NULL,
-    destination VARCHAR(10) NOT NULL,
+    dest VARCHAR(10) NOT NULL,
     train_type VARCHAR (30) NOT NULL,
     FOREIGN KEY (src) REFERENCES Station(st_code),
-    FOREIGN KEY (destination) REFERENCES Station(st_code)
+    FOREIGN KEY (dest) REFERENCES Station(st_code)
 );
 
 CREATE TABLE ticket (
