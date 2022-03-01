@@ -6,3 +6,4 @@ class_type,class_name,capacity,cost_per_km
 "E","Executive Chair Car",46,2.75
 "H","AC 1 Tier",24,3.5
 "S","Sleeper Class",72,0.55
+"BE","AC 3 Tier Economy",64,1.25

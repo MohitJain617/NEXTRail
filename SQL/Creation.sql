@@ -131,8 +131,8 @@ CREATE TABLE reserve (
 
 CREATE TABLE structure (
 	train_id INT NOT NULL,
-    size INT NOT NULL,
     class_type VARCHAR(2),
+    size INT NOT NULL,
     PRIMARY KEY(train_id, class_type)
 );
 
