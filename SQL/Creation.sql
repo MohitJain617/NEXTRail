@@ -27,12 +27,12 @@ CREATE TABLE credentials (
 
 CREATE TABLE station (
 	st_code VARCHAR(10) PRIMARY KEY,
-    st_name VARCHAR(30) NOT NULL
+    st_name VARCHAR(36) NOT NULL
 );
 
 CREATE TABLE train (
 	id VARCHAR(6) PRIMARY KEY,
-    train_name VARCHAR(30) NOT NULL,
+    train_name VARCHAR(120) NOT NULL,
     src VARCHAR(10) NOT NULL,
     dest VARCHAR(10) NOT NULL,
     train_type VARCHAR (30) NOT NULL,
@@ -66,7 +66,6 @@ CREATE TABLE receipt (
     CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer'))
 );
 
-
 CREATE TABLE adm (
 	user_name VARCHAR(20) PRIMARY KEY,
     passcode VARCHAR(30),
@@ -86,7 +85,6 @@ CREATE TABLE passenger (
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
 );
-
 
 CREATE TABLE seat_no (
 	num INT PRIMARY KEY
