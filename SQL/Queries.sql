@@ -1,3 +1,4 @@
+use reservation_system;
 -- To check the validity of a username
 SET @tempusername = 'cpharro0';
 
@@ -88,10 +89,21 @@ WHERE S.st_code = @tempsrc
 
 -- all the seats given a train
 SET @temptrain = '11123';
+SET @tempdate = DATE('2022-03-05');
 
+( 
 SELECT S.train_id, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
 FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
 WHERE S.train_id = @temptrain
 	AND S.class_type = C.class_type
     AND SN2.num <= S.size
-	AND SN.num <= C.capacity;
+	AND SN.num <= C.capacity 
+)
+EXCEPT 
+(
+SELECT , as coach, R. as coach_no, as seat_no
+FROM reserve as R, ticket as T
+WHERE R.pnr = T.pnr 
+	AND T.train_id = @temptrain
+    AND T.
+);

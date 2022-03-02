@@ -22,7 +22,7 @@ CREATE TABLE credentials (
     PRIMARY KEY(user_id),
     CHECK (age>=18),
     CHECK ((pin > 99999) AND (pin < 1000000)),
-    FOREIGN KEY (user_name) REFERENCES Credentials(user_name)
+    FOREIGN KEY (user_name) REFERENCES credentials(user_name)
 );
 
 CREATE TABLE station (
