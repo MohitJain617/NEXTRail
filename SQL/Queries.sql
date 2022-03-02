@@ -84,3 +84,14 @@ WHERE S.st_code = @tempsrc
 		)
     )
 );
+
+
+-- all the seats given a train
+SET @temptrain = '11123';
+
+SELECT S.train_id, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
+FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
+WHERE S.train_id = @temptrain
+	AND S.class_type = C.class_type
+    AND SN2.num <= S.size
+	AND SN.num <= C.capacity;
