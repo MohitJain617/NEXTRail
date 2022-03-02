@@ -96,7 +96,7 @@ WHERE S.train_id = @temptrain
     AND SN2.num <= S.size
 	AND SN.num <= C.capacity;
     
--- all the seats given a train
+-- Query for avaiable tickets between two stations
 
 SELECT * FROM reserve;
 SELECT * FROM ticket;
@@ -119,7 +119,6 @@ SET @tempdestdatetime = (SELECT distinct arrival
     WHERE train_id=@temptrain AND st_code=@tempdest AND trip_no = @temptripno);
 
 SELECT S.train_id, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
--- SELECT COUNT(*)
 FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
 WHERE S.train_id = @temptrain
     AND S.class_type = C.class_type
@@ -170,6 +169,7 @@ WHERE S.train_id = @temptrain
             )
         )
 	);
+<<<<<<< HEAD
     
     
 -- Query for the status of a ticket given pnr
@@ -188,3 +188,5 @@ AND T.user_id = U.user_id
 
 
     
+=======
+>>>>>>> bb34436402b63c896aea361c01aa8ab5901f1fdd
