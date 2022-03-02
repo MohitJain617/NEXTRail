@@ -44,3 +44,4 @@ INSERT INTO passenger VALUES
 ('111111111', @pname, @gender, @pag, 'Confirmed', @meal_option);
 INSERT INTO reserve VALUES 
 (1, 1,@tempclasstype,'111111111')
+

@@ -170,3 +170,21 @@ WHERE S.train_id = @temptrain
             )
         )
 	);
+    
+    
+-- Query for the status of a ticket given pnr
+SET @temppnr = '111111111';
+SELECT * FROM ticket as T, passenger as P
+WHERE T.pnr = @temppnr
+AND P.pnr = T.pnr;
+
+
+-- Query for all ticket booked by a user
+SET @tempuser = 'cpharro0';
+SELECT T.pnr, T.boarding_time, T.boarding_from, T.going_to, T.fare
+FROM ticket as T, user_account as U
+WHERE U.user_name = @tempuser
+AND T.user_id = U.user_id
+
+
+    
