@@ -1,4 +1,3 @@
-use reservation_system;
 -- To check the validity of a username
 SET @tempusername = 'cpharro0';
 
@@ -89,21 +88,85 @@ WHERE S.st_code = @tempsrc
 
 -- all the seats given a train
 SET @temptrain = '11123';
-SET @tempdate = DATE('2022-03-05');
 
-( 
 SELECT S.train_id, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
 FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
 WHERE S.train_id = @temptrain
 	AND S.class_type = C.class_type
     AND SN2.num <= S.size
-	AND SN.num <= C.capacity 
-)
-EXCEPT 
-(
-SELECT , as coach, R. as coach_no, as seat_no
-FROM reserve as R, ticket as T
-WHERE R.pnr = T.pnr 
-	AND T.train_id = @temptrain
-    AND T.
-);
+	AND SN.num <= C.capacity;
+    
+-- all the seats given a train
+
+SELECT * FROM reserve;
+SELECT * FROM ticket;
+
+SET @temptrain = '22210';
+SET @tempdatetime = DATE('2022-03-05');
+SET @tempsrc = "RTM";
+SET @tempdest = "MMCT";
+
+SET @temptripno = (SELECT distinct trip_no 
+    FROM sched 
+    WHERE train_id=@temptrain AND st_code=@tempsrc AND DATE(departure)=@tempdatetime);
+
+SET @tempsrcdatetime = (SELECT distinct departure 
+    FROM sched 
+    WHERE train_id=@temptrain AND st_code=@tempsrc AND DATE(departure)=@tempdatetime);
+
+SET @tempdestdatetime = (SELECT distinct arrival 
+    FROM sched 
+    WHERE train_id=@temptrain AND st_code=@tempdest AND trip_no = @temptripno);
+
+SELECT S.train_id, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
+-- SELECT COUNT(*)
+FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
+WHERE S.train_id = @temptrain
+    AND S.class_type = C.class_type
+    AND SN2.num <= S.size
+    AND SN.num <= C.capacity
+    AND NOT EXISTS (
+		SELECT * FROM reserve as R, ticket as T 
+		WHERE T.train_id = S.train_id AND R.class_type = S.class_type AND R.id = SN2.num AND R.seat_no = SN.num
+        AND R.pnr = T.pnr 
+		AND T.train_id = @temptrain
+		AND ((
+				@tempdestdatetime >= T.boarding_time 
+                AND @tempdestdatetime <= (SELECT S2.arrival FROM sched AS S2
+										WHERE S2.train_id = T.train_id 
+                                        AND S2.st_code = T.going_to
+                                        AND S2.trip_no = (
+											SELECT S3.trip_no from sched as S3
+											WHERE T.boarding_time = S3.departure
+                                            AND S3.train_id = T.train_id
+											AND S3.st_code = T.boarding_from
+                                        )
+				)
+            ) OR (
+				@tempsrcdatetime >= T.boarding_time 
+                AND @tempsrcdatetime <= (SELECT S2.arrival FROM sched AS S2
+										WHERE S2.train_id = T.train_id 
+                                        AND S2.st_code = T.going_to
+                                        AND S2.trip_no = (
+											SELECT S3.trip_no from sched as S3
+											WHERE T.boarding_time = S3.departure
+                                            AND S3.train_id = T.train_id
+											AND S3.st_code = T.boarding_from
+                                        )
+				)
+                
+            ) OR (
+				@tempsrcdatetime <= T.boarding_time
+                AND @tempdestdatetime >= (SELECT S2.arrival FROM sched AS S2
+										WHERE S2.train_id = T.train_id 
+                                        AND S2.st_code = T.going_to
+                                        AND S2.trip_no = (
+											SELECT S3.trip_no from sched as S3
+											WHERE T.boarding_time = S3.departure
+                                            AND S3.train_id = T.train_id
+											AND S3.st_code = T.boarding_from
+                                        )
+				)
+            )
+        )
+	);
