@@ -2,3 +2,4 @@ queries for optimized dataset
 waiting list
 update database everyday --> remove old reserved seats from reserve
 generate receipt for transaction
+admin queries
