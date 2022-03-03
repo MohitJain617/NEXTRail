@@ -96,6 +96,7 @@ WHERE S.train_id = @temptrain
     AND SN2.num <= S.size
 	AND SN.num <= C.capacity;
     
+    
 -- Query for avaiable tickets between two stations
 
 SELECT * FROM reserve;
@@ -125,9 +126,10 @@ WHERE S.train_id = @temptrain
     AND SN2.num <= S.size
     AND SN.num <= C.capacity
     AND NOT EXISTS (
-		SELECT * FROM reserve as R, ticket as T 
+		SELECT * FROM reserve as R, ticket as T, passenger as P
 		WHERE T.train_id = S.train_id AND R.class_type = S.class_type AND R.id = SN2.num AND R.seat_no = SN.num
         AND R.pnr = T.pnr 
+        AND T.pnr = P.pnr AND P.stat='Confirmed'
 		AND T.train_id = @temptrain
 		AND ((
 				@tempdestdatetime >= T.boarding_time 
@@ -169,7 +171,7 @@ WHERE S.train_id = @temptrain
             )
         )
 	);
-<<<<<<< HEAD
+
     
     
 -- Query for the status of a ticket given pnr
@@ -184,9 +186,18 @@ SET @tempuser = 'cpharro0';
 SELECT T.pnr, T.boarding_time, T.boarding_from, T.going_to, T.fare
 FROM ticket as T, user_account as U
 WHERE U.user_name = @tempuser
-AND T.user_id = U.user_id
+AND T.user_id = U.user_id;
+
+-- Query to cancel a ticket with a given pnr
+SET @temppnr = '111111111';
+
+UPDATE passenger
+SET stat='Cancelled'
+WHERE pnr = @temppnr;
+
+DELETE FROM reserve
+WHERE pnr=@temppnr;
 
 
-    
-=======
->>>>>>> bb34436402b63c896aea361c01aa8ab5901f1fdd
+
+
