@@ -59,6 +59,8 @@ Run the queries located in Queries.sql script located at the below path to run t
 <br>
 
 ## <B> Project Report </B> 📜 <br>
+The report of the Project with all the all relevant information like Table Creation, identification of Stake-Holders, etc. 
+
     Railway-Reservation-System/NEXTRAIL_ProjectReport.pdf
 
 
