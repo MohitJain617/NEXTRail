@@ -1,6 +1,5 @@
 -- To check the validity of a username
 SET @tempusername = 'cpharro0';
-
 SELECT user_name FROM credentials WHERE user_name = @tempusername;
 
 -- To authenticate a user -- 
@@ -197,7 +196,3 @@ WHERE pnr = @temppnr;
 
 DELETE FROM reserve
 WHERE pnr=@temppnr;
-
-
-
-
