@@ -3,3 +3,4 @@ waiting list
 update database everyday --> remove old reserved seats from reserve
 generate receipt for transaction
 admin queries
+pantry available option in train database for meal_option
