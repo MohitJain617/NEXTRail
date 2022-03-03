@@ -65,8 +65,5 @@ The report of the Project with all the all relevant information like Table Creat
 
 
 ***
-
-<p align="center">
-Made with ❤️ <br>
-<B> [Aadit Kant Jha] (https://github.com/AaditJha) • [Abhik S. Basu] (https://github.com/abhik-s-basu) • [Mohit Jain] (https://github.com/MohitJain617) • [Sohum Sikdar] (https://github.com/sohumsikdar) </B>
-</p>
+Made with ❤️ by 
+[**Aadit Kant Jha**](https://github.com/AaditJha) • [**Abhik S. Basu**](https://github.com/abhik-s-basu) • [**Mohit Jain**](https://github.com/MohitJain617) • [**Sohum Sikdar**](https://github.com/sohumsikdar) 
