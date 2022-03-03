@@ -10240,14 +10240,14 @@ INSERT INTO train VALUES
 
 
 INSERT INTO class_layout(class_type, class_name, capacity, cost_per_km) VALUES
-('A','AC 2 Tier',54,1.8),
-('B','AC 3 Tier',64,1.5),
-('C','AC Chair Car',75,1.25),
-('D','Second Seating',103,0.35),
-('E','Executive Chair Car',46,2.75),
-('H','AC 1 Tier',24,3.5),
-('S','Sleeper Class',72,0.55),
-('BE','AC 3 Tier Economy',64,1.25);
+('A','AC 2 Tier',5,1.8),
+('B','AC 3 Tier',6,1.5),
+('C','AC Chair Car',7,1.25),
+('D','Second Seating',10,0.35),
+('E','Executive Chair Car',4,2.75),
+('H','AC 1 Tier',2,3.5),
+('S','Sleeper Class',7,0.55),
+('BE','AC 3 Tier Economy',6,1.25);
 
 
 INSERT INTO seat_no VALUES
@@ -10358,7 +10358,7 @@ INSERT INTO seat_no VALUES
 (105);
 
 INSERT INTO structure VALUES
-(22210,'A',3),
+(22210,'A',1),
 (22210,'B',9),
 (22210,'H',1),
 (22908,'A',1),

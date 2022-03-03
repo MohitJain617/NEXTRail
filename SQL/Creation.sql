@@ -1,4 +1,4 @@
-drop database reservation_system;
+drop database if exists reservation_system;
 CREATE database reservation_system;
 use reservation_system;
 
@@ -36,8 +36,8 @@ CREATE TABLE train (
     src VARCHAR(10) NOT NULL,
     dest VARCHAR(10) NOT NULL,
     train_type VARCHAR (30) NOT NULL,
-    FOREIGN KEY (src) REFERENCES Station(st_code),
-    FOREIGN KEY (dest) REFERENCES Station(st_code)
+    FOREIGN KEY (src) REFERENCES station(st_code),
+    FOREIGN KEY (dest) REFERENCES station(st_code)
 );
 
 CREATE TABLE ticket (
@@ -49,8 +49,8 @@ CREATE TABLE ticket (
     going_to VARCHAR(10) NOT NULL,
     fare INT,
     booking_details VARCHAR(255),
-    FOREIGN KEY (going_to) REFERENCES Station(st_code),
-    FOREIGN KEY (boarding_from) REFERENCES Station(st_code),   
+    FOREIGN KEY (going_to) REFERENCES station(st_code),
+    FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
     FOREIGN KEY (train_id) REFERENCES train(id),            
     FOREIGN KEY (user_id) REFERENCES user_account(user_id)     -- Buys
 );
@@ -108,7 +108,7 @@ CREATE TABLE sched (
     dist INT,
     PRIMARY KEY (train_id,st_code,trip_no),
     FOREIGN KEY (train_id) REFERENCES train(id),
-    FOREIGN KEY (st_code) REFERENCES Station(st_code),
+    FOREIGN KEY (st_code) REFERENCES station(st_code),
     CHECK (arrival <= departure)
 );
 
