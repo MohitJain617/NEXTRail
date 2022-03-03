@@ -62,9 +62,9 @@ Run the queries located in Queries.sql script located at the below path to run t
     Railway-Reservation-System/NEXTRAIL_ProjectReport.pdf
 
 
-*****
+***
 
 <p align="center">
 Made with ❤️ <br>
-<B> Aadit Kant Jha • Abhik S. Basu • Mohit Jain • Sohum Sikdar </B>
+<B> [Aadit Kant Jha] (https://github.com/AaditJha) • [Abhik S. Basu] (https://github.com/abhik-s-basu) • [Mohit Jain] (https://github.com/MohitJain617) • [Sohum Sikdar] (https://github.com/sohumsikdar) </B>
 </p>
