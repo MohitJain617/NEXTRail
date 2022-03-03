@@ -55,7 +55,7 @@ INSERT INTO ticket VALUES
 INSERT INTO passenger VALUES
 ('111111112', 'Sohum Sikdar', 'Male', 21, 'Confirmed', 'non-veg');
 INSERT INTO reserve VALUES 
-(1, 2,'H','111111112');
+(1, 1,'H','111111112');
 -- coach no, seat no, class type, pnr
 
 

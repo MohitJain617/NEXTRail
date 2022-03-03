@@ -32,7 +32,7 @@ SET @tempsrc = "MFP";
 SET @tempdest = "BJU";
 SET @tempdate = DATE('2022-03-05');
 
-SELECT train_id FROM sched as S
+SELECT train_id, S.departure FROM sched as S
 WHERE S.st_code = @tempsrc
 	AND DATE(S.departure) = @tempdate
     AND EXISTS (
@@ -44,11 +44,11 @@ WHERE S.st_code = @tempsrc
 ) ORDER BY S.departure;
 
 -- Query for trains between two stations sorted by Arrival time at Destination -- 
-SET @tempsrc = "NDLS";
-SET @tempdest = "MMCT";
+SET @tempsrc = "MFP";
+SET @tempdest = "BJU";
 SET @tempdate = DATE('2022-03-05');
 
-SELECT train_id FROM sched as S
+SELECT train_id, S.arrival FROM sched as S
 WHERE S.st_code = @tempdest
     AND EXISTS (
 		SELECT * FROM sched as S2
@@ -98,12 +98,9 @@ WHERE S.train_id = @temptrain
     
 -- Query for avaiable tickets between two stations
 
-SELECT * FROM reserve;
-SELECT * FROM ticket;
-
 SET @temptrain = '22210';
-SET @tempdatetime = DATE('2022-03-05');
-SET @tempsrc = "RTM";
+SET @tempdatetime = DATE('2022-03-04');
+SET @tempsrc = "NDLS";
 SET @tempdest = "MMCT";
 
 SET @temptripno = (SELECT distinct trip_no 
