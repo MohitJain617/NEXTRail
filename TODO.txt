@@ -3,4 +3,16 @@ waiting list
 update database everyday --> remove old reserved seats from reserve
 generate receipt for transaction
 admin queries
-pantry available option in train database for meal_option
+
+fare to be calculated as: base fare (from class_layout) + service charge (from fare_lookup) + concession (if any) + catering charges (if pantry_avl and chosen a meal_option) + tax
+
+change queries and datasets for updated dataset:
+updated dataset:
+    train now has pantry_avl: 1 where passenger can choose a meal_option, 0 passenger is forced to put null
+    train schedule is divided into two parts:
+        time_table: corresponds to the day no in a given trip and station the train reaches it on
+        sched: corresponds to the day (MTWTFSS) the train runs for in a week
+
+store credentials in user_account
+look into ways of storing the password.
+move fare to receipt 
