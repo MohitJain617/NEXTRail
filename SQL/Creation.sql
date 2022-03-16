@@ -36,6 +36,7 @@ CREATE TABLE train (
     src VARCHAR(10) NOT NULL,
     dest VARCHAR(10) NOT NULL,
     train_type VARCHAR (30) NOT NULL,
+    pantry_avl BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (src) REFERENCES station(st_code),
     FOREIGN KEY (dest) REFERENCES station(st_code)
 );
@@ -43,7 +44,7 @@ CREATE TABLE train (
 CREATE TABLE ticket (
 	pnr VARCHAR(10) PRIMARY KEY,
     user_id INT,
-    train_id VARCHAR(6) NOT NULL,
+    train_no VARCHAR(6) NOT NULL,
     boarding_time DATETIME,
     boarding_from VARCHAR(10) NOT NULL,
     going_to VARCHAR(10) NOT NULL,
@@ -51,7 +52,7 @@ CREATE TABLE ticket (
     booking_details VARCHAR(255),
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
-    FOREIGN KEY (train_id) REFERENCES train(id),            
+    FOREIGN KEY (train_no) REFERENCES train(id),            
     FOREIGN KEY (user_id) REFERENCES user_account(user_id)     -- Buys
 );
 
@@ -97,19 +98,25 @@ CREATE TABLE class_layout (
     capacity INT NOT NULL
 );
 
+CREATE TABLE sched (
+	train_no VARCHAR(6) NOT NULL,
+    trip_no INT NOT NULL,
+    PRIMARY KEY(train_no,trip_no),
+    FOREIGN KEY (train_no) REFERENCES train(id)
+);
+
 -- Relations Table --
 
-CREATE TABLE sched (
-	train_id VARCHAR(6) NOT NULL,
+CREATE TABLE time_table (
+	train_no VARCHAR(6) NOT NULL,
     st_code VARCHAR(10) NOT NULL,
-	trip_no INT,
-    arrival DATETIME NOT NULL,
-    departure DATETIME NOT NULL,
+    arrival TIME NOT NULL,
+    departure TIME NOT NULL,
     dist INT,
-    PRIMARY KEY (train_id,st_code,trip_no),
-    FOREIGN KEY (train_id) REFERENCES train(id),
-    FOREIGN KEY (st_code) REFERENCES station(st_code),
-    CHECK (arrival <= departure)
+    day_no INT,
+    PRIMARY KEY (train_no,st_code),
+    FOREIGN KEY (train_no) REFERENCES train(id),
+    FOREIGN KEY (st_code) REFERENCES station(st_code)
 );
 
 CREATE TABLE fare_lookup (
@@ -127,10 +134,10 @@ CREATE TABLE reserve (
 );
 
 
-CREATE TABLE structure (
-	train_id VARCHAR(6) NOT NULL,
+CREATE TABLE struct (
+	train_no VARCHAR(6) NOT NULL,
     class_type VARCHAR(2),
     size INT NOT NULL,
-    PRIMARY KEY(train_id, class_type)
+    PRIMARY KEY(train_no, class_type)
 );
 

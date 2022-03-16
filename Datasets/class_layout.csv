@@ -1,9 +1,0 @@
-class_type,class_name,capacity,cost_per_km
-"A","AC 2 Tier",54,1.8
-"B","AC 3 Tier",64,1.5
-"C","AC Chair Car",75,1.25
-"D","Second Seating",103,0.35
-"E","Executive Chair Car",46,2.75
-"H","AC 1 Tier",24,3.5
-"S","Sleeper Class",72,0.55
-"BE","AC 3 Tier Economy",64,1.25
