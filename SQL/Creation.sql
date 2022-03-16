@@ -94,8 +94,8 @@ CREATE TABLE seat_no (
 CREATE TABLE class_layout (
 	class_type VARCHAR(2) PRIMARY KEY,
     class_name VARCHAR(30) NOT NULL,
-    cost_per_km DECIMAL(3,2) NOT NULL,
-    capacity INT NOT NULL
+	capacity INT NOT NULL,
+    cost_per_km DECIMAL(3,2) NOT NULL
 );
 
 CREATE TABLE sched (
