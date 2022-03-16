@@ -1,0 +1,304 @@
+id,train_name,src,dest,train_type
+22210,New Delhi Mumbai Central DURONTO,NDLS,MMCT,Duranto
+22908,Hapa Madgaon MADGAON SUPERFAST,HAPA,MAO,Super Fast
+53181,Sealdah Lalgola LALGOLA PASSENGER,SDAH,LGL,Passenger
+16865,Chennai Egmore Thanjavur UZHAVAN EXPRESS,MS,TJ,Mail & Express
+12057,New Delhi Una Himachal JAN SHATABDI,NDLS,UHL,Jan Shatabdi
+15273,RAXAUL JN DELHI SATYAGRAH EXPRESS,RXL,ANVT,Mail & Express
+11123,Barauni Jn Gwalior Jn MAIL,GWL,BJU,Mail & Express
+22402,Udhampur Delhi S Rohilla AC SUPERFAST,UHP,DEE,Super Fast
+22150,Pune Jn Ernakulam Jn SUPERFAST EXPRESS,PUNE,ERS,Super Fast
+15232,Gondia Jn Barauni Jn GONDIA EXPRESS,G,BJU,Mail & Express
+13416,Patna Jn Malda Town EXPRESS,PNBE,MLDT,Mail & Express
+14038,NDLS SCL PSK EXP,NDLS,SCL,Mail & Express
+16574,PUDUCHERRY YESVANTPUR JN YESVANTPUR EXPRESS,PDY,YPR,Mail & Express
+12360,Patna Jn Kolkata KOL GARIB RATH,PNBE,KOAA,Garib Rath
+04602,JDNX PTK SPL,JDNX,PTK,Special
+04410,SSB-PWL EMU MEXP SPL,SSB,PWL,Special
+12986,Delhi S Rohilla Jaipur Jn DOUBLE DECKER,DEE,JP,Intercity Express
+15635,Okha Guwahati GUWAHATI EXPRESS,OKHA,GHY,Mail & Express
+06745,SPE-NLR MEMU EXP SPL,SPE,NLR,Special
+15648,Guwahati Lokmanyatilak EXPRESSS,GHY,LTT,Mail & Express
+19301,Indore Jn Bg Yasvantpur Jn YESHVANTPUR EXPRESS,DADN,YPR,Mail & Express
+13064,Balurghat Howrah Jn EXPRESS,BLGT,HWH,Mail & Express
+18201,DURG NAUTANWA EXPRESS,DURG,NTV,Mail & Express
+22627,Tiruchchirappalli Jn Thiruvananthapuram Central EXPRESS,TPJ,TVC,Intercity Express
+12621,Chennai Central New Delhi TAMIL NADU EXPRESS,MAS,NDLS,Super Fast
+04502,UHL-SRE MEX SPL,UHL,SRE,Special
+16053,Chennai Central Tirupati TIRUPATHI EXPRESS,MAS,TPTY,Intercity Express
+07507,RDP - SGUJ DMU SPECIAL,RDP,SGUJ,Special
+14711,Haridwar Jn Shri Ganganagar EXPRESS,HW,SGNR,Intercity Express
+22847,Visakhapatnam Lokmanyatilak EXPRESS,VSKP,LTT,Super Fast
+12804,Hazrat Nizamuddin Visakhapatnam SWARNA JAYANTI EXPRESS,NZM,VSKP,Super Fast
+09429,ANND-CBY DEMU SPL,ANND,CBY,Special
+12009,Mumbai Central Ahmedabad Jn SHATABDI EXPRESS,MMCT,GNC,Shatabdi
+16231,Mayiladuturai Jn Mysore Jn MYSORE EXPRESS,MV,MYS,Mail & Express
+05216,NKE MFP SPL,NKE,MFP,Special
+55149,Gorakhpur BCY PASSENGER,GKP,BCY,Passenger
+12371,HOWRAH JN JAISALMER EXPRESS,HWH,BKN,Super Fast
+12620,Mangalore Central Lokmanyatilak MATSYAGANDA EXPRESS,MAQ,LTT,Super Fast
+12554,New Delhi Barauni Jn VAISHALI EXPRESS,NDLS,SHC,Super Fast
+11703,REWA DR AMBEDKAR NGR (MHOW) INDB EXPRESS,REWA,DADN,Mail & Express
+04701,BTI LGH SPL,BTI,LGH,Special
+12274,New Delhi Howrah Jn DURONTO EXPRESS,NDLS,HWH,Duranto
+12990,Ajmer Jn Dadar Wr  EXPRESS,AII,DDR,Super Fast
+12588,Jammu Tawi Gorakhpur JAMMU EXPRESS,JAT,GKP,Super Fast
+14616,Amritsar Jn Lal Kuan EXPRESS,ASR,LKU,Mail & Express
+19414,KOLKATA AHMEDABAD JN EXPRESS,KOAA,ADI,Mail & Express
+12225,Azamgarh Delhi KAIFIYAT EXPRESS,AMH,DLI,Super Fast
+19034,Ahmedabad Jn Valsad GUJARAT QUEEN,ADI,BL,Intercity Express
+17019,JAIPUR JN HYDERABAD DECCAN EXPRESS,JP,HYB,Mail & Express
+17064,Secunderabad Jn Manmad Jn AJANTA EXPRESS,SC,MMR,Mail & Express
+12791,Secunderabad Jn Danapur EXPRESS,SC,DNR,Super Fast
+15644,Kamakhya Jn Puri EXPRESS,KYQ,PURI,Mail & Express
+16533,Bhagat Ki Kothi Ksr Bengaluru EXPRESS,JU,SBC,Mail & Express
+13186,Jaynagar Sealdah GANGA SAGAR EXPRESS,JYG,SDAH,Mail & Express
+13281,New Tinsukia Rajendranagar T EXPRESS,DBRG,RJPB,Mail & Express
+16779,TIRUPATI RAMESWARAM EXPRESS,TPTY,RMM,Mail & Express
+14853,Varanasi Jn Jodhpur Jn MARUDHAR EXPRESS,BSB,JU,Mail & Express
+13166,Sitamarhi Kolkata EXPRESS,SMI,KOAA,Mail & Express
+12635,Chennai Egmore Madurai Jn VAIGAI EXPRESS,MS,MDU,Intercity Express
+12445,New Delhi Shmata Vd Katra UTTAR SAMPARK KRANTI,NDLS,SVDK,Sampark Kranti
+12350,New Delhi Bhagalpur EXPRESS,NDLS,GODA,Super Fast
+12828,Purulia Jn Howrah Jn EXPRESS,PRR,HWH,Intercity Express
+12622,New Delhi Chennai Central TAMIL NADU EXPRESS,NDLS,MAS,Super Fast
+12788,NSL NS SPL,NSL,NS,Special
+19329,Indore Jn Bg Udaipur City VEER BHUMI EXPRESS,INDB,UDZ,Mail & Express
+16589,Ksr Bengaluru C Sahumaharaj T Kolhapur RANI CHENNAMMA EXPRESS,SBC,MRJ,Mail & Express
+22131,Pune Jn Manduadih GYAN GANGA EXPRESS,PUNE,BSBS,Super Fast
+13114,Lalgola Kolkata HAZARDUARI EXPRESS,LGL,KOAA,Intercity Express
+12196,Ajmer Jn Agra Fort INTERCITY,AII,AF,Intercity Express
+12346,Guwahati Howrah Jn SARAIGHAT EXPRESS,GHY,HWH,Super Fast
+11061,Lokmanyatilak Darbhanga Jn DARBHANGA EXPRESS,LTT,JYG,Mail & Express
+12750,BIDR MTM SF EXP,BIDR,MTM,Super Fast
+12520,Kamakhya Jn Lokmanyatilak AC EXPRESS,KYQ,LTT,Super Fast
+12535,Lucknow Ne Raipur Jn GARIBRATH,LJN,R,Garib Rath
+19408,Varanasi Jn Ahmedabad Jn EXPRESS,BSB,ADI,Mail & Express
+22883,Puri Yasvantpur Jn GARIB RATH,PURI,YPR,Garib Rath
+22620,Tirunelveli Bilaspur Jn BILASPUR EXPRESS,TEN,BSP,Super Fast
+15716,Ajmer Jn Kishanganj GARIB NAWAJ EXPRESS,AII,KNE,Mail & Express
+17221,Kakinada Port Lokmanyatilak  EXPRESS,COA,LTT,Mail & Express
+12970,Jaipur Jn Coimbatore Jn SUPERFAST EXPRESS,JP,CBE,Super Fast
+12055,New Delhi Dehradun JAN SHATABDI,NDLS,DDN,Jan Shatabdi
+22863,Howrah Jn Yasvantpur Jn AC EXPRESS,HWH,YPR,Super Fast
+15055,Agra Fort Ramnagar EXPRESS,AF,RMR,Mail & Express
+12291,Yasvantpur Jn Chennai Central CHENNAI EXPRESS,YPR,MAS,Super Fast
+13483,Malda Town Delhi FARAKKA EXPRESS,MLDT,DLI,Mail & Express
+22845,Pune Jn Hatia HATIA SUPERFAST,HTE,PUNE,Super Fast
+19608,Ajmer Jn Kolkata EXPRESS,MDJN,KOAA,Mail & Express
+12411,Chandigarh Amritsar Jn INTERCITY EXPRESS,CDG,ASR,Intercity Express
+19224,Jammu Tawi Ahmedabad Jn EXPRESS,JAT,ADI,Express Cum ordinary
+19610,HW UDZ  EXP,YNRK,UDZ,Mail & Express
+14631,Dehradun Amritsar Jn EXPRESS,DDN,ASR,Mail & Express
+12382,New Delhi Howrah Jn POORVA EXPRESS,NDLS,HWH,Special
+16342,TVC GUV EXP,TVC,GUV,Special
+12228,INDORE JN BG MUMBAI CENTRAL MUMBAI DURONTO,INDB,MMCT,Duranto
+13345,Varanasi Jn Singrauli INTERCITY,BSB,SGRL,Intercity Express
+12558,Anand Vihar Terminal Muzaffarpur Jn SAPT KRANTI EXPRESS,ANVT,MFP,Super Fast
+12783,Visakhapatnam Secunderabad Jn AC EXPRESS,VSKP,SC,Super Fast
+16535,Mysore Jn Solapur Jn GOLGUMBAZ EXPRESS,MYS,SUR,Mail & Express
+12539,YASVANTPUR JN LUCKNOW LUCKNOW EXPRESS,YPR,LKO,Super Fast
+18048,Vasco Da Gama Kacheguda HOWRAH EXPRESS,VSG,SHM,Mail & Express
+12077,Chennai Central Vijayawada Jn JAN SHATABDI,MAS,BZA,Jan Shatabdi
+12985,Jaipur Jn Delhi S Rohilla DOUBLE DECKER,JP,DEE,Intercity Express
+11464,JABALPUR SOMNATH SOMNATH EXPRESS,JBP,SMNH,Mail & Express
+12223,Lokmanyatilak Ernakulam Jn DURONTO,LTT,ERS,Duranto
+12128,Pune Jn Mumbai Cst INTERCITY EXPRESS,PUNE,CSMT,Intercity Express
+15052,Gorakhpur Kolkata KOLKATA EXPRESS,GKP,KOAA,Mail & Express
+15661,RANCHI KAMAKHYA JN  EXPRESS,RNC,KYQ,Mail & Express
+22187,Habibganj Jabalpur INTERCITY EXPRESS,RKMP,ADTL,Intercity Express
+09535,DADN RTM DEMU SPL,DADN,RTM,Special
+22611,Chennai Central New Jalpaiguri EXPRESS,MAS,NJP,Super Fast
+12839,Howrah Jn Chennai Central MAIL,HWH,MAS,Super Fast
+18234,Bilaspur Jn Indore Jn Bg NARMADA EXPRESS PASSENGER,BSP,INDB,Express Cum ordinary
+22113,Lokmanyatilak Kochuveli EXPRESS,LTT,KCVL,Super Fast
+15029,Gorakhpur Pune Jn EXPRESS,GKP,PUNE,Mail & Express
+17411,Mumbai Cst C Sahumaharaj T Kolhapur MAHALAXMI EXPRESS,CSMT,KOP,Mail & Express
+12032,Amritsar Jn New Delhi AMRITSAR SHATABDI,ASR,NDLS,Shatabdi
+14003,Malda Town New Delhi EXPRESS,MLDT,NDLS,Mail & Express
+13346,Singrauli Varanasi Jn INTERCITY EXPRESS,SGRL,BSB,Intercity Express
+15013,Jaisalmer Ramnagar RANIKHET EXPRESS,JSM,KGM,Mail & Express
+12636,Madurai Jn Chennai Egmore VAIGAI EXPRESS,MDU,MS,Intercity Express
+22884,Yasvantpur Jn Puri GARIB RATH,YPR,PURI,Garib Rath
+14220,Lucknow Varanasi Jn EXPRESS,LKO,BSB,Intercity Express
+19052,Muzaffarpur Jn Valsad SHRAMIK EXPRESS,MFP,BL,Mail & Express
+12435,JYG ANVT G RATH,JYG,ANVT,Garib Rath
+15903,Dibrugarh Chandigarh EXPRESS,DBRG,CDG,Mail & Express
+12367,Bhagalpur Anand Vihar Terminal VIKRAMSHILA EXPRESS,BGP,ANVT,Super Fast
+12827,Howrah Jn Purulia Jn EXPRESS,HWH,PRR,Intercity Express
+22484,Gandhidham Jn Jodhpur Jn JODHPUR EXPRESS,GIMB,JU,Super Fast
+12273,Howrah Jn New Delhi DURONTO,HWH,NDLS,Duranto
+12591,GORAKHPUR YASVANTPUR JN EXPRESS,GKP,YPR,Super Fast
+18241,Durg Ambikapur EXPRESS PASSENGER,DURG,ABKP,Express Cum ordinary
+04153,RBL-CNB UNRESERVED SPL,RBL,CNB,Special
+11009,Mumbai Cst Pune Jn SINHAGAD EXPRESS,CSMT,PUNE,Intercity Express
+12424,New Delhi Dibrugarh Town RAJDHANI,NDLS,DBRG,Rajdhani
+14209,Prayag Jn Lucknow INTRCTY,PYGS,LKO,Intercity Express
+12285,Secunderabad Jn Hazrat Nizamuddin DURONTO  EXPRESS,SC,NZM,Duranto
+12284,Hazrat Nizamuddin Ernakulam Jn DURONTO,NZM,ERS,Duranto
+15666,DIMAPUR KAMAKHYA JN B G EXPRESS,MXN,GHY,Mail & Express
+11450,Shmata Vd Katra Jabalpur EXPRESS,SVDK,JBP,Mail & Express
+14525,Ambala Cant Jn Shri Ganganagar INTERCITY,UMB,SGNR,Intercity Express
+12742,Patna Jn Vasco Da Gama EXPRESS,PNBE,VSG,Super Fast
+14312,Bhuj Bareilly ALA HAZRAT EXPRESS,BHUJ,BE,Mail & Express
+12852,Chennai Central Bilaspur Jn BILASPUR EXPRESS,MAS,BSP,Super Fast
+12623,Chennai Central Thiruvananthapuram Central TRIVANDRUM MAIL,MAS,TVC,Super Fast
+12577,Darbhanga Jn Mysore Jn BAGMATI EXPRESS,DBG,MYS,Super Fast
+14114,Dehradun Allahabad Jn LINK EXPRESS,DDN,SFG,Link
+12918,HAZRAT NIZAMUDDIN AHMEDABAD JN GUJRAT SAMPARK KRANTI EXPRESS,NZM,ADI,Sampark Kranti
+17609,Patna Jn Purna Jn  EXPRESS,PNBE,PAU,Mail & Express
+22351,Patliputra Yasvantpur Jn EXPRESS,PPTA,YPR,Super Fast
+12509,Bengaluru Cant Guwahati GUWAHATI EXPRESS,BNC,GHY,Super Fast
+12660,Shalimar Nagarcoil Jn GURUDEV EXPRESS,SHM,NCJ,Super Fast
+12694,Tuticorin Chennai Egmore PEARL CITY EXPRESS,TN,MS,Super Fast
+17001,Sainagar Shirdi Secunderabad Jn EXPRESS,SNSI,SC,Mail & Express
+22406,Anand Vihar Terminal Bhagalpur GARIB RATH,ANVT,BGP,Garib Rath
+12673,Chennai Central Coimbatore Jn CHERAN EXPRESS,MAS,CBE,Super Fast
+13245,New Jalpaiguri Rajendranagar T CAPITAL EXPRESS,NJP,RJPB,Mail & Express
+22413,MADGAON HAZRAT NIZAMUDDIN RAJDHANI,MAO,NZM,Rajdhani
+11271,ITARSI JN BHOPAL JN VINDHYACHAL EXPRESS,ET,BPL,Mail & Express
+22119,MUMBAI CST KARMALI TEJAS EXPRESS,CSMT,KRMI,Shatabdi
+22682,Chennai Central Mysore Jn MYSORE EXPRESS,MAS,MYS,Super Fast
+12477,Jamnagar Shmata Vd Katra EXPRESS,JAM,SVDK,Super Fast
+16352,Nagarcoil Jn Mumbai Cst MUMBAI EXPRESS,NCJ,CSMT,Mail & Express
+22634,Hazrat Nizamuddin Thiruvananthapuram Central SUPERFAST EXPRESS,NZM,TVC,Super Fast
+12311,Howrah Jn Kalka DELHI MAIL,HWH,KLK,Super Fast
+11449,Jabalpur Shmata Vd Katra EXPRESS,JBP,SVDK,Mail & Express
+06624,BRGW-KTE MEMU PSPC SPL,BRGW,KTE,Special
+12882,Puri Howrah Jn GARIB RATH,PURI,SHM,Garib Rath
+14216,Lucknow Allahabad Jn GANGA GOMTI EXPRESS,LKO,PYGS,Intercity Express
+03572,MKA - JSME MEMU PGR SPL,MKA,JSME,Special
+12378,New Alipurduar Sealdah PADATIK EXPRESS,NOQ,SDAH,Super Fast
+12201,Lokmanyatilak Kochuveli GARIB RATH,LTT,KCVL,Garib Rath
+12738,Secunderabad Jn Kakinada Port GOUTAMI EXPRESS,LPI,COA,Super Fast
+22401,Delhi S Rohilla Udhampur AC SUPERFAST,DEE,UHP,Super Fast
+12912,Haridwar Jn Valsad SUPERFAST EXPRESS,HW,BL,Super Fast
+11040,Gondia Jn C Sahumaharaj T Kolhapur MAHARASHTRA EXPRESS,G,KOP,Mail & Express
+06552,JTJ-SBC MEMU,JTJ,SBC,Special
+11039,C Sahumaharaj T Kolhapur Gondia Jn MAHARASHTRA EXPRESS,KOP,G,Mail & Express
+22633,Thiruvananthapuram Central Hazrat Nizamuddin NIZAMUDDIN EXPRESS,TVC,NZM,Super Fast
+16613,Rajkot Jn Coimbatore Jn COIMBATORE EXPRESS,RJT,CBE,Mail & Express
+22806,Anand Vihar Terminal Bhubaneswar SUPERFAST,ANVT,BBS,Super Fast
+12306,New Delhi Howrah Jn KOLKATA  RAJDHANI,NDLS,HWH,Rajdhani
+12231,LUCKNOW CHANDIGARH EXPRESS,LKO,CDG,Super Fast
+22917,Bandra Terminus Haridwar Jn HARIDWAR EXPRESS,BDTS,HW,Super Fast
+11022,Tirunelveli Dadar CHALUKYA  EXPRESS,TEN,DR,Mail & Express
+12430,New Delhi Lucknow AC SUPERFAST,NDLS,LKO,Super Fast
+12164,MAS LTT EXPRESS,MAS,LTT,Super Fast
+19568,Okha Tuticorin VIVEK EXPRESS,OKHA,TN,Mail & Express
+12540,Lucknow Yasvantpur Jn SUPERFAST EXPRESS,LKO,YPR,Super Fast
+12434,HAZRAT NIZAMUDDIN CHENNAI CENTRAL CHENNAI RAJDHANI,NZM,MAS,Rajdhani
+19168,Varanasi Jn Ahmedabad Jn SABARMATI EXPRESS,BSB,ADI,Express Cum ordinary
+22455,Sainagar Shirdi Kalka SUPERFAST EXPRESS,SNSI,KLK,Super Fast
+12314,New Delhi Sealdah SEALDAH RAJDHANI,NDLS,SDAH,Rajdhani
+21125,RTM  BHIND EXP,RTM,BIX,Mail & Express
+15028,Gorakhpur Hatia MAURYA EXPRESS,GKP,HTE,Mail & Express
+22424,Amritsar Jn Gorakhpur EXPRESS,ASR,GKP,Super Fast
+15104,Manduadih Gorakhpur INTERCITY,BSBS,GKP,Intercity Express
+12964,Udaipur City Hazrat Nizamuddin MEWAR EXPRESS,UDZ,NZM,Super Fast
+12643,THIRUVANANTHAPURAM CENTRAL HAZRAT NIZAMUDDIN NIZAMUDDIN EXPRESS,TVC,NZM,Super Fast
+19574,Jaipur Jn Okha EXPRESS,JP,OKHA,Mail & Express
+12849,Bilaspur Jn Pune Jn SUPERFAST EXPRESS,BSP,PUNE,Super Fast
+11465,Somnath Jabalpur EXPRESS,SMNH,JBP,Mail & Express
+07327,MYS-CMNR PAS SPL,MYS,CMNR,Special
+16311,BIKANER JN KOCHUVELI EXPRESS,SGNR,KCVL,Mail & Express
+22104,Faizabad Jn Lokmanyatilak SUPERFAST EXPRESS,AYC,LTT,Super Fast
+15813,DKGN-MZS EXPRESS,DKGN,MZS,Special
+72452,Shimla Kalka RAIL MOTOR,SML,KLK,Hill Train
+12241,Chandigarh Amritsar Jn SUPERFAST,CDG,ASR,Intercity Express
+12902,AHMEDABAD JN MUMBAI CENTRAL GUJARAT MAIL,ADI,DDR,Super Fast
+12152,Howrah Jn Lokmanyatilak SAMARSATA EXPRESS,SHM,LTT,Super Fast
+13163,SEALDAH SAHARSA JN HATE BAZARE EXPRESS,SDAH,SHC,Mail & Express
+12776,Secunderabad Jn Kakinada Town COCANADA EXPRESS,LPI,CCT,Super Fast
+13010,Dehradun Howrah Jn DOON EXPRESS,YNRK,HWH,Mail & Express
+12397,GAYA JN NEW DELHI MAHABODHI EXPRESS,GAYA,NDLS,Super Fast
+16516,Karwar Yasvantpur Jn EXPRESS,KAWR,YPR,Intercity Express
+12336,Lokmanyatilak Bhagalpur BHAGALPUR EXPRESS,LTT,BGP,Super Fast
+18637,Hatia Bengaluru Cant EXPRESS,HTE,BNC,Mail & Express
+22146,Miraj Jn Pandharpur SUPERFAST EXPRESS,MRJ,PVR,Intercity Express
+15656,Shmata Vd Katra Kamakhya Jn EXPRESS,SVDK,KYQ,Mail & Express
+22444,Bandra Terminus Kanpur Central KANPUR EXPRESS,BDTS,CNB,Super Fast
+22451,Bandra Terminus Chandigarh SUPERFAST,BDTS,CDG,Super Fast
+16218,SAINAGAR SHIRDI MYSORE JN EXPRESS,SNSI,MYS,Mail & Express
+06625,KTE-STA MEMU SPL,KTE,STA,Special
+12996,Udaipur City Bandra Terminus SUPERFAST EXPRESS,AII,BDTS,Super Fast
+16591,Hubli Jn Mysore Jn HAMPI EXPRESS,UBL,MYS,Mail & Express
+10104,Madgaon Mumbai Cst MANDOVI EXPRESS,MAO,CSMT,Intercity Express
+12067,JAN SHATABDI SPL,GHY,JTTN,Special
+12444,ANAND VIHAR TERMINAL HALDIA SUPERFAST EXPRESS,ANVT,HLZ,Super Fast
+12221,Pune Jn Howrah Jn DURONTO,PUNE,HWH,Duranto
+12927,Mumbai Central Vadodara Jn VADODARA EXPRESS,DDR,EKNR,Super Fast
+17302,Dharwad Mysore Jn MYSORE EXPRESS,DWR,MYS,Mail & Express
+22646,THIRUVANANTHAPURAM CENTRAL INDORE JN BG AHILYANAGARI EXPRESS,KCVL,INDB,Super Fast
+14041,MUSSOORIE EXP,DLI,DDN,Mail & Express
+03291,PPTA-PNBE MEMU PASS SPL,PPTA,PNBE,Special
+06018,ERS-SRR MEMU EXP SPL,ERS,SRR,Special
+14504,Shmata Vd Katra Kalka EXPRESS,SVDK,KLK,Mail & Express
+22204,Secunderabad Jn Visakhapatnam DURONTO  EXPRESS,SC,VSKP,Duranto
+16217,MYSORE JN SAINAGAR SHIRDI EXPRESS,MYS,SNSI,Mail & Express
+12304,New Delhi Howrah Jn POORVA EXPRESS,NDLS,HWH,Super Fast
+12661,Chennai Egmore Sengottai POTHIGAI  EXPRESS,MS,SCT,Super Fast
+15008,Lucknow Ne Varanasi City   EXPRESS,LJN,BCY,Mail & Express
+12155,Habibganj Hazrat Nizamuddin BHOPAL EXPRESS,RKMP,NZM,Super Fast
+18450,Patna Jn Puri B NATH DHAM EXPRESS,PNBE,PURI,Mail & Express
+03453,TIL-JMP PGR SPL,TIL,JMP,Special
+22149,Ernakulam Jn Pune Jn EXPRESS,ERS,PUNE,Super Fast
+19415,Ahmedabad Jn Shmata Vd Katra EXPRESS,ADI,SVDK,Mail & Express
+11272,Bhopal Jn Itarsi Jn VINDHYACHAL EXPRESS,BPL,ET,Mail & Express
+18106,PURI ROU SPL,JYG,ROU,Special
+12235,HUMSAFAR EXP,MDP,ANVT,Humsafar
+14235,Varanasi Jn Bareilly EXPRESS,BSB,BE,Mail & Express
+13352,Alleppey Dhanbad Jn DHANBAD EXPRESS,ALLP,DHN,Mail & Express
+12425,New Delhi Jammu Tawi JAMMU RAJDHANI,NDLS,JAT,Rajdhani
+03558,ASN-BWN MEMU PGR SPL,ASN,BWN,Special
+14012,Hoshiarpur Delhi EXPRESS,HSX,DLI,Mail & Express
+16316,Kochuveli Ksr Bengaluru BANGALORE EXPRESS,KCVL,MYS,Mail & Express
+22619,Bilaspur Jn Tirunelveli EXPRESS,BSP,TEN,Super Fast
+22939,Hapa Bilaspur Jn EXPRESS,HAPA,BSP,Super Fast
+12647,Coimbatore Jn Hazrat Nizamuddin KONGU EXPRESS,CBE,NZM,Super Fast
+12217,Kochuveli Chandigarh SAMPARK KRANTI,KCVL,CDG,Sampark Kranti
+12469,Kanpur Central Jammu Tawi EXPRESS,CNB,JAT,Super Fast
+03327,SNDT-GMO PASSENGER  SPL,SNDT,GMO,Special
+22101,LTT MDU SF SPL,LTT,MDU,Intercity Express
+12901,Mumbai Central Ahmedabad Jn GUJARAT MAIL,DDR,ADI,Super Fast
+16106,TIRUCHENDUR CHENNAI EGMORE CHENNAI EXPRESS,TCN,MS,Mail & Express
+12492,Jammu Tawi Barauni Jn MAUR DHAWJ EXPRESS,JAT,BJU,Super Fast
+03067,KWAE-RPH MEMU PGR SPL,KWAE,RPH,Special
+12615,Chennai Central Delhi S Rohilla GRAND TRUNK EXPRESS,MAS,NDLS,Super Fast
+22862,Adra Jn Shalimar RAJYA RANI EXPRESS,ADRA,SHM,Intercity Express
+12870,Howrah Jn Mumbai Cst EXPRESS,HWH,CSMT,Super Fast
+12722,Hazrat Nizamuddin Hyderabad Decan DAKSHIN EXPRESS,NZM,HYB,Super Fast
+12792,Danapur Secunderabad Jn SECUNDERABAD EXPRESS,DNR,SC,Super Fast
+12707,Tirupati Hazrat Nizamuddin A P SAMPARK KRANTI,TPTY,NZM,Sampark Kranti
+14810,Jodhpur Jn Jaisalmer EXPRESS,JU,JSM,Mail & Express
+14313,Lokmanyatilak Bareilly BAREILLY EXPRESS,LTT,BE,Mail & Express
+12933,Mumbai Central Ahmedabad Jn KARNAVATI EXPRESS,MMCT,ADI,Intercity Express
+14512,Saharanpur Allahabad Jn NAUCHANDI EXPRESS,SRE,PYGS,Mail & Express
+14316,New Delhi Bareilly INTERCITY EXPRESS,NDLS,BE,Intercity Express
+19251,SOMNATH OKHA EXPRESS,SMNH,OKHA,Mail & Express
+12820,Anand Vihar Terminal Bhubaneswar ORISSA SAMPARK KRANTI,ANVT,BBS,Sampark Kranti
+19409,Ahmedabad Jn Gorakhpur GORAKHPUR EXPRESS,ADI,GKP,Mail & Express
+22873,Digha F S Visakhapatnam EXPRESS,DGHA,VSKP,Super Fast
+15616,SCL GHY  SPECIAL,SCL,GHY,Special
+14205,Faizabad Jn Delhi EXPRESS,AYC,DLI,Mail & Express
+12372,JAISALMER HOWRAH JN SUPERFAST EXPRESS,BKN,HWH,Super Fast
+22145,Pandharpur Miraj Jn SUPERFAST EXPRESS,PVR,MRJ,Intercity Express
+12119,Amravati Ajni EXPRESS,AMI,AJNI,Intercity Express
+19326,Amritsar Jn Indore Jn Bg EXPRESS,ASR,INDB,Mail & Express
+03209,KIUL-MKA MEMU PASS SPL,KIUL,MKA,Special
+22652,PGT MAS EXP,PGT,MAS,Super Fast
+17063,Manmad Jn Secunderabad Jn AJANTA EXPRESS,MMR,SC,Mail & Express
+12436,JYG GARIB RATH,ANVT,JYG,Garib Rath
+12182,Ajmer Jn Jabalpur DAYODAYA EXPRESS,AII,JBP,Super Fast
+12033,Kanpur Central New Delhi SHATABDI,CNB,NDLS,Shatabdi
+12754,MARATHWADA S K,NZM,NED,Super Fast
+18409,Howrah Jn Puri SRI JAGANNATH EXPRESS,SHM,PURI,Mail & Express
+19203,GNC BVC EXPRESS,GNC,BVC,Mail & Express
+14042,Dehradun Delhi S Rohilla MUSSOORIE EXPRESS,DDN,DLI,Mail & Express
+12859,Mumbai Cst Howrah Jn GITANJALI EXPRESS,CSMT,HWH,Super Fast
+12786,Ksr Bengaluru Kacheguda KACHEGUDA EXPRESS,MYS,KCG,Super Fast
+12390,Chennai Egmore Gaya Jn EXPRESS,MAS,GAYA,Super Fast
+12002,New Delhi Habibganj BHOPAL SHATABDI,NDLS,RKMP,Shatabdi
+15036,Kathgodam Delhi UTR SAMPARK KRANTI EXPRESS,KGM,DLI,Sampark Kranti
+18625,PRNC HTE EXPRESS,PRNC,HTE,Intercity Express
+12582,New Delhi Manduadih SUPERFAST EXPRESS,NDLS,BSBS,Super Fast
