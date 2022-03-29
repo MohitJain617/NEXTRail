@@ -10237,13 +10237,22 @@ INSERT INTO train VALUES
 (22150,'Pune Jn Ernakulam Jn SUPERFAST EXPRESS','PUNE','ERS','SF',1),
 (15232,'Gondia Jn Barauni Jn GONDIA EXPRESS','G','BJU','EXP',0);
 
+INSERT INTO adm VALUES
+('rwinsor0','Gai0gccZYhAj'),
+('ejantet1','AAgRUhV'),
+('eladloe2','mDA7wx7'),
+('josullivan3','iKnCKuR'),
+('ecalles4','HYsB01oVkk');
 
+<<<<<<< HEAD
 INSERT INTO credentials VALUES
 ('cpharro0','c3nrRpkG'),
 ('agergolet1','B4WuHtn'),
 ('tscutcheon2','2yQRP5b'),
 ('gderyebarrett3','pcs7lSG24M'),
 ('gbeedell4','OkkaQh');
+=======
+>>>>>>> 77fdcd1548ba38aa770b27ccf0924f1950677200
 
 
 INSERT INTO seat_no VALUES
