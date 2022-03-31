@@ -1,8 +1,12 @@
 queries for optimized dataset
+connecting server to backend
+-----------------------------
+frontend
+-----------------------------
 waiting list
-update database everyday --> remove old reserved seats from reserve
-generate receipt for transaction
-admin queries
+update database everyday --> remove old reserved seats from reserve (12:00 - 12:20 thing)
+generate receipt for transaction (fancy ticket)
+admin queries (and privileges)
 
 fare to be calculated as: base fare (from class_layout) + service charge (from fare_lookup) + concession (if any) + catering charges (if pantry_avl and chosen a meal_option) + tax
 
