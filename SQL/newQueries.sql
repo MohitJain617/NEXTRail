@@ -1,4 +1,45 @@
+drop function get_dayNo;
+DELIMITER //
+create function get_dayNo(temp_date DATE)
+    RETURNS INTEGER
+    DETERMINISTIC
+    BEGIN
+    declare val INTEGER ;
+	SET val = dayofweek(temp_date);
+    RETURN val;
+    END //
 
+
+SET @tempday = get_dayNo(DATE('2022-04-03'));
+SELECT @tempday;
+
+-- what i can do is, suppose i have the date at which i want  tickets
+-- i can get the dayno for that date to find the train at that schedule
+-- and now from that dayno query for the next day.
+
+-- what is a connecting feature between date of reaching a stations and the sched time_table tables?
+-- The answer might be the week. 
+
+-- In the ticket we store the station as well 
+
+-- what if instead of updating all these queries below what we do is create the old schedule table
+-- from the new sched and time table that stores the value for say 2 weeks ahead of you. and you update this at 00:00 am everyday.
+
+SET @tempdate = DATE('2022-04-03');
+SET @tempday = get_dayNo(@tempdate);
+CREATE TABLE sched_table AS
+(SELECT * FROM sched NATURAL JOIN time_table
+WHERE sched.trip_no + time_table.day_no - 1 >= @tempday);
+
+ALTER TABLE sched_table
+ADD arrival DATETIME;
+ALTER TABLE sched_table
+ADD departure DATETIME;
+
+UPDATE TABLE sched_table
+SET arrival = SELECT TIMESTAMP(DATE_ADD(@tempdate, INTERVAL trip_no+day_no-1-@tempday DAY),arrive);
+UPDATE TABLE sched_table
+SET departure = SELECT TIMESTAMP(DATE_ADD(@tempdate, INTERVAL trip_no+day_no-1-@tempday DAY),depart);
 
 -- To check the validity of a username
 SET @tempusername = 'cpharro0';
@@ -16,8 +57,8 @@ WHERE user_name = @tempusername1
 -- Query for trains between two stations -- 
 SET @tempsrc = "UMB";
 SET @tempdest = "PNP";
-SET @tempdayno = 1;
 SET @tempdate = DATE('2022-03-05');
+SET @tempdayno = get_dayNo(@tempdate);
 
 SELECT train_no FROM sched as S
 WHERE S.st_code = @tempsrc
@@ -30,6 +71,21 @@ WHERE S.st_code = @tempsrc
             AND S2.st_code = @tempdest
 );
 
+-- updated query
+SET @tempdayno = get_dayNo(@tempdate);
+
+SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
+WHERE T.st_code = @tempsrc
+	AND (T.dayno+S.trip_no-1) = @tempdayno
+	AND EXISTS (
+		SELECT * FROM time_table as T2 NATURAL JOIN sched as S2
+		WHERE S2.trip_no = S.trip_no
+			AND S2.train_no = S.train_no
+			AND (T.dayno) < (T2.dayno)
+			AND T2.st_code = @tempdest 
+);
+
+
 -- SELECT train_no FROM sched as S NATURAL JOIN time_table as T
 -- WHERE T.st_code = @tempsrc
 
@@ -37,6 +93,7 @@ WHERE S.st_code = @tempsrc
 SET @tempsrc = "MFP";
 SET @tempdest = "BJU";
 SET @tempdate = DATE('2022-03-05');
+SET @tempdayno = get_dayNo(@tempdate);
 
 SELECT train_no, S.departure FROM sched as S
 WHERE S.st_code = @tempsrc
@@ -49,10 +106,25 @@ WHERE S.st_code = @tempsrc
             AND S2.st_code = @tempdest
 ) ORDER BY S.departure;
 
+-- updated query
+SET @tempdayno = get_dayNo(@tempdate);
+
+SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
+WHERE T.st_code = @tempsrc
+	AND (T.dayno+S.trip_no-1) = @tempdayno
+	AND EXISTS (
+		SELECT * FROM time_table as T2 NATURAL JOIN sched as S2
+		WHERE S2.trip_no = S.trip_no
+			AND S2.train_no = S.train_no
+			AND (T.dayno) < (T2.dayno)
+			AND T2.st_code = @tempdest 
+) ORDER BY T.departure ;
+
 -- Query for trains between two stations sorted by Arrival time at Destination -- 
 SET @tempsrc = "MFP";
 SET @tempdest = "BJU";
 SET @tempdate = DATE('2022-03-05');
+SET @tempdayno = get_dayNo(@tempdate);
 
 SELECT train_no, S.arrival FROM sched as S
 WHERE S.st_code = @tempdest
@@ -65,6 +137,18 @@ WHERE S.st_code = @tempdest
             AND S2.st_code = @tempsrc
 ) ORDER BY S.arrival;
 
+-- updated query 
+
+SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
+WHERE T.st_code = @tempdest
+	AND EXISTS (
+		SELECT * FROM time_table as T2 NATURAL JOIN sched as S2
+		WHERE S2.trip_no = S.trip_no
+			AND (T2.dayno+S2.trip_no-1) = @tempdayno
+			AND S2.train_no = S.train_no
+			AND (T.dayno) > (T2.dayno)
+			AND T2.st_code = @tempsrc 
+) ORDER BY T.arrival ;
 
 -- Query for trains between two stations sorted by total time -- 
 SET @tempsrc = "HJP";
@@ -90,6 +174,7 @@ WHERE S.st_code = @tempsrc
     )
 );
 
+-- TODO updated query for above
 
 -- all the seats given a train
 SET @temptrain = '11123';
@@ -112,6 +197,10 @@ SET @tempdest = "MMCT";
 SET @temptripno = (SELECT distinct trip_no 
     FROM sched 
     WHERE train_no=@temptrain AND st_code=@tempsrc AND DATE(departure)=@tempdatetime);
+
+SET @temptripno = (SELECT distinct trip_no
+	FROM sched NATURAL JOIN 
+)
 
 SET @tempsrcdatetime = (SELECT distinct departure 
     FROM sched 
