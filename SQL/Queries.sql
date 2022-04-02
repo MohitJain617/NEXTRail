@@ -133,6 +133,7 @@ WHERE S.train_no = @temptrain
         AND R.pnr = T.pnr 
         AND T.pnr = P.pnr AND P.stat='Confirmed'
 		AND T.train_no = @temptrain
+        
 		AND ((
 				@tempdestdatetime >= T.boarding_time 
                 AND @tempdestdatetime <= (SELECT S2.arrival FROM sched AS S2

@@ -32,13 +32,13 @@ INSERT INTO passenger VALUES
 ('3410381', 'Mohit J', 'Male', 19, 'Confirmed', null);
 
 INSERT INTO reserve VALUES
-('22210',1,'A','3410381'),
-('22210',2,'A','3410381');
+(1,1,'A','3410381'),
+(1,2,'A','3410381');
 
 -- query for available seats 
 SET @temptrain = 22210;
-SET @tempdatetime = DATE('2022-04-09');
-SET @tempsrc = "NDLS";
+SET @tempdatetime = DATE('2022-04-06');
+SET @tempsrc = "RTM";
 SET @tempdest = "MMCT";
 
 set @dayno = (select day_no from time_table where train_no = @temptrain and st_code = @tempsrc);
@@ -48,18 +48,6 @@ set @tripno = if(@tripno = 0,7,@tripno);
 
 set @tripweek = (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime));
 
--- now i have the tripweek and the tripno to identify other tickets with
--- to do add ticket me trip no and week no and remove boarding date time 
-
--- return true if stA comes before stB
-set @boolval = ((SELECT dist FROM time_table as TT1 
-WHERE TT1.train_no = '22210' 
-	AND TT1.st_code = @tempdest) 
-		<
-	(SELECT dist FROM time_table as TT2 
-	WHERE TT2.train_no = '22210' 
-	AND TT2.st_code = @tempsrc)) ;
-select @boolval;
 
 SELECT S.train_no, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
 FROM struct AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
@@ -80,7 +68,7 @@ WHERE S.train_no = @temptrain
 				(SELECT dist FROM time_table as TT1 
 				WHERE TT1.train_no = T.train_no 
 				AND TT1.st_code = @tempdest) 
-				<
+				<=
 				(SELECT dist FROM time_table as TT2 
 				WHERE TT2.train_no = T.train_no 
 				AND TT2.st_code = T.boarding_from)

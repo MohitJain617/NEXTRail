@@ -121,6 +121,7 @@ CREATE TABLE time_table (
     FOREIGN KEY (st_code) REFERENCES station(st_code)
 );
 
+
 CREATE TABLE fare_lookup (
 	train_type VARCHAR(30),
     additional_cost INT NOT NULL
