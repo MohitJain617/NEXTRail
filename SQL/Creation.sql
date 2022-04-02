@@ -1,4 +1,5 @@
 drop database if exists reservation_system;
+
 CREATE database reservation_system;
 use reservation_system;
 
@@ -45,7 +46,8 @@ CREATE TABLE ticket (
 	pnr VARCHAR(10) PRIMARY KEY,
     user_id INT,
     train_no VARCHAR(6) NOT NULL,
-    boarding_time DATETIME,
+    trip_no INT,
+    week_no INT,
     boarding_from VARCHAR(10) NOT NULL,
     going_to VARCHAR(10) NOT NULL,
     fare INT,

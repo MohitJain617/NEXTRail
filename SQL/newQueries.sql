@@ -189,6 +189,8 @@ WHERE S.train_no = @temptrain
     
 -- Query for avaiable tickets between two stations
 
+
+
 SET @temptrain = '22210';
 SET @tempdatetime = DATE('2022-03-04');
 SET @tempsrc = "NDLS";
@@ -209,6 +211,17 @@ SET @tempsrcdatetime = (SELECT distinct departure
 SET @tempdestdatetime = (SELECT distinct arrival 
     FROM sched 
     WHERE train_no=@temptrain AND st_code=@tempdest AND trip_no = @temptripno);
+
+
+-- given a station and a particular trip, return all the stations that come before it 
+-- during the trip.
+
+SELECT st_code
+FROM time_table as TT
+WHERE TT.train_no = @temptripno
+AND (
+	TT.dist < SELECT *
+);
 
 SELECT S.train_no, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
 FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
