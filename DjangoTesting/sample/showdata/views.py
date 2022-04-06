@@ -1,7 +1,18 @@
 from django.shortcuts import render
 from MySQLdb import _mysql
+import os
+from dotenv import load_dotenv, find_dotenv
 
-db = _mysql.connect(host='localhost',user='root',port=3306,password='0>&a8KvQ',database='reservation_system')
+load_dotenv(find_dotenv())
+
+c_host = os.getenv('HOST')
+c_user = os.getenv('USER')
+c_pass = os.getenv('PASSWORD')
+c_db = os.getenv('DATABASE')
+c_port = os.getenv('DB_PORT')
+
+
+db = _mysql.connect(host=c_host,user=c_user,port=int(c_port),password=c_pass,database=c_db)
 db.query("""SELECT * FROM reservation_system.time_table;""")
 x = db.store_result().fetch_row(how=1,maxrows=0)
 print(x)
