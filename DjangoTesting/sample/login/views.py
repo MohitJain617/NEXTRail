@@ -3,4 +3,4 @@ from django.views.generic import TemplateView
 # Create your views here.
 
 class LoginInfo(TemplateView):
-	template_name = "logindex.html"
+	template_name = "login/logindex.html"
