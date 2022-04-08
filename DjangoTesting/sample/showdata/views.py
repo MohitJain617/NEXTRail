@@ -11,12 +11,11 @@ c_pass = os.getenv('PASSWORD')
 c_db = os.getenv('DATABASE')
 c_port = os.getenv('DB_PORT')
 
-
 db = _mysql.connect(host=c_host,user=c_user,port=int(c_port),password=c_pass,database=c_db)
-db.query("""SELECT * FROM reservation_system.time_table;""")
-x = db.store_result().fetch_row(how=1,maxrows=0)
-print(x)
 
 # Create your views here.
 def index(request):
+	db.query("""SELECT * FROM reservation_system.time_table;""")
+	x = db.store_result().fetch_row(how=1,maxrows=0)
 	return render(request, 'showdata/index.html',dict({'query':x,}))
+
