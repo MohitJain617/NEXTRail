@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'NEXTRail.wsgi.application'
 DATABASES = {
     'default': {  
         'ENGINE': env('BACKEND_ENGINE'),  
-        'NAME': env('DATABASE'),  
-        'USER': env('MYSQL_USER'),  
-        'PASSWORD': env('PASSWORD'),  
-        'HOST': env('HOST'),  
-        'PORT': env('DB_PORT'),  
+        'NAME': env('MYSQL_ADDON_DB'),  
+        'USER': env('MYSQL_ADDON_USER'),  
+        'PASSWORD': env('MYSQL_ADDON_PASSWORD'),  
+        'HOST': env('MYSQL_ADDON_HOST'),  
+        'PORT': env('MYSQL_ADDON_PORT'),  
         'OPTIONS': {  
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
         }  
