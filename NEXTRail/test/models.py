@@ -268,8 +268,10 @@ class TimeTable(models.Model):
 class Train(models.Model):
     id = models.CharField(primary_key=True, max_length=6)
     train_name = models.CharField(max_length=120)
-    src = models.ForeignKey(Station, models.DO_NOTHING, related_name='src')
-    dest = models.ForeignKey(Station, models.DO_NOTHING, related_name='dest')
+    srcfk = models.ForeignKey(Station, models.DO_NOTHING, related_name='srcfk', to_field='st_code')
+    destfk = models.ForeignKey(Station, models.DO_NOTHING, related_name='destfk', to_field='st_code')
+    src = srcfk.get_attname()
+    dest = destfk.get_attname()    
     train_type = models.CharField(max_length=30)
     pantry_avl = models.IntegerField(blank=True, null=True)
 

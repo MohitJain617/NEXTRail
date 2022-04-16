@@ -18,8 +18,7 @@ export default class HomePage extends Component {
     return <Router>
         <Routes>
             {/* <Route exact path='/'><p>This is home page</p></Route> */}
-            <Route path='/' element={<HomePageDetails />}>
-            </Route>
+            <Route path='/' element={<HomePageDetails />}/>
             <Route path='/train' element={<TrainDetails />}/>
         </Routes>
     </Router>
