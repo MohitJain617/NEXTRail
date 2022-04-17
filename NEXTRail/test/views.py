@@ -25,3 +25,17 @@ class TrainDetailView(APIView):
             return Response(TrainSerializer(queryset[0]).data,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    def get(self,request,trainno,format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        print("got get request")
+        # train_no = self.request.query_params.get('trainno')
+        train_no = trainno
+        queryset = Train.objects.raw('SELECT * FROM train WHERE id = %s', [train_no])
+
+        if(len(queryset) == 1):
+            return Response(TrainSerializer(queryset[0]).data,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
