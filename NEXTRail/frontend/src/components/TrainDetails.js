@@ -29,6 +29,19 @@ export default class TrainDetails extends Component {
         .then((data) => console.log(data))
         // todo catch 404 in case of 200 do more fetches for sched and timetable
     }
+    handleSeatsPressed() {
+        console.log("requesting /data/train/seats")
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id: this.state.train_id,
+            }),
+        };
+        fetch("/data/train/seats",requestOptions).then((response) => response.json())
+        .then((data) => console.log(data[75]))
+        // todo catch 404 in case of 200 do more fetches for sched and timetable
+    }
     
     handleSearchPressed2() {
         // GET request using fetch with error handling
@@ -78,6 +91,13 @@ export default class TrainDetails extends Component {
                         onClick={this.handleSearchPressed2.bind(this)}
                     >
                         Search
+                    </Button>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={this.handleSeatsPressed.bind(this)}
+                    >
+                        Seats
                     </Button>
                 </Grid>
             </Grid>
