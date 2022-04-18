@@ -2,3 +2,4 @@
 .env
 NEXTRail/frontend/node_modules
 Website/node_modules
+.pyc

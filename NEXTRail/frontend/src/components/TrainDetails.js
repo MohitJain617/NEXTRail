@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid,Typography,TextField, Button } from "@material-ui/core";
+import {Typography, AppBar, Card, CardAction, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField} from "@material-ui/core";
 
 export default class TrainDetails extends Component {
     constructor(props) {
@@ -66,41 +66,41 @@ export default class TrainDetails extends Component {
 
     render(){
         return (
-            <Grid container spacing={2}>
-                <Grid item xs={12} align="center">
-                    <Typography component="h4" variant="h4">
-                        Train Details
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} align="left">
-                    <TextField
-                     id="outlined-basic"
-                     label="Train No." 
-                     variant="outlined" 
-                     required={true}
-                     type="text"
-                     onChange={this.handleTrainNoChanged}
-                     inputProps={{
-                        maxLength: 5,
-                        style: { textAlign: "center" },
-                      }}
-                    />
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={this.handleSearchPressed2.bind(this)}
-                    >
-                        Search
-                    </Button>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={this.handleSeatsPressed.bind(this)}
-                    >
-                        Seats
-                    </Button>
-                </Grid>
-            </Grid>
+            <div>
+            <Container maxWidth="sm" style={{
+                        marginTop: '180px'
+                    }}>
+                        <Typography style={{ fontWeight:550 }} variant="h2" align="center" position="relative" gutterBottom>
+                            Search Trains
+                        </Typography>
+                        <div>
+                            <Grid container spacing = {0} justifyContent="center">
+                                <Grid item>
+                                    <TextField style={{
+                                                width: "302px",
+                                                height: "55px",
+                                                fontSize: "14px",
+                                                backgroundColor: "#FFFFFF",
+                                            }}
+                                            inputProps={{
+                                                maxLength: 5,
+                                            }}
+                                            id="outlined-basic" label="Enter Train No." variant="outlined" />
+                                </Grid>     
+                                <Grid item>
+                                    <Button style={{
+                                                backgroundColor: "#DC532D",
+                                                color: '#FFFFFF',
+                                                width: "88px",
+                                                height: "55px",
+                                                fontSize: "14px"
+                                            }}
+                                        variant="contained">Search</Button>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </Container>
+                </div>
         );
     }
 }
