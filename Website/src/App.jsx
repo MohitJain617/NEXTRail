@@ -82,6 +82,7 @@ const App = () => {
                             <Grid container spacing = {0} justifyContent="center">
                                 <Grid item>
                                     <TextField style={{
+                                                maxLength: 10,
                                                 width: "302px",
                                                 height: "55px",
                                                 fontSize: "14px",
