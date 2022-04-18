@@ -69,9 +69,10 @@ export default class NavBar extends Component {
                   style={{
                     backgroundColor: "#DC532D",
                     color: "#FFFFFF",
-                    width: "88px",
-                    height: "53px",
+                    width: "80px",
+                    height: "45px",
                     fontSize: "14px",
+                    marginTop: "5px",
                   }}
                   variant="contained"
                 >
