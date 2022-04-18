@@ -2,4 +2,6 @@
 .env
 NEXTRail/frontend/node_modules
 Website/node_modules
+react-website-test/node_modules
+node_modules
 .pyc
