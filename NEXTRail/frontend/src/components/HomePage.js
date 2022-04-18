@@ -8,6 +8,8 @@ import {
   Redirect,
 } from "react-router-dom";
 import HomePageDetails from "./HomePageDetails";
+import PnrPageDetails from "./PnrPageDetails";
+import NavBar from "./NavBar";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -16,10 +18,12 @@ export default class HomePage extends Component {
 
   render() {
     return <Router>
+        <NavBar />
         <Routes>
             {/* <Route exact path='/'><p>This is home page</p></Route> */}
             <Route path='/' element={<HomePageDetails />}/>
             <Route path='/train' element={<TrainDetails />}/>
+            <Route path='/pnr' element={<PnrPageDetails />}/>
         </Routes>
     </Router>
   }
