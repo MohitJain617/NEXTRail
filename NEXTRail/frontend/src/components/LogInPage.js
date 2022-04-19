@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Typography, AppBar, Card, CardAction, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField } from "@material-ui/core";
+import { Avatar,Typography, AppBar, Card, CardAction, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField } from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/Lock";
 
 const textbox = {
 	width: "450px",
