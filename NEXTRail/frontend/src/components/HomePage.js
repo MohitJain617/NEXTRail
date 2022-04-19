@@ -12,6 +12,7 @@ import PnrPageDetails from "./PnrPageDetails";
 import NavBar from "./NavBar";
 import TrainBwStation from "./TrainBwStation";
 import LogInPage from "./LogInPage";
+import SignUpPage from "./SignUpPage";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ export default class HomePage extends Component {
             <Route path='/search' element={<TrainBwStation />}/>
             <Route path='/pnr' element={<PnrPageDetails />}/>
             <Route path='/login' element={<LogInPage />}/>
+            <Route path='/signup' element={<SignUpPage />}/>
         </Routes>
     </Router>
   }
