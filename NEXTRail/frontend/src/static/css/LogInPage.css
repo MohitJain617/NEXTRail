@@ -1,0 +1,23 @@
+.textbox {
+  width: 450px;
+  height: 55px;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+.loginbutt {
+  width: 225px;
+  height: 45px;
+  font-size: 14px;
+}
+
+.signup {
+  width: 112px;
+  height: 20px;
+  font-size: 12px;
+}
+
+.navbutton {
+  text-decoration: none;
+  color: #242038;
+}

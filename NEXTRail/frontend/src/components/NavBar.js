@@ -1,5 +1,22 @@
 import React, { Component } from "react";
-import { AppBar, Toolbar, Grid, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Grid, Button, Box } from "@material-ui/core";
+import Logo from "../static/img/NEXTRAIL.png";
+import { Link } from "react-router-dom";
+import NavBarButton from "./NavBarButton";
+
+const navbutton = {
+  textDecoration: "none",
+  color: "#242038",
+}
+
+const appbarlogin = {
+  marginTop: "5px",
+  backgroundColor: '#DC532D',
+  color: '#FFFDF8',
+  width: "80px",
+  height: "45px",
+  fontSize: "14px"
+}
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -10,51 +27,21 @@ export default class NavBar extends Component {
     return (
       <AppBar style={{ background: "#388087" }}>
         <Toolbar position="relative">
+        <img src={Logo} alt={"logo"}/>
           <div style={{ marginLeft: "auto" }}>
             <Grid container spacing={0} justifyContent="center">
               <Grid item>
-                <Button
-                  style={{
-                    color: "#242038",
-                    width: "88px",
-                    height: "55px",
-                    fontSize: "14px",
-                  }}
-                  variant="text"
-                >
-                  Home
-                </Button>
+                <NavBarButton className="NavButtons" path="/" name="Home" active="true" /> 
               </Grid>
+              <Grid item>
+                <NavBarButton className="NavButtons" path="pnr/" name="PNR Status" buttwidth="110px" active="false"/>
+              </Grid>
+              <Grid item>
+                <NavBarButton className="NavButtons" path="train/" name="Trains" active="false"/> 
+                </Grid>
               <Grid item>
                 <Button
                   style={{
-                    color: "#FFFFFF",
-                    width: "110px",
-                    height: "55px",
-                    fontSize: "14px",
-                  }}
-                  variant="text"
-                >
-                  PNR Status
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  style={{
-                    color: "#242038",
-                    width: "88px",
-                    height: "55px",
-                    fontSize: "14px",
-                  }}
-                  variant="text"
-                >
-                  Trains
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  style={{
-                    color: "#242038",
                     width: "88px",
                     height: "55px",
                     fontSize: "14px",
@@ -66,17 +53,10 @@ export default class NavBar extends Component {
               </Grid>
               <Grid item>
                 <Button
-                  style={{
-                    backgroundColor: "#DC532D",
-                    color: "#FFFFFF",
-                    width: "80px",
-                    height: "45px",
-                    fontSize: "14px",
-                    marginTop: "5px",
-                  }}
+                  style={appbarlogin}
                   variant="contained"
                 >
-                  Log In
+                  <Link to="login/" style={navbutton}>Log In</Link>
                 </Button>
               </Grid>
             </Grid>

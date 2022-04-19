@@ -1,16 +1,71 @@
 import React, { Component } from "react";
-import {Typography, AppBar, Card, CardAction, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField} from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  Container,
+  Button,
+  TextField,
+} from "@material-ui/core";
 
-export default class TrainDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            train_id:  "0",
-        };
-        this.handleTrainNoChanged = this.handleTrainNoChanged.bind(this);
-        this.handleSearchPressed = this.handleSearchPressed.bind(this);
-    }
+function TrainDetails() {
+  return (
+    <div>
+      <Container
+        maxWidth="sm"
+        style={{
+          marginTop: "180px",
+        }}
+      >
+        <Typography
+          style={{ fontWeight: 550 }}
+          variant="h2"
+          align="center"
+          position="relative"
+          gutterBottom
+        >
+          Search Trains
+        </Typography>
+        <div>
+          <Grid container spacing={0} justifyContent="center">
+            <Grid item>
+              <TextField
+                style={{
+                  width: "302px",
+                  height: "55px",
+                  fontSize: "14px",
+                  backgroundColor: "#FFFFFF",
+                }}
+                inputProps={{
+                  maxLength: 5,
+                }}
+                id="outlined-basic"
+                label="Enter Train No."
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                style={{
+                  backgroundColor: "#DC532D",
+                  color: "#FFFFFF",
+                  width: "88px",
+                  height: "55px",
+                  fontSize: "14px",
+                }}
+                variant="contained"
+              >
+                Search
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
+      </Container>
+    </div>
+  );
+}
+export default TrainDetails;
 
+/*
     handleTrainNoChanged(e) {
         this.setState({
             train_id: e.target.value,
@@ -63,44 +118,4 @@ export default class TrainDetails extends Component {
                 console.error('There was an error!', error);
             });
     }
-
-    render(){
-        return (
-            <div>
-            <Container maxWidth="sm" style={{
-                        marginTop: '180px'
-                    }}>
-                        <Typography style={{ fontWeight:550 }} variant="h2" align="center" position="relative" gutterBottom>
-                            Search Trains
-                        </Typography>
-                        <div>
-                            <Grid container spacing = {0} justifyContent="center">
-                                <Grid item>
-                                    <TextField style={{
-                                                width: "302px",
-                                                height: "55px",
-                                                fontSize: "14px",
-                                                backgroundColor: "#FFFFFF",
-                                            }}
-                                            inputProps={{
-                                                maxLength: 5,
-                                            }}
-                                            id="outlined-basic" label="Enter Train No." variant="outlined" />
-                                </Grid>     
-                                <Grid item>
-                                    <Button style={{
-                                                backgroundColor: "#DC532D",
-                                                color: '#FFFFFF',
-                                                width: "88px",
-                                                height: "55px",
-                                                fontSize: "14px"
-                                            }}
-                                        variant="contained">Search</Button>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </Container>
-                </div>
-        );
-    }
-}
+*/
