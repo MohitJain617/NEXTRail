@@ -16,9 +16,22 @@ module.exports = {
           loader: "babel-loader",
         },
       },
-      { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: "url-loader?limit=100000" },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.(jpe?g|png|gif|woff|woff2|otf|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
+        use: [
+            {
+                loader: 'url-loader',
+                options: {
+                    limit: 1000,
+                    name : 'assets/img/[name].[ext]'
+                }
+            }
+        ]
+    },
     ],
   },
   optimization: {

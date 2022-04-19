@@ -1,31 +1,23 @@
-import React, { Component } from "react";
+import React from "react";
 import TrainDetails from "./TrainDetails";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
-  Redirect,
 } from "react-router-dom";
-import HomePageDetails from "./HomePageDetails";
 import PnrPageDetails from "./PnrPageDetails";
 import NavBar from "./NavBar";
 import TrainBwStation from "./TrainBwStation";
 import LogInPage from "./LogInPage";
 import SignUpPage from "./SignUpPage";
 
-export default class HomePage extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <Router>
+function HomePage() {
+  return (
+    <Router>
         <NavBar />
         <Routes>
             {/* <Route exact path='/'><p>This is home page</p></Route> */}
-            <Route path='' element={<TrainBwStation />}/>
-            <Route path='/' element={<HomePageDetails />}/>
+            <Route path='/' element={<TrainBwStation />}/>
             <Route path='/train' element={<TrainDetails />}/>
             <Route path='/search' element={<TrainBwStation />}/>
             <Route path='/pnr' element={<PnrPageDetails />}/>
@@ -33,5 +25,7 @@ export default class HomePage extends Component {
             <Route path='/signup' element={<SignUpPage />}/>
         </Routes>
     </Router>
-  }
-}
+  );
+};
+
+export default HomePage;

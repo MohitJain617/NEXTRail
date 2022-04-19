@@ -1,0 +1,36 @@
+.loginbut {
+  color: #ffffff;
+  width: 500px;
+  height: 45px;
+  font-size: 14px;
+}
+
+.textboxsmall {
+  width: 240px;
+  height: 55px;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+.textboxbig {
+  width: 500px;
+  height: 55px;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+.appbarlogin {
+  margin-top: 5px;
+  background-color: #fffdf8;
+  color: #dc532d;
+  width: 80px;
+  height: 45px;
+  font-size: 14px;
+}
+
+.signup {
+  color: #242038;
+  width: 112px;
+  height: 20px;
+  font-size: 12px;
+}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { AppBar, Toolbar, Grid, Button, Box } from "@material-ui/core";
-import Logo from "../static/NEXTRAIL.png";
+import Logo from "../static/img/NEXTRAIL.png";
 import { Link } from "react-router-dom";
 import NavBarButton from "./NavBarButton";
 

@@ -41,12 +41,7 @@ const categoryDB = [
     },
 ]
 
-export default class TrainBwStation extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
+function TrainBwStation() {
         return (
             <div>
                 <Container maxWidth="sm" style={{
@@ -112,6 +107,7 @@ export default class TrainBwStation extends Component {
                     </div>
                 </Container>
             </div>
-        )
-    }
-}
+        );
+    };
+
+export default TrainBwStation;
