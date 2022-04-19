@@ -66,7 +66,7 @@ CREATE TABLE receipt (
 	user_id INT,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
     FOREIGN KEY (user_id) REFERENCES user_account(user_id), -- keeps 
-    CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer'))
+    CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer','Pending'))
 );
 
 CREATE TABLE adm (
@@ -128,7 +128,7 @@ CREATE TABLE fare_lookup (
 );
 
 CREATE TABLE reserve (
-	id INT NOT NULL,
+	coach_no INT NOT NULL,
     seat_no INT NOT NULL,
     class_type VARCHAR (20) NOT NULL,
     pnr VARCHAR(10),
@@ -143,4 +143,12 @@ CREATE TABLE struct (
     size INT NOT NULL,
     PRIMARY KEY(train_no, class_type)
 );
+
+-- PASSENGER UPDATE:
+ALTER TABLE passenger
+ADD class_type VARCHAR(2) NOT NULL;
+
+-- TICKET UPDATE:
+ALTER TABLE ticket
+MODIFY COLUMN fare INT NOT NULL DEFAULT 0;
 

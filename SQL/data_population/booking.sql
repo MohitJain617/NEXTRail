@@ -102,5 +102,3 @@ INSERT INTO passenger VALUES
 INSERT INTO reserve VALUES 
 (1, 4,@tempclasstype,'111111114');
 -- coach no, seat no, class type, pnr
-
-

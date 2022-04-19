@@ -8,7 +8,8 @@ create function get_dayNo(temp_date DATE)
 	SET val = dayofweek(temp_date);
     RETURN val;
     END //
-
+select * from time_table;
+use reservation_system;
 
 SET @tempday = get_dayNo(DATE('2022-04-03'));
 SELECT @tempday;
