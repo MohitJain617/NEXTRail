@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 
-const url = "data/stations"
+const url = "/data/stations"
 
+const stnList = [
+  {label: "AAA: AAAAA"},
+  {label: "ABVC: SADASF"}
+];
 
-function StnAutoComplete() {
-  const [value, setValue] = React.useState(null);
+const StnAutoComplete = () => {
+  const [hasError, setErrors] = useState(false);
+  const [value, setValue] = useState(null);
+  const [stns, setStations] = useState({});
+
   const handleInput = (e) => {
     console.log(e.target.value);
   };
 
-  console.log(stnList)
+  async function fetchData() {
+    const res = await fetch(url);
+    res
+      .json()
+      .then(res => setStations(res))
+      .catch(err => setErrors(err));
+    console.log("Hello world")
+    console.log(stns)
+  }
+
+  useEffect(() => {
+    fetchData();
+  },[]);
+
   return (
     <Autocomplete
       disablePortal
