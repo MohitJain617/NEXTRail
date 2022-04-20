@@ -20,47 +20,34 @@ delete from reserve;
 delete from ticket; 
 
 select * from ticket;
+
 -- GIVEN SECTION
-SET @tempdatetime = DATE('2022-04-06'); -- datetime of journey
-SET @tempsrc = 'KOTA'; -- src
-SET @tempdest = 'BRC'; -- dest
-SET @temptrain = '22210';
+SET @tempdatetime = DATE('2022-04-18'); -- datetime of journey
+SET @tempsrc = 'HJP'; -- src
+SET @tempdest = 'MFP'; -- dest
+SET @temptrain = '15232';
 SET @coachType = 'A';
 
 -- assume passenger details
-SET @pcnt = 2;
--- these vals are always correct ^
-
 
 -- CALCULATE SECTION
 SET @startdate = DATE('1970-01-01');
 select @tempsrc;
 set @dayno = (select day_no from time_table where train_no=@temptrain and st_code=@tempsrc);
+select @dayno;
 -- formulate tripno
 set @tripno = get_dayNo(@tempdatetime) + 1 - @dayno;
-set @tripno = if(@tripno = 0,7,@tripno);
+set @tripno = if(@tripno = 0,7,@tripno); -- started last week's sunday
+set @tripno = if(@tripno = -1,6,@tripno); -- started last week's saturday
 
-select @dayno;
-select @tripno;
 -- tripno is correct or not
 select count(*) from sched where train_no = '22210' and trip_no = @tripno;
-
-SET SQL_SAFE_UPDATES = 0;
-select * from ticket;
+set @tripweek = (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime));
+set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 
 insert into ticket values
-('3410381',2,'22210',@tripno, (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime)), 'KOTA', 'BRC',0,null);
-select * from receipt;
-select * from ticket;
-
-SET @distsrc = (SELECT dist FROM time_table as T, Ticket as TC
-					WHERE TC.pnr = '3410381'
-					AND T.train_no = TC.train_no
-					AND T.st_code = TC.boarding_from);
-
-select @distsrc;
-select * from reserve;
+('3410381',2,'22210',@tripno, @tripweek, 'KOTA', 'BRC',0,null);
 INSERT INTO passenger VALUES
 ('3410381', 'Aadit Kant Jha', 'Male', 20, 'Confirmed', null,'A'),
 ('3410381', 'Mohit J', 'Male', 19, 'Confirmed', null,'A');
@@ -82,15 +69,6 @@ INSERT INTO reserve VALUES
 (1,2,'A','3410381');
 
 -- query for available seats 
-SET @temptrain = '22210';
-SET @tempdatetime = DATE('2022-04-06');
-SET @tempsrc = "RTM";
-SET @tempdest = "MMCT";
-
-set @dayno = (select day_no from time_table where train_no = @temptrain and st_code = @tempsrc);
--- formulate tripno
-set @tripno = get_dayNo(@tempdatetime) + 1 - @dayno;
-set @tripno = if(@tripno = 0,7,@tripno);
 
 set @tripweek = (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime));
 
@@ -272,7 +250,5 @@ select train_name from train where char_length(train_name) > 35;
 -- Ticket : src datetime 
 -- connect this src datetime to sched to find out if we are talking about the same train or not.
 -- availibility we needed (T booked) the journey is same or not
-set @val1 = null, @val2 = 0;
-select train_name into @val1 from train LIMIT 1;
-select @val1;
-select * from train;
+
+

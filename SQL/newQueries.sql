@@ -1,4 +1,4 @@
-drop function get_dayNo;
+drop function if exists get_dayNo;
 DELIMITER //
 create function get_dayNo(temp_date DATE)
     RETURNS INTEGER
@@ -6,14 +6,17 @@ create function get_dayNo(temp_date DATE)
     BEGIN
     declare val INTEGER ;
 	SET val = dayofweek(temp_date);
+    SET val = val-1;
+    SET val = if(val=0,7,val);
     RETURN val;
     END //
 select * from time_table;
 use reservation_system;
 
-SET @tempday = get_dayNo(DATE('2022-04-03'));
+SET @tempday = get_dayNo(DATE('2022-04-25'));
 SELECT @tempday;
 
+select * from sched where train_no='11123';
 -- what i can do is, suppose i have the date at which i want  tickets
 -- i can get the dayno for that date to find the train at that schedule
 -- and now from that dayno query for the next day.
