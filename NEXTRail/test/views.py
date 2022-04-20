@@ -75,3 +75,15 @@ class TrainSeatsView(APIView):
             return Response(queryset,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class StationView(APIView):
+    def get(self,request,format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+        # queryset = Station.objects.raw('SELECT CONCAT(st_code, ": ",st_name) as stnList FROM station')
+        queryset = Station.objects.raw('SELECT * FROM station')
+        if(len(queryset) >= 1):
+            return Response(StationSerializer(queryset, many=True).data,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)

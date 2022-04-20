@@ -49,3 +49,12 @@ class AllSeatsSerializer(serializers.Serializer):
     ct = serializers.CharField(max_length = 10)
     coach_no = serializers.DecimalField
     seat_no = serializers.DecimalField
+
+class StationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = ('stnList',)
+    stnList = serializers.SerializerMethodField()
+
+    def get_stnList(self,obj):
+        return '{}: {}'.format(obj.st_code, obj.st_name)
