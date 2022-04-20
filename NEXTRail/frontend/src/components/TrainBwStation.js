@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Typography,
   AppBar,
@@ -21,6 +21,7 @@ import {
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import StnAutoComplete from "./StnAutoComplete";
 
 const classes = [
   {
@@ -95,16 +96,7 @@ function TrainBwStation() {
         <div>
           <Grid container spacing={0} align="center" justifyContent="center">
             <Grid item xs={0}>
-              <TextField
-                style={{
-                  fontSize: "14px",
-                  backgroundColor: "#FFFFFF",
-                }}
-                id="outlined-basic"
-                label="From"
-                variant="outlined"
-                inputProps={{ style: { textTransform: "uppercase" } }}
-              />
+              <StnAutoComplete/>
             </Grid>
             <Grid item xs={0}>
               <TextField
