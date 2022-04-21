@@ -10,6 +10,24 @@ create function get_dayNo(temp_date DATE)
     SET val = if(val=0,7,val);
     RETURN val;
     END //
+    
+DELIMITER //
+create function get_daytime(weekno INT, days INT)
+    RETURNS date
+    DETERMINISTIC
+    BEGIN
+    declare val date;
+	SET val = date_add("1970-01-01", INTERVAL weekno WEEK);
+    SET val = date_add(val,INTERVAL days day);
+    RETURN val;
+    END //
+
+select * from ticket;
+set @dx = get_daytime(2726,2);
+select @dx;
+
+set @tripweek = (SELECT TIMESTAMPDIFF(WEEK,"1970-01-01",@dx));
+select @tripweek;
 select * from time_table;
 use reservation_system;
 
