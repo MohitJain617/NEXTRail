@@ -77,33 +77,22 @@ WHERE user_name = @tempusername1
 	AND passcode = @temppassword1;
     
 -- Query for trains between two stations -- 
-SET @tempsrc = "UMB";
-SET @tempdest = "PNP";
-SET @tempdate = DATE('2022-03-05');
+SET @tempsrc = "NDLS";
+SET @tempdest = "MMCT";
+SET @tempdate = DATE('2022-04-18');
 SET @tempdayno = get_dayNo(@tempdate);
-
-SELECT train_no FROM sched as S
-WHERE S.st_code = @tempsrc
-	AND DATE(S.departure) = @tempdate
-    AND EXISTS (
-		SELECT * FROM sched as S2
-        WHERE S2.trip_no = S.trip_no
-			AND S2.train_no = S.train_no
-            AND S2.arrival > S.departure
-            AND S2.st_code = @tempdest
-);
 
 -- updated query
 SET @tempdayno = get_dayNo(@tempdate);
 
 SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
 WHERE T.st_code = @tempsrc
-	AND (T.dayno+S.trip_no-1) = @tempdayno
+	AND (T.day_no+S.trip_no-1) = @tempdayno
 	AND EXISTS (
 		SELECT * FROM time_table as T2 NATURAL JOIN sched as S2
 		WHERE S2.trip_no = S.trip_no
 			AND S2.train_no = S.train_no
-			AND (T.dayno) < (T2.dayno)
+			AND (T.dist) < (T2.dist)
 			AND T2.st_code = @tempdest 
 );
 
@@ -138,7 +127,7 @@ WHERE T.st_code = @tempsrc
 		SELECT * FROM time_table as T2 NATURAL JOIN sched as S2
 		WHERE S2.trip_no = S.trip_no
 			AND S2.train_no = S.train_no
-			AND (T.dayno) < (T2.dayno)
+			AND (T.dist) < (T2.dist)
 			AND T2.st_code = @tempdest 
 ) ORDER BY T.departure ;
 
@@ -147,17 +136,6 @@ SET @tempsrc = "MFP";
 SET @tempdest = "BJU";
 SET @tempdate = DATE('2022-03-05');
 SET @tempdayno = get_dayNo(@tempdate);
-
-SELECT train_no, S.arrival FROM sched as S
-WHERE S.st_code = @tempdest
-    AND EXISTS (
-		SELECT * FROM sched as S2
-        WHERE S2.trip_no = S.trip_no
-			AND DATE(S2.departure) = @tempdate
-			AND S2.train_no = S.train_no
-            AND S.arrival > S2.departure
-            AND S2.st_code = @tempsrc
-) ORDER BY S.arrival;
 
 -- updated query 
 
