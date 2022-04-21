@@ -24,7 +24,6 @@ move fare to receipt
 
 
 pass the stations list as props to autocomplete element
-redesign homepage
 integrate navbar
-make trains tab with two options: train by no and train bw stations
-look into the cause for slow api response
+
+change views to use cursor

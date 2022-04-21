@@ -180,7 +180,6 @@ INSERT INTO user_account VALUES
 (5,'gbeedell4','Julie','','Bora','65\, Marathahalli','Nashik',592010,64,5473926838);
 
 INSERT INTO station VALUES
-('9BP3','9Bp No3'),
 ('ACAB','A Cabin'),
 ('ABB','Abada'),
 ('AHA','Abhaipur'),
@@ -2545,7 +2544,6 @@ INSERT INTO station VALUES
 ('DAH','Dehare'),
 ('DEIT','Dehit'),
 ('DDN','Dehradun'),
-('1','Dehradunddn'),
 ('DOS','Dehri On Son'),
 ('DEHR','Dehu Road'),
 ('DKPM','Dekapam'),

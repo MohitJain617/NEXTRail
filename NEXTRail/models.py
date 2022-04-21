@@ -242,8 +242,8 @@ class Ticket(models.Model):
     train_no = models.ForeignKey('Train', models.DO_NOTHING, db_column='train_no')
     trip_no = models.IntegerField(blank=True, null=True)
     week_no = models.IntegerField(blank=True, null=True)
-    boarding_from = models.ForeignKey(Station, models.DO_NOTHING, related_name='boarding_from')
-    going_to = models.ForeignKey(Station, models.DO_NOTHING, related_name='going_to')
+    boarding_from = models.ForeignKey(Station, models.DO_NOTHING, db_column='boarding_from')
+    going_to = models.ForeignKey(Station, models.DO_NOTHING, db_column='going_to')
     fare = models.IntegerField()
     booking_details = models.CharField(max_length=255, blank=True, null=True)
 
@@ -269,8 +269,8 @@ class TimeTable(models.Model):
 class Train(models.Model):
     id = models.CharField(primary_key=True, max_length=6)
     train_name = models.CharField(max_length=120)
-    src = models.ForeignKey(Station, models.DO_NOTHING, related_name='src')
-    dest = models.ForeignKey(Station, models.DO_NOTHING, related_name='dest')
+    src = models.ForeignKey(Station, models.DO_NOTHING, db_column='src')
+    dest = models.ForeignKey(Station, models.DO_NOTHING, db_column='dest')
     train_type = models.CharField(max_length=30)
     pantry_avl = models.IntegerField(blank=True, null=True)
 

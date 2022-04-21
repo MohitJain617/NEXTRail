@@ -57,5 +57,4 @@ class StationSerializer(serializers.ModelSerializer):
     label = serializers.SerializerMethodField()
 
     def get_label(self,obj):
-        return obj.st_code
-        # return '{}: {}'.format(obj.st_code, obj.st_name)
+        return '{}: {}'.format(obj.st_code, obj.st_name)
