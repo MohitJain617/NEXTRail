@@ -53,8 +53,5 @@ class AllSeatsSerializer(serializers.Serializer):
 class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
-        fields = ('label',)
-    label = serializers.SerializerMethodField()
+        fields = ('st_code','st_name')
 
-    def get_label(self,obj):
-        return '{}: {}'.format(obj.st_code, obj.st_name)

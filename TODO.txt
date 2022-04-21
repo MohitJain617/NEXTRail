@@ -27,3 +27,4 @@ pass the stations list as props to autocomplete element
 integrate navbar
 
 change views to use cursor
+see if u can modify autocomplete to search by st_code but options are in form as code: name
