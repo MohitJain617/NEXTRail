@@ -1,46 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, TextField, createFilterOptions } from "@mui/material";
 
-const url = "/data/stations"
 
-const stnList = [
-  {label: "AAA: AAAAA"},
-  {label: "ABVC: SADASF"}
-];
-
-const StnAutoComplete = () => {
-  const [hasError, setErrors] = useState(false);
+function StnAutoComplete (props) {
   const [value, setValue] = useState(null);
-  const [stns, setStations] = useState({});
+  const [opts,setOpts] = React.useState([]);
+  
+  function getStns(){
+    fetch("data/stations").then((response) => response.json()).then((data) => {
+      setOpts(data)
+    })
+  }
 
-  const handleInput = (e) => {
-    console.log(e.target.value);
-  };
+  const filterOptions = createFilterOptions({
+    matchFrom: 'any',
+    limit: 5,
+  });
 
-  async function fetchData() {
-    const res = await fetch(url);
-    res
-      .json()
-      .then(res => setStations(res))
-      .catch(err => setErrors(err));
-    console.log("Hello world")
-    console.log(stns)
+  function handleChange(e){
+    console.log(e.target.value)
   }
 
   useEffect(() => {
-    fetchData();
-  },[]);
+    getStns();
+  }, [])
 
   return (
     <Autocomplete
-      disablePortal
-      id="combo-box-demo"
-      options={stnList}
+      filterOptions={filterOptions}
+      options={opts}
       sx={{ width: 230 }}
-      value={value}
-      onInputChange={handleInput}
+      // value={value}
+      onChange={handleChange}
+      // onInputChange={handleChange}
       renderInput={(params) => (
-        <TextField {...params} label="From" variant="outlined" />
+        <TextField {...params} label={props.label} variant="outlined"  />
       )}
     />
   );

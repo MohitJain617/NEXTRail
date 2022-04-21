@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from html5lib import serialize
 from rest_framework import generics, status
 from .seralizers import StationSerializer, TrainSerializer, getTrainDetailsSerializer, AllSeatsSerializer
@@ -78,12 +79,13 @@ class TrainSeatsView(APIView):
 
 
 class StationView(APIView):
+    serializer_class = StationSerializer
+
     def get(self,request,format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-        # queryset = Station.objects.raw('SELECT CONCAT(st_code, ": ",st_name) as stnList FROM station')
         queryset = Station.objects.raw('SELECT * FROM station')
+        print(queryset[3])
         if(len(queryset) >= 1):
-            return Response(StationSerializer(queryset, many=True).data,status=status.HTTP_200_OK)
+            data = StationSerializer(queryset[:2],many=True).data
+            return Response(data,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)

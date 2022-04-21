@@ -96,19 +96,10 @@ function TrainBwStation() {
         <div>
           <Grid container spacing={0} align="center" justifyContent="center">
             <Grid item xs={0}>
-              <StnAutoComplete/>
+              <StnAutoComplete label="From"/>
             </Grid>
             <Grid item xs={0}>
-              <TextField
-                style={{
-                  fontSize: "14px",
-                  backgroundColor: "#FFFFFF",
-                }}
-                id="outlined-basic"
-                label="To"
-                variant="outlined"
-                inputProps={{ style: { textTransform: "uppercase" } }}
-              />
+              <StnAutoComplete label="To"/>
             </Grid>
             <Grid item xs={0}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>

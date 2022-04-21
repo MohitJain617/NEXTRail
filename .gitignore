@@ -5,3 +5,4 @@ Website/node_modules
 react-website-test/node_modules
 node_modules
 .pyc
+.DS_Store
