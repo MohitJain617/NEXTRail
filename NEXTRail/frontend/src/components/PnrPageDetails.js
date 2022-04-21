@@ -26,7 +26,7 @@ function PnrPageDetails() {
       >
         <Typography
           style={{ fontWeight: 550 }}
-          variant="h1"
+          variant="h2"
           align="center"
           position="relative"
           gutterBottom

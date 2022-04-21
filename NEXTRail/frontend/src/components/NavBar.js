@@ -1,68 +1,87 @@
-import React, { Component } from "react";
-import { AppBar, Toolbar, Grid, Button, Box } from "@material-ui/core";
-import Logo from "../static/img/NEXTRAIL.png";
+import React from "react";
+import { useLocation } from 'react-router-dom'
+import { AppBar, Toolbar, CssBaseline, makeStyles, Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import NavBarButton from "./NavBarButton";
+import Logo from '../static/img/NEXTRAIL.svg'
 
-const navbutton = {
-  textDecoration: "none",
-  color: "#242038",
-}
+const useStyles = makeStyles((theme) => ({
+    navlinks: {
+        marginTop: "10px",
+        marginLeft: theme.spacing(10),
+        display: "flex",
+    },
+    logo: {
+        flexGrow: "1",
+        cursor: "pointer",
+    },
+    link: {
+        textDecoration: "none",
+        color: "#242038",
+        fontSize: "16px",
+        fontWeight: "550",
+        marginLeft: theme.spacing(5),
+        "&:hover": {
+            color: "#FFFFFF",
+            borderBottom: "1px solid white",
+        },
+    },
 
-const appbarlogin = {
-  marginTop: "5px",
-  backgroundColor: '#DC532D',
-  color: '#FFFDF8',
-  width: "80px",
-  height: "45px",
-  fontSize: "14px"
-}
+    linkbtn: {
+        backgroundColor: "#DC532D",
+        color: "#000",
+        width: "80px",
+        height: "45px",
+        fontSize: "14px",
+        marginTop: "-12px",
+        textDecoration: "none",
+        marginLeft: theme.spacing(5),
+        "&:hover": {
+            backgroundColor: "#FFF",
+        }
+    }
+}));
 
-export default class NavBar extends Component {
-  constructor(props) {
-    super(props);
-  }
+const Navbar = () => {
+    const classes = useStyles();
+    function getCol(curr) {
+        const location = useLocation()
+        if((location.pathname === curr)) {
+            return '#FFF'
+        }
+    }
 
-  render() {
     return (
-      <AppBar style={{ background: "#388087" }}>
-        <Toolbar position="relative">
-        <img src={Logo} alt={"logo"}/>
-          <div style={{ marginLeft: "auto" }}>
-            <Grid container spacing={0} justifyContent="center">
-              <Grid item>
-                <NavBarButton className="NavButtons" path="/" name="Home" active="true" /> 
-              </Grid>
-              <Grid item>
-                <NavBarButton className="NavButtons" path="pnr/" name="PNR Status" buttwidth="110px" active="false"/>
-              </Grid>
-              <Grid item>
-                <NavBarButton className="NavButtons" path="train/" name="Trains" active="false"/> 
-                </Grid>
-              <Grid item>
-                <Button
-                  style={{
-                    width: "88px",
-                    height: "55px",
-                    fontSize: "14px",
-                  }}
-                  variant="text"
-                >
-                  Tickets
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  style={appbarlogin}
-                  variant="contained"
-                >
-                  <Link to="login/" style={navbutton}>Log In</Link>
-                </Button>
-              </Grid>
-            </Grid>
-          </div>
-        </Toolbar>
-      </AppBar>
+        <AppBar position="relative" style={{background: "#388087"}}>
+            <CssBaseline />
+            <Toolbar>
+                <Box>
+                    <img src={Logo} alt="logo"/>
+                </Box>
+
+                <div className={classes.navlinks} style={{ marginLeft: "auto" }}>
+                    <Link to="/" className={classes.link}  style={{color:getCol("/")}}>
+                        Home
+                    </Link>
+                    
+                    <Link to="/pnr" className={classes.link} style={{color:getCol("/pnr")}}>
+                        PNR Status
+                    </Link>
+
+                    <Link to="/train" className={classes.link} style={{color:getCol("/train")}}>
+                        Trains
+                    </Link>
+
+                    <Link to="/tickets" className={classes.link} style={{color:getCol("/tickets")}}>
+                        Tickets
+                    </Link>
+
+                    <Button component={Link} to="/login" variant="contained" className={classes.linkbtn} style={{background:getCol("/login")}}>
+                        Log In
+                    </Button>
+                </div>
+            </Toolbar>
+        </AppBar>
     );
-  }
-}
+};
+
+export default Navbar;
