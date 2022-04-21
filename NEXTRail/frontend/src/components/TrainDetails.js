@@ -8,6 +8,19 @@ import {
 } from "@material-ui/core";
 
 function TrainDetails() {
+  const [trainId,setTrainId] = React.useState("");
+  function handleSearchPressed() {
+    const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            id: trainId
+        }),
+    };
+    fetch("/data/train",requestOptions).then((response) => response.json())
+    .then((data) => console.log(data))
+    // todo catch 404 in case of 200 do more fetches for sched and timetable
+}
   return (
     <div>
       <Container
@@ -41,6 +54,7 @@ function TrainDetails() {
                 id="outlined-basic"
                 label="Enter Train No."
                 variant="outlined"
+                onChange={(e)=>setTrainId(e.target.value)}
               />
             </Grid>
             <Grid item>
@@ -53,6 +67,7 @@ function TrainDetails() {
                   fontSize: "14px",
                 }}
                 variant="contained"
+                onClick={handleSearchPressed}
               >
                 Search
               </Button>
@@ -72,18 +87,7 @@ export default TrainDetails;
         });
     }
 
-    handleSearchPressed() {
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                id: this.state.train_id,
-            }),
-        };
-        fetch("/data/train",requestOptions).then((response) => response.json())
-        .then((data) => console.log(data))
-        // todo catch 404 in case of 200 do more fetches for sched and timetable
-    }
+    
     handleSeatsPressed() {
         console.log("requesting /data/train/seats")
         const requestOptions = {

@@ -21,8 +21,6 @@ def get_all_seats(tno):
     with connection.cursor() as cursor:
         cursor.execute("SELECT S.train_no, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no FROM struct AS S,  class_layout as C, seat_no AS SN2, seat_no as SN WHERE S.train_no = %s AND S.class_type = C.class_type AND SN2.num <= S.size AND SN.num <= C.capacity;", [tno])
         row = dictfetchall(cursor)
-        
-
     # print(row)
     return row
 
@@ -45,18 +43,18 @@ class TrainDetailView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-    def get(self,request,trainno,format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
+    # def get(self,request,trainno,format=None):
+    #     if not self.request.session.exists(self.request.session.session_key):
+    #         self.request.session.create()
 
-        print("got get request")
-        # train_no = self.request.query_params.get('trainno')
-        train_no = trainno
-        queryset = Train.objects.raw('SELECT * FROM train WHERE id = %s', [train_no])
-        if(len(queryset) == 1):
-            return Response(TrainSerializer(queryset[0]).data,status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    #     print("got get request")
+    #     # train_no = self.request.query_params.get('trainno')
+    #     train_no = trainno
+    #     queryset = Train.objects.raw('SELECT * FROM train WHERE id = %s', [train_no])
+    #     if(len(queryset) == 1):
+    #         return Response(TrainSerializer(queryset[0]).data,status=status.HTTP_200_OK)
+    #     else:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class TrainSeatsView(APIView):
     def post(self,request,format=None):
@@ -82,10 +80,10 @@ class StationView(APIView):
     serializer_class = StationSerializer
 
     def get(self,request,format=None):
-        queryset = Station.objects.raw('SELECT * FROM station')
-        print(queryset[3])
+        
+        queryset = Station.objects.raw('SELECT * FROM station')        
         if(len(queryset) >= 1):
-            data = StationSerializer(queryset[:2],many=True).data
+            data = StationSerializer(queryset,many=True).data
             return Response(data,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
