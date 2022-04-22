@@ -10,6 +10,7 @@ import NavBar from "./NavBar";
 import TrainBwStation from "./TrainBwStation";
 import LogInPage from "./LogInPage";
 import SignUpPage from "./SignUpPage";
+import BookingPage from "./BookingPage";
 
 function HomePage() {
   return (
@@ -23,6 +24,7 @@ function HomePage() {
             <Route path='/pnr' element={<PnrPageDetails />}/>
             <Route path='/login' element={<LogInPage />}/>
             <Route path='/signup' element={<SignUpPage />}/>
+            <Route path='/bookings' element={<BookingPage />}/>
         </Routes>
     </Router>
   );

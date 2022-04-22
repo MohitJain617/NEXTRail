@@ -2,8 +2,6 @@ from typing import Any, Dict
 from datetime import datetime
 from html5lib import serialize
 from rest_framework import generics, status
-from .seralizers import StationSerializer, TrainSerializer, getTrainDetailsSerializer, AllSeatsSerializer
-from .models import Station, Train
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -20,17 +18,13 @@ class BackEndQuerier():
             for row in cursor.fetchall()
         ]
     
-    def cursor_querier(query,params):
+    def cursor_querier(query,params=[]):
         with connection.cursor() as cursor:
             cursor.execute(query, params)
             row = BackEndQuerier.dictfetchall(cursor)
         # print(row)
         return row
     
-
-class TestView(generics.ListAPIView):
-    queryset = Station.objects.raw('SELECT * FROM station WHERE st_code LIKE "A_J"')
-    serializer_class = StationSerializer
 
 class TrainDetailView(APIView):
 
@@ -154,7 +148,6 @@ class TrainDetailView(APIView):
 
 class TrainSeatsView(APIView):
 
-
     def post(self,request,format=None):
         print("post called")
         if not self.request.session.exists(self.request.session.session_key):
@@ -177,13 +170,11 @@ class TrainSeatsView(APIView):
 
 
 class StationView(APIView):
-    serializer_class = StationSerializer
 
     def get(self,request,format=None):
-        
-        queryset = Station.objects.raw('SELECT * FROM station')        
+        query = 'SELECT * FROM station'
+        queryset = BackEndQuerier.cursor_querier(query)        
         if(len(queryset) >= 1):
-            data = StationSerializer(queryset,many=True).data
-            return Response(data,status=status.HTTP_200_OK)
+            return Response(queryset,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
