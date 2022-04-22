@@ -43,6 +43,7 @@ const App = () => {
     return(
         <>
         <div>
+            {/* navbar change kardena to responsive */}
             <CssBaseline />
             <AppBar style={{ background: '#388087' }}>
                 <Toolbar position="relative">
