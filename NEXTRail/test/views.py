@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from datetime import datetime
 from html5lib import serialize
 from rest_framework import generics, status
 from .seralizers import StationSerializer, TrainSerializer, getTrainDetailsSerializer, AllSeatsSerializer
@@ -23,8 +24,15 @@ class BackEndQuerier():
         with connection.cursor() as cursor:
             cursor.execute(query, params)
             row = BackEndQuerier.dictfetchall(cursor)
-    # print(row)
+        # print(row)
         return row
+    
+    def normal_querier(query,params = False):
+        with connection.cursor() as cursor:
+            if(params == False):
+                cursor.execute(query)
+            else:
+                cursor.execute(query,params)
 
 class TestView(generics.ListAPIView):
     queryset = Station.objects.raw('SELECT * FROM station WHERE st_code LIKE "A_J"')
@@ -34,14 +42,42 @@ class TrainDetailView(APIView):
 
     def post(self,request,format=None):
         classType = request.data.get('classType')
+        classReq = 'FALSE' if(classType == '') else 'TRUE'
         #classType is empty string for all classes
         dest = request.data.get('dest')
         src = request.data.get('src')
         doj = request.data.get('doj')
-        print(classType,dest,src,doj,sep='\n')
+        doja = datetime.strptime(doj,'%Y-%m-%d').weekday()+1
+        print(classType,dest,src,doja,classReq,sep=' ')
         #Write your queries here
 
-        return Response(status=status.HTTP_200_OK)
+        query = """SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
+            WHERE T.st_code = %s
+                AND (T.day_no+S.trip_no-1) = %s
+                AND EXISTS (
+                    SELECT * FROM time_table as T2 NATURAL JOIN sched as S2
+                    WHERE S2.trip_no = S.trip_no
+                        AND S2.train_no = S.train_no
+                        AND (T.dist) < (T2.dist)
+                        AND T2.st_code = %s 
+                )
+                AND (
+                (%s="FALSE") OR EXISTS (
+                    SELECT * FROM struct as STR
+                    WHERE STR.train_no = S.train_no
+                    AND STR.class_type = %s
+                )
+            )"""
+            
+        params = [src,doja,dest,classReq,classType]
+
+        queryset = BackEndQuerier.cursor_querier(query,params)
+        print(queryset)
+
+        if(len(queryset) >= 1):
+            return Response(queryset,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
     def get(self,request,format=None):
