@@ -27,12 +27,6 @@ class BackEndQuerier():
         # print(row)
         return row
     
-    def normal_querier(query,params = False):
-        with connection.cursor() as cursor:
-            if(params == False):
-                cursor.execute(query)
-            else:
-                cursor.execute(query,params)
 
 class TestView(generics.ListAPIView):
     queryset = Station.objects.raw('SELECT * FROM station WHERE st_code LIKE "A_J"')
@@ -51,7 +45,7 @@ class TrainDetailView(APIView):
         print(classType,dest,src,doja,classReq,sep=' ')
         #Write your queries here
 
-        query = """SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
+        query = """SELECT T.train_no FROM time_table as T NATURAL JOIN sched as S
             WHERE T.st_code = %s
                 AND (T.day_no+S.trip_no-1) = %s
                 AND EXISTS (
@@ -72,6 +66,48 @@ class TrainDetailView(APIView):
         params = [src,doja,dest,classReq,classType]
 
         queryset = BackEndQuerier.cursor_querier(query,params)
+        queryClasses = """select distinct class_type from struct where train_no = %s;"""
+        queryStationTime = """select arrival,departure,day_no from time_table where train_no = %s and st_code=%s;"""
+        queryTrainName = """select train_name from train where id = %s;"""
+        queryTrips = """select trip_no from sched where train_no = %s;"""
+        
+        # appending required values
+        for i in range(len(queryset)):
+            #train name
+            currId = queryset[i]["train_no"]
+            queryset[i]["train_name"] = BackEndQuerier.cursor_querier(queryTrainName,[currId])[0]["train_name"]
+
+            # classes in this train:
+            varclasses = BackEndQuerier.cursor_querier(queryClasses,[currId])
+            # making comma seperated string
+            varString=""
+            for temp in varclasses:
+                varString = varString + temp["class_type"]+','
+            varString = varString[:-1]
+            queryset[i]["class_types"] = varString
+
+            # station timings
+            varTimes = BackEndQuerier.cursor_querier(queryStationTime,[currId,src])[0]
+            queryset[i]["src_arrival"] = varTimes["arrival"]
+            queryset[i]["src_departure"] = varTimes["departure"]
+            queryset[i]["src_day_no"] = varTimes["day_no"]
+
+            varTimes = BackEndQuerier.cursor_querier(queryStationTime,[currId,dest])[0]
+            queryset[i]["dest_arrival"] = varTimes["arrival"]
+            queryset[i]["dest_departure"] = varTimes["departure"]
+            queryset[i]["dest_day_no"] = varTimes["day_no"]
+
+            # days(trip nos) at which this train starts from actual source
+            varDays = BackEndQuerier.cursor_querier(queryTrips,[currId])
+            varString = ""
+            for temp in varDays:
+                # offset for current source
+                x = (temp["trip_no"]+queryset[i]["src_day_no"]-1) % 7
+                x = 7 if(x == 0) else x;
+                varString = varString + str(x)+","
+            varString = varString[:-1]
+            queryset[i]["trip_nos"] = varString
+
         print(queryset)
 
         if(len(queryset) >= 1):
@@ -84,8 +120,32 @@ class TrainDetailView(APIView):
         train_no = request.GET.get('id')
         if train_no != None:
             query = 'SELECT * FROM train WHERE id = %s'
-            queryset = BackEndQuerier.cursor_querier(query,[train_no])
-            if(len(queryset) == 1):
+            queryset = BackEndQuerier.cursor_querier(query,[train_no])[0]
+            queryClasses = """select distinct class_type from struct where train_no = %s;"""
+            queryTrips = """select trip_no from sched where train_no = %s;"""
+            queryTT = """select st_code,arrival,departure,dist,day_no from time_table where train_no = %s order by dist ;"""
+
+            # appending required values
+            # classes in this train:
+            varclasses = BackEndQuerier.cursor_querier(queryClasses,[train_no])
+            # making comma seperated string
+            varString=""
+            for temp in varclasses:
+                varString = varString + temp["class_type"]+','
+            varString = varString[:-1]
+            queryset["class_types"] = varString
+
+            # days(trip nos) at which this train starts from actual source
+            varDays = BackEndQuerier.cursor_querier(queryTrips,[train_no])
+            varString = ""
+            for temp in varDays:
+                x = temp["trip_no"]
+                varString = varString + str(x)+","
+            varString = varString[:-1]
+            queryset["trip_nos"] = varString
+            queryset["time_table"] = BackEndQuerier.cursor_querier(queryTT,[train_no])
+
+            if(len(queryset) >= 1):
                 return Response(queryset,status=status.HTTP_200_OK)
             else:
                 return Response({"Train not Found!":"Cannot find the train."},
