@@ -24,7 +24,6 @@ class BackEndQuerier():
             row = BackEndQuerier.dictfetchall(cursor)
         # print(row)
         return row
-    
 
 class TrainDetailView(APIView):
 
