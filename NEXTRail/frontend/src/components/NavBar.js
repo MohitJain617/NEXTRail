@@ -43,39 +43,58 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () => {
     const classes = useStyles();
+    // const [scrolled, setScrolled] = React.useState(false);
+    // const handleScroll = () => {
+    //     const offset = window.scrollY;
+    //     if (offset > 200) {
+    //         setScrolled(true);
+    //     }
+    //     else {
+    //         setScrolled(false);
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll)
+    // })
+    // let navbarClasses = ['navbar'];
+    // if (scrolled) {
+    //     navbarClasses.push('scrolled');
+    // }
+
     function getCol(curr) {
         const location = useLocation()
-        if((location.pathname === curr)) {
+        if ((location.pathname === curr)) {
             return '#FFF'
         }
     }
 
     return (
-        <AppBar position="relative" style={{background: "#388087"}}>
+        <AppBar position="relative" style={{ background: "#388087" }}>
             <CssBaseline />
             <Toolbar>
                 <Box>
-                    <img src={Logo} alt="logo"/>
+                    <img src={Logo} alt="logo" />
                 </Box>
 
                 <div className={classes.navlinks} style={{ marginLeft: "auto" }}>
-                    <Link to="/" className={classes.link}  style={{color:getCol("/")}}>
+                    <Link to="/" className={classes.link} style={{ color: getCol("/") }}>
                         Home
                     </Link>
-                    
-                    <Link to="/pnr" className={classes.link} style={{color:getCol("/pnr")}}>
+
+                    <Link to="/pnr" className={classes.link} style={{ color: getCol("/pnr") }}>
                         PNR Status
                     </Link>
 
-                    <Link to="/train" className={classes.link} style={{color:getCol("/train")}}>
+                    <Link to="/train" className={classes.link} style={{ color: getCol("/train") }}>
                         Trains
                     </Link>
 
-                    <Link to="/tickets" className={classes.link} style={{color:getCol("/tickets")}}>
+                    <Link to="/tickets" className={classes.link} style={{ color: getCol("/tickets") }}>
                         Tickets
                     </Link>
 
-                    <Button component={Link} to="/login" variant="contained" className={classes.linkbtn} style={{background:getCol("/login")}}>
+                    <Button component={Link} to="/login" variant="contained" className={classes.linkbtn} style={{ background: getCol("/login") }}>
                         Log In
                     </Button>
                 </div>
