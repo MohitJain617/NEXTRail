@@ -23,8 +23,10 @@ move fare to receipt
 
 
 
-pass the stations list as props to autocomplete element
-integrate navbar
-
+sticky navbar
 change views to use cursor
-see if u can modify autocomplete to search by st_code but options are in form as code: name
+
+login page
+pnr backend query
+trains backend query
+tickets redirecting to login

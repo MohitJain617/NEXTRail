@@ -16,6 +16,14 @@ import {
 } from "@material-ui/core";
 
 function PnrPageDetails() {
+  const[value,setValue] = React.useState('');
+
+  function changeValue(e){
+    if(!isNaN(e.target.value)){
+      setValue(e.target.value)
+    }
+  }
+
   return (
     <div>
       <Container
@@ -43,6 +51,8 @@ function PnrPageDetails() {
                   fontSize: "18px",
                   backgroundColor: "#FFFFFF",
                 }}
+                value={value}
+                onChange={changeValue}
                 inputProps={{
                   maxLength: 10,
                 }}

@@ -8,7 +8,14 @@ import {
 } from "@material-ui/core";
 
 function TrainDetails() {
-  const [trainId,setTrainId] = React.useState("");
+  const [trainId,setTrainId] = React.useState('');
+
+  function changeValue(e){
+    if(!isNaN(e.target.value)){
+      setTrainId(e.target.value)
+    }
+  }
+
   function handleSearchPressed() {
     const requestOptions = {
         method: "POST",
@@ -48,13 +55,14 @@ function TrainDetails() {
                   fontSize: "14px",
                   backgroundColor: "#FFFFFF",
                 }}
+                value={trainId}
+                onChange={changeValue}
                 inputProps={{
                   maxLength: 5,
                 }}
                 id="outlined-basic"
                 label="Enter Train No."
                 variant="outlined"
-                onChange={(e)=>setTrainId(e.target.value)}
               />
             </Grid>
             <Grid item>

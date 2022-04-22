@@ -1,71 +1,59 @@
 import React, { useState, useEffect } from "react";
 import {
   Typography,
-  AppBar,
-  MenuItem,
-  Card,
-  CardAction,
-  CardContent,
-  CardMedia,
-  CssBaseline,
   Grid,
-  Toolbar,
   Container,
   Button,
-  Box,
   TextField,
-  FormControl,
-  InputLabel,
-  NativeSelect,
 } from "@material-ui/core";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import StnAutoComplete from "./StnAutoComplete";
-
+import { Alert, Snackbar } from "@mui/material";
 const classes = [
   {
-    value: 1,
+    value: 0,
     label: "All Classes",
     code: "",
   },
   {
-    value: 2,
+    value: 1,
     label: "AC 1 Tier",
     code: "H",
   },
   {
-    value: 3,
+    value: 2,
     label: "AC 2 Tier",
     code: "A",
   },
   {
-    value: 4,
+    value: 3,
     label: "AC 3 Tier",
     code: "B",
   },
   {
-    value: 5,
+    value: 4,
     label: "AC 3 Tier Economy",
     code: "BE",
   },
   {
-    value: 6,
+    value: 5,
     label: "AC Chair Car",
     code: "C",
   },
   {
-    value: 7,
+    value: 6,
     label: "Executive Chair Car",
     code: "E",
   },
   {
-    value: 8,
+    value: 7,
     label: "Sleeper Class",
     code: "S",
   },
   {
-    value: 9,
+    value: 8,
     label: "Second Seating",
     code: "D"
   },
@@ -83,6 +71,8 @@ function TrainBwStation() {
     src:null,
     doj:null,  
   });
+  const [open,setOpen] = React.useState(false);
+  const [alertMsg,setAlertMsg] = React.useState("");
 
   function getSrc(e, val){
     if(val === null){
@@ -104,7 +94,22 @@ function TrainBwStation() {
   
   function searchTrain(){
     rqstParam.doj = value.toLocaleDateString()
-    console.log(rqstParam)
+    if(rqstParam.src === null || rqstParam.dest === null){
+      setOpen(true)
+      setAlertMsg("Source or Destination missing!")
+    }
+    else if(rqstParam.src == rqstParam.dest){
+      setOpen(true)
+      setAlertMsg("Source or Destination cannot be the same!")
+    }
+    else{
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rqstParam),
+    };
+    fetch("/data/train",requestOptions)
+    }
   }
 
   function getStns() {
@@ -118,6 +123,13 @@ function TrainBwStation() {
     getStns();
   }, [])
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <div>
       <Container
@@ -206,6 +218,11 @@ function TrainBwStation() {
           </Grid>
         </div>
       </Container>
+      <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {alertMsg}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

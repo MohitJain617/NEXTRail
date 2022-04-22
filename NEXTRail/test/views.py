@@ -17,16 +17,22 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-def get_all_seats(tno):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT S.train_no, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no FROM struct AS S,  class_layout as C, seat_no AS SN2, seat_no as SN WHERE S.train_no = %s AND S.class_type = C.class_type AND SN2.num <= S.size AND SN.num <= C.capacity;", [tno])
-        row = dictfetchall(cursor)
-    # print(row)
-    return row
-
 class TestView(generics.ListAPIView):
     queryset = Station.objects.raw('SELECT * FROM station WHERE st_code LIKE "A_J"')
     serializer_class = StationSerializer
+
+class TrainAvlView(APIView):
+    def post(self,request,format=None):
+        classType = request.data.get('classType')
+        #classType is empty string for all classes
+        dest = request.data.get('dest')
+        src = request.data.get('src')
+        doj = request.data.get('doj')
+        print(classType,dest,src,doj,sep='\n')
+        #Write your queries here
+
+        return Response(status=status.HTTP_200_OK)
+
 
 class TrainDetailView(APIView):
     serializer_class = getTrainDetailsSerializer
@@ -57,6 +63,13 @@ class TrainDetailView(APIView):
     #         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class TrainSeatsView(APIView):
+    def get_all_seats(self,tno):
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT S.train_no, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no FROM struct AS S,  class_layout as C, seat_no AS SN2, seat_no as SN WHERE S.train_no = %s AND S.class_type = C.class_type AND SN2.num <= S.size AND SN.num <= C.capacity;", [tno])
+            row = dictfetchall(cursor)
+    # print(row)
+        return row
+
     def post(self,request,format=None):
         print("post called")
         if not self.request.session.exists(self.request.session.session_key):
@@ -65,7 +78,7 @@ class TrainSeatsView(APIView):
         print(train_no)
         # train_no = '22210'
 
-        queryset = get_all_seats(train_no)
+        queryset = self.get_all_seats(train_no)
 
         # print(queryset[0])
         print(len(queryset))
