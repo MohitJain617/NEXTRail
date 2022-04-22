@@ -55,60 +55,56 @@ const classes = [
   {
     value: 8,
     label: "Second Seating",
-    code: "D"
+    code: "D",
   },
 ];
 
 //Fix calendar size
 
-
 function TrainBwStation() {
   const [value, setValue] = React.useState(new Date());
   const [stnList, setStnList] = React.useState([]);
   const [rqstParam, setRqstParam] = React.useState({
-    classType:"",
-    dest:null,
-    src:null,
-    doj:null,  
+    classType: "",
+    dest: null,
+    src: null,
+    doj: null,
   });
-  const [open,setOpen] = React.useState(false);
-  const [alertMsg,setAlertMsg] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [alertMsg, setAlertMsg] = React.useState("");
+  const [datePickerOpen, setDatePickerOpen] = React.useState(false);
 
-  function getSrc(e, val){
-    if(val === null){
-      rqstParam.src = null
-    }
-    else{
-      rqstParam.src = val.st_code
+  function getSrc(e, val) {
+    if (val === null) {
+      rqstParam.src = null;
+    } else {
+      rqstParam.src = val.st_code;
     }
   }
 
-  function getDest(e, val){
-    if(val === null){
-      rqstParam.dest = null
-    }
-    else{
-      rqstParam.dest = val.st_code
+  function getDest(e, val) {
+    if (val === null) {
+      rqstParam.dest = null;
+    } else {
+      rqstParam.dest = val.st_code;
     }
   }
-  
-  function searchTrain(){
-    rqstParam.doj = value.toLocaleDateString()
-    if(rqstParam.src === null || rqstParam.dest === null){
-      setOpen(true)
-      setAlertMsg("Source or Destination missing!")
-    }
-    else if(rqstParam.src == rqstParam.dest){
-      setOpen(true)
-      setAlertMsg("Source or Destination cannot be the same!")
-    }
-    else{
+
+  function searchTrain() {
+    rqstParam.doj = value.toLocaleDateString('en-CA');
+    if (rqstParam.src === null || rqstParam.dest === null) {
+      setOpen(true);
+      setAlertMsg("Source or Destination missing!");
+    } else if (rqstParam.src == rqstParam.dest) {
+      setOpen(true);
+      setAlertMsg("Source and Destination cannot be the same!");
+    } else {
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rqstParam),
-    };
-    fetch("/data/train",requestOptions)
+      };
+      fetch("/data/train/", requestOptions);
     }
   }
 
@@ -121,15 +117,20 @@ function TrainBwStation() {
   }
   useEffect(() => {
     getStns();
-  }, [])
+  }, []);
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
+
+  const handleDateChangeRaw = (e) => {
+    e.preventDefault();
+  }
+
   return (
     <div>
       <Container
@@ -154,16 +155,22 @@ function TrainBwStation() {
         <div>
           <Grid container spacing={0} align="center" justifyContent="center">
             <Grid item xs={0}>
-              <StnAutoComplete label="From" stnList={stnList} handler={getSrc}/>
+              <StnAutoComplete
+                label="From"
+                stnList={stnList}
+                handler={getSrc}
+              />
             </Grid>
             <Grid item xs={0}>
-              <StnAutoComplete label="To" stnList={stnList} handler={getDest}/>
+              <StnAutoComplete label="To" stnList={stnList} handler={getDest} />
             </Grid>
             <Grid item xs={0}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  PopupWidth="230px"
                   views={["day"]}
+                  open={datePickerOpen}
+                  onClick={() => setDatePickerOpen(true)}
+                  onClose={() => setDatePickerOpen(false)}
                   minDate={new Date()}
                   maxDate={new Date().setMonth(new Date().getMonth() + 3)}
                   label="Date of Journey"
@@ -174,9 +181,17 @@ function TrainBwStation() {
                   }}
                   renderInput={(params) => (
                     <TextField
-                      variant="outlined"
+                    onKeyDown={e => {
+                      if(e.code !== "Tab" && !e.ctrlKey){
+                        e.preventDefault();
+                      }
+                    }
+                      }
+                    variant="outlined"
                       {...params}
                       sx={{ width: "50%" }}
+                      value={value}
+                    onClick={() => setDatePickerOpen(true)}
                     />
                   )}
                 />
@@ -188,7 +203,9 @@ function TrainBwStation() {
                 select
                 variant="outlined"
                 label="Class Type"
-                onChange={e => {rqstParam.classType = classes[e.target.value].code}}
+                onChange={(e) => {
+                  rqstParam.classType = classes[e.target.value].code;
+                }}
                 SelectProps={{
                   native: true,
                 }}
@@ -219,7 +236,7 @@ function TrainBwStation() {
         </div>
       </Container>
       <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           {alertMsg}
         </Alert>
       </Snackbar>

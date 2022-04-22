@@ -28,5 +28,8 @@ change views to use cursor
 
 login page
 pnr backend query
-trains backend query
-tickets redirecting to login
+tickets redirecting to login if not logged in
+
+log in and user infos stuff
+convert everything to cursor
+make BackendQuerier singleton

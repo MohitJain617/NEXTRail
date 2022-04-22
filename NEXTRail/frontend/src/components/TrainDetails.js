@@ -17,14 +17,8 @@ function TrainDetails() {
   }
 
   function handleSearchPressed() {
-    const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            id: trainId
-        }),
-    };
-    fetch("/data/train",requestOptions).then((response) => response.json())
+
+    fetch("/data/train/"+ "?id=" +trainId).then((response) => response.json())
     .then((data) => console.log(data))
     // todo catch 404 in case of 200 do more fetches for sched and timetable
 }
@@ -54,6 +48,11 @@ function TrainDetails() {
                   height: "55px",
                   fontSize: "14px",
                   backgroundColor: "#FFFFFF",
+                }}
+                onKeyDown={(e)=>{
+                  if(e.code === "Enter" && parseInt(trainId) >= 10000){
+                    handleSearchPressed();
+                  }
                 }}
                 value={trainId}
                 onChange={changeValue}
