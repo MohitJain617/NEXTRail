@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   AppBar,
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   linkbtn: {
     backgroundColor: "#DC532D",
     color: "#000",
-    width: "80px",
+    width: "100px",
     height: "45px",
     fontSize: "14px",
     marginTop: "-12px",
@@ -56,6 +56,13 @@ const Navbar = () => {
       return "#FFF";
     }
   }
+  const [isAuth, setIsAuth] = React.useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      setIsAuth(true);
+    }
+  }, []);
 
   return (
     <AppBar position="relative" style={{ background: "#388087" }}>
@@ -66,10 +73,13 @@ const Navbar = () => {
             <img src={Logo} alt="logo" />
           </Link>
         </Box>
-        <Box style={{
-            marginLeft: "20px", 
+        <Box
+          style={{
+            marginLeft: "20px",
             marginTop: "10px",
-            color: "#242038"}}>
+            color: "#242038",
+          }}
+        >
           <h4>Hello, cxsUJsnv.</h4>
         </Box>
         <div className={classes.navlinks} style={{ marginLeft: "auto" }}>
@@ -100,16 +110,27 @@ const Navbar = () => {
           >
             Your Journeys
           </Link>
-
-          <Button
-            component={Link}
-            to="/login"
-            variant="contained"
-            className={classes.linkbtn}
-            style={{ background: getCol("/login") }}
-          >
-            Log In
-          </Button>
+          {isAuth === true ? (
+            <Button
+              component={Link}
+              to="/login"
+              variant="contained"
+              className={classes.linkbtn}
+              style={{ background: getCol("/login") }}
+            >
+              Log In
+            </Button>
+          ) : (
+            <Button
+              component={Link}
+              to="/login"
+              variant="contained"
+              className={classes.linkbtn}
+              style={{ background: getCol("/login") }}
+            >
+              Log Out
+            </Button>
+          )}
         </div>
       </Toolbar>
     </AppBar>

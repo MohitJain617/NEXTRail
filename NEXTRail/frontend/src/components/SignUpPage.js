@@ -54,7 +54,7 @@ function SignUpPage() {
         "number": number,
       }),
     };
-    fetch("/data/register/", requestOptions)
+    fetch("/accounts/register/", requestOptions)
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok) {

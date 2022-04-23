@@ -176,30 +176,3 @@ class StationView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-class RegisterUserView(APIView):
-
-    def post(self,request,format=None):
-        user_name = request.data.get('userName')
-        email = request.data.get('email')
-        password = request.data.get('password')
-        first_name = request.data.get('firstName')
-        last_name = request.data.get('lastName')
-        
-        try:
-            match = User.objects.get(username=user_name)
-        except User.DoesNotExist:
-            try:
-                match = User.objects.get(email=email)
-            except User.DoesNotExist:
-                #Unique
-                user = User.objects.create_user(user_name,email,password)
-                user.first_name = first_name
-                user.last_name = last_name
-                user.save()
-                print(user)
-                print(user_name,email,password,sep='\n')
-                return Response({"success":"User Registered"},status=status.HTTP_200_OK)
-            return Response({"error":"Email in Use"},status=status.HTTP_409_CONFLICT)
-
-        return Response({"error":"User Name in Use"},status=status.HTTP_409_CONFLICT)
-        
