@@ -1,3 +1,4 @@
+SET SQL_SAFE_UPDATES = 0;
 drop function if exists get_dayNo;
 DELIMITER //
 create function get_dayNo(temp_date DATE)
@@ -79,11 +80,15 @@ WHERE user_name = @tempusername1
 -- Query for trains between two stations -- 
 SET @tempsrc = "NDLS";
 SET @tempdest = "MMCT";
-SET @tempdate = DATE('2022-04-18');
+SET @tempdate = DATE('2022-04-23');
 SET @tempdayno = get_dayNo(@tempdate);
 
 -- updated query
 SET @tempdayno = get_dayNo(@tempdate);
+SET @classReq = FALSE;
+SET @classPref = 'S';
+
+select * from struct;
 
 SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
 WHERE T.st_code = @tempsrc
@@ -94,8 +99,15 @@ WHERE T.st_code = @tempsrc
 			AND S2.train_no = S.train_no
 			AND (T.dist) < (T2.dist)
 			AND T2.st_code = @tempdest 
+	)
+    AND (
+	(@classReq = FALSE) OR EXISTS (
+		SELECT * FROM struct as STR
+        WHERE STR.train_no = T.train_no
+        AND STR.class_type = @classPref
+	)
 );
-
+select * from struct where train_no = '22210';
 
 -- SELECT train_no FROM sched as S NATURAL JOIN time_table as T
 -- WHERE T.st_code = @tempsrc
@@ -301,3 +313,76 @@ WHERE pnr = @temppnr;
 
 DELETE FROM reserve
 WHERE pnr=@temppnr;
+
+-- QUERY to get the confirmation status given a train, trip_no and week_no, src, dest
+
+SET @trainNo = '22210';
+SET @tempsrc = 'NDLS';
+SET @tempdest = 'BRC';
+SET @tempdate = DATE("2022-04-30");
+-- CALCULATE SECTION
+set @dayno = (select day_no from time_table where train_no=@temptrain and st_code=@tempsrc);
+-- formulate tripno
+set @tripno = get_dayNo(@tempdate) + 1 - @dayno;
+set @tripno = if(@tripno = 0,7,@tripno); -- started last week's sunday
+set @tripno = if(@tripno = -1,6,@tripno); -- started last week's saturday
+
+-- tripno is correct or not
+-- select count(*) from sched where train_no = '15232' and trip_no = @tripno;
+set @tripweek = get_weekNo(@tempdate);
+set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
+
+
+SELECT count(*) 
+FROM waiting_list as W
+WHERE W.train_no = @trainNo
+	AND W.week_no = @tripweek
+	AND W.trip_no = @tripno
+	AND NOT(
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = @tempdest) 
+			<=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no =W.train_no 
+			AND TT2.st_code = W.boarding_from)
+		) 
+		OR
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = @tempsrc) 
+			>=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no = W.train_no 
+			AND TT2.st_code = W.going_to)
+		)
+	);
+    
+-- ----------------- VIEWS --------------------- 
+-- Waiting List View with ranks
+drop view if exists waiting_list_count;
+CREATE VIEW waiting_list_count as
+-- SELECT dense_rank() over (order by R.transaction_time) as priority, T.pnr, P.pname, P.age
+SELECT count(*) as WL, T.train_no, T.week_no, T.trip_no, P.class_type as class_type
+FROM passenger as P, ticket as T, receipt as R
+WHERE P.pnr = T.pnr
+	AND P.pnr = R.pnr
+	AND P.stat = 'WL'
+    GROUP BY T.train_no, T.week_no, T.trip_no, P.class_type;
+
+-- reserve , passenger -> cancelled, x passenger -> which is in waiting list and
+
+drop view if exists waiting_list;
+CREATE VIEW waiting_list as
+SELECT dense_rank() over (order by R.transaction_time) as priority, P.pid, T.pnr, T.train_no, T.boarding_from, T.going_to, T.week_no, T.trip_no
+FROM passenger as P, ticket as T, receipt as R
+WHERE p.pnr = T.pnr
+	AND P.pnr = R.pnr
+	AND P.stat = 'WL'
+    ORDER by priority;
+
+ select * from waiting_list;
+ 
+ select * from ticket;

@@ -50,7 +50,7 @@ CREATE TABLE ticket (
     week_no INT,
     boarding_from VARCHAR(10) NOT NULL,
     going_to VARCHAR(10) NOT NULL,
-    fare INT,
+    fare INT DEFAULT 0 NOT NULL,
     booking_details VARCHAR(255),
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
@@ -82,9 +82,10 @@ CREATE TABLE passenger (
     age INT NOT NULL,
     stat VARCHAR(20),
 	meal_option VARCHAR(10),
+    class_type VARCHAR(2) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),       -- Belongs To 
 	CHECK (meal_option in ('veg','non-veg',null)),
-    CHECK (stat in ('Confirmed','Waiting','Cancelled')),
+    CHECK (stat in ('CNF','WL','CAN')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
 );
@@ -123,7 +124,7 @@ CREATE TABLE time_table (
 
 
 CREATE TABLE fare_lookup (
-	train_type VARCHAR(30),
+	train_type VARCHAR(30) PRIMARY KEY,
     additional_cost INT NOT NULL
 );
 
@@ -144,10 +145,14 @@ CREATE TABLE struct (
     PRIMARY KEY(train_no, class_type)
 );
 
--- PASSENGER UPDATE:
-ALTER TABLE passenger
-ADD class_type VARCHAR(2) NOT NULL;
 
--- TICKET UPDATE:
-ALTER TABLE ticket
-MODIFY COLUMN fare INT NOT NULL DEFAULT 0; 
+-- ---------------Indexes-------------------
+CREATE INDEX station_index ON station (st_name);
+CREATE INDEX trainname_index ON train (train_name);
+CREATE INDEX traintype_index ON train (train_type);
+CREATE INDEX ticket_index ON ticket (trip_no, week_no);
+CREATE INDEX ticket_fare ON ticket(fare);
+CREATE INDEX receipt_index ON receipt (pnr);
+CREATE INDEX passenger_index ON passenger(pnr);
+CREATE INDEX class_layout_index ON class_layout (class_name);
+CREATE INDEX time_table_index ON time_table (train_no);

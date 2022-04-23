@@ -1,4 +1,3 @@
-
 drop database if exists reservation_system;
 
 CREATE database reservation_system;
@@ -51,7 +50,7 @@ CREATE TABLE ticket (
     week_no INT,
     boarding_from VARCHAR(10) NOT NULL,
     going_to VARCHAR(10) NOT NULL,
-    fare INT,
+    fare INT DEFAULT 0 NOT NULL,
     booking_details VARCHAR(255),
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
@@ -77,15 +76,17 @@ CREATE TABLE adm (
 );
 
 CREATE TABLE passenger (
+	pid INT auto_increment primary key,
 	pnr VARCHAR(10) NOT NULL,
     pname VARCHAR(30) NOT NULL,
     gender VARCHAR(10) NOT NULL,
     age INT NOT NULL,
     stat VARCHAR(20),
 	meal_option VARCHAR(10),
+    class_type VARCHAR(2) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),       -- Belongs To 
 	CHECK (meal_option in ('veg','non-veg',null)),
-    CHECK (stat in ('Confirmed','Waiting','Cancelled')),
+    CHECK (stat in ('CNF','WL','CAN')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
 );
@@ -124,7 +125,7 @@ CREATE TABLE time_table (
 
 
 CREATE TABLE fare_lookup (
-	train_type VARCHAR(30),
+	train_type VARCHAR(30) PRIMARY KEY,
     additional_cost INT NOT NULL
 );
 
@@ -145,16 +146,21 @@ CREATE TABLE struct (
     PRIMARY KEY(train_no, class_type)
 );
 
--- PASSENGER UPDATE:
-ALTER TABLE passenger
-ADD class_type VARCHAR(2) NOT NULL;
 
--- TICKET UPDATE:
-ALTER TABLE ticket
-MODIFY COLUMN fare INT NOT NULL DEFAULT 0;
+-- ---------------Indexes-------------------
+CREATE INDEX station_index ON station (st_name);
+CREATE INDEX trainname_index ON train (train_name);
+CREATE INDEX traintype_index ON train (train_type);
+CREATE INDEX ticket_index ON ticket (trip_no, week_no);
+CREATE INDEX ticket_fare ON ticket(fare);
+CREATE INDEX receipt_index ON receipt (pnr);
+CREATE INDEX passenger_index ON passenger(pnr);
+CREATE INDEX class_layout_index ON class_layout (class_name);
+CREATE INDEX time_table_index ON time_table (train_no);
 
-------------------------------
+-- ----------------------------
 
+-- Data Population
 
 INSERT INTO adm VALUES
 ('rwinsor0','Gai0gccZYhAj'),
@@ -10847,6 +10853,44 @@ INSERT INTO struct VALUES
 (15232,'S',9);
 
 
+drop function if exists get_dayNo;
+DELIMITER //
+create function get_dayNo(temp_date DATE)
+    RETURNS INTEGER
+    DETERMINISTIC
+    BEGIN
+    declare val INTEGER ;
+	SET val = dayofweek(temp_date);
+    SET val = val-1;
+    SET val = if(val=0,7,val);
+    RETURN val;
+    END //
+    
+drop function if exists get_weekNo;
+DELIMITER //
+create function get_weekNo(temp_date DATE)
+    RETURNS INTEGER
+    DETERMINISTIC
+    BEGIN
+    declare val INTEGER ;
+    SET val = (SELECT TIMESTAMPDIFF(WEEK,DATE("1970-01-05"),temp_date));
+    RETURN val;
+    END //
+
+DELIMITER //
+create function get_daytime(weekno INT, days INT)
+    RETURNS date
+    DETERMINISTIC
+    BEGIN
+    declare val date;
+	SET val = date_add("1970-01-05", INTERVAL weekno WEEK);
+    SET val = date_add(val,INTERVAL days day);
+    RETURN val;
+    END //
+    
+    
+    
+
 -- TRIGGERS:
 
 -- find additional cost given a train type
@@ -10902,6 +10946,7 @@ $$
 DELIMITER ;
 
 -- TRIGGER FOR ASSIGNING A SEAT TO PASSENGER
+
 drop trigger if exists book_seat_if_avail;
 DELIMITER $$
 CREATE TRIGGER book_seat_if_avail
@@ -10933,9 +10978,9 @@ begin
     	AND SN.num <= C.capacity
     	AND NOT EXISTS (
 			SELECT * FROM reserve as R, ticket as T, passenger as P
-			WHERE T.train_no = S.train_no AND R.class_type = S.class_type AND R.id = SN2.num AND R.seat_no = SN.num
+			WHERE T.train_no = S.train_no AND R.class_type = S.class_type AND R.coach_no = SN2.num AND R.seat_no = SN.num
         	AND R.pnr = T.pnr 
-        	AND T.pnr = P.pnr AND P.stat='Confirmed'
+        	AND T.pnr = P.pnr AND P.stat='CNF'
 			AND T.train_no = @temptrain
 			AND T.trip_no = @tripno
 			AND T.week_no = @tripweek
@@ -10963,8 +11008,9 @@ begin
 		) LIMIT 1;
 
 		IF (@seatno IS NULL) then
-			SET NEW.stat = 'Waiting';
+			SET NEW.stat = 'WL';
 		ELSE
+			SET NEW.stat = 'CNF';
 			INSERT INTO RESERVE VALUES (@coachno, @seatno, @coachtype, NEW.pnr);
 		END IF;
     
@@ -10973,26 +11019,3 @@ $$
 DELIMITER ;
 
 
-drop function if exists get_dayNo;
-DELIMITER //
-create function get_dayNo(temp_date DATE)
-    RETURNS INTEGER
-    DETERMINISTIC
-    BEGIN
-    declare val INTEGER ;
-	SET val = dayofweek(temp_date);
-    SET val = val-1;
-    SET val = if(val=0,7,val);
-    RETURN val;
-    END //
-    
-DELIMITER //
-create function get_daytime(weekno INT, days INT)
-    RETURNS date
-    DETERMINISTIC
-    BEGIN
-    declare val date;
-	SET val = date_add("1970-01-01", INTERVAL weekno WEEK);
-    SET val = date_add(val,INTERVAL days day);
-    RETURN val;
-    END //
