@@ -43,7 +43,6 @@ const App = () => {
     return(
         <>
         <div>
-            {/* navbar change kardena to responsive */}
             <CssBaseline />
             <AppBar style={{ background: '#388087' }}>
                 <Toolbar position="relative">
@@ -241,8 +240,8 @@ const App = () => {
                 Stations
             </Typography>
             <div style={{ height: 300, width: '100%' }}>
-                <DataGrid rows={rows} columns={columns} sx={{
-                boxShadow: 2,border: 2, borderColor: '#000000','& .MuiDataGrid-cell:hover': {color: 'primary.main',},'& .super-app-theme--header': {
+                <DataGrid rows={rows} columns={columns} hideFooter="true" sx={{
+                '& .MuiDataGrid-cell:hover': {color: 'primary.main',},'& .super-app-theme--header': {
                     backgroundColor: '#00afb9',
                     color: "white",
                     fontWeight: "bold"
