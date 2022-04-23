@@ -30,13 +30,13 @@ const rows: GridRowsProp = [
   ];
   
   const columns: GridColDef[] = [
-    { field: 'col1', headerName: 'Station  Code', width: 200, headerAlign: 'center', align:"center",headerClassName: 'super-app-theme--header',},
-    { field: 'col2', headerName: 'Station Name', width: 200, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',},
-    { field: 'col3', headerName: 'Arrival', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',},
-    { field: 'col4', headerName: 'Departure', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header' },
-    { field: 'col5', headerName: 'Halt Time', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header' },
-    { field: 'col6', headerName: 'Day', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header' },
-    { field: 'col7', headerName: 'Distance', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header' },
+    { field: 'col1', headerName: 'Station  Code', width: 200, headerAlign: 'center', align:"center",headerClassName: 'super-app-theme--header', sortable: false, disableColumnMenu: true, disableSelectionClick: true},
+    { field: 'col2', headerName: 'Station Name', width: 200, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',  sortable: false, disableColumnMenu: true, disableSelectionClick: true},
+    { field: 'col3', headerName: 'Arrival', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',  sortable: false, disableColumnMenu: true, disableSelectionClick: true},
+    { field: 'col4', headerName: 'Departure', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',  sortable: false, disableColumnMenu: true , disableSelectionClick: true},
+    { field: 'col5', headerName: 'Halt Time', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',  sortable: false, disableColumnMenu: true , disableSelectionClick: true},
+    { field: 'col6', headerName: 'Day', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',  sortable: false, disableColumnMenu: true , disableSelectionClick: true},
+    { field: 'col7', headerName: 'Distance', width: 150, headerAlign: 'center',align:"center", headerClassName: 'super-app-theme--header',  sortable: false, disableColumnMenu: true},
   ];
 
 const App = () => {
@@ -240,7 +240,7 @@ const App = () => {
                 Stations
             </Typography>
             <div style={{ height: 300, width: '100%' }}>
-                <DataGrid rows={rows} columns={columns} hideFooter="true" sx={{
+                <DataGrid rows={rows} columns={columns} disableSelectionOnClick= "true" isRowSelectable="false" hideFooter="true" sx={{
                 '& .MuiDataGrid-cell:hover': {color: 'primary.main',},'& .super-app-theme--header': {
                     backgroundColor: '#00afb9',
                     color: "white",
