@@ -35,6 +35,7 @@ make BackendQuerier singleton
 
 routing transitions
 
+make everything form
 improve frontend class type dict
 swap stations
 rework abhik's frontend

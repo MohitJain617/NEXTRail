@@ -93,11 +93,11 @@ function TrainBwStation() {
   function searchTrain() {
     rqstParam.doj = value.toLocaleDateString("en-CA");
     if (rqstParam.src === null || rqstParam.dest === null) {
-      setOpen(true);
       setAlertMsg("Source or Destination missing!");
-    } else if (rqstParam.src == rqstParam.dest) {
       setOpen(true);
+    } else if (rqstParam.src == rqstParam.dest) {
       setAlertMsg("Source and Destination cannot be the same!");
+      setOpen(true);
     } else {
       const requestOptions = {
         method: "POST",

@@ -3,6 +3,7 @@ from datetime import datetime
 from html5lib import serialize
 from rest_framework import generics, status
 from rest_framework.views import APIView
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 
 from django.db import connection
@@ -146,7 +147,6 @@ class TrainDetailView(APIView):
 class TrainSeatsView(APIView):
 
     def post(self,request,format=None):
-        print("post called")
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         train_no = request.data.get('id')
@@ -175,3 +175,31 @@ class StationView(APIView):
             return Response(queryset,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class RegisterUserView(APIView):
+
+    def post(self,request,format=None):
+        user_name = request.data.get('userName')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        first_name = request.data.get('firstName')
+        last_name = request.data.get('lastName')
+        
+        try:
+            match = User.objects.get(username=user_name)
+        except User.DoesNotExist:
+            try:
+                match = User.objects.get(email=email)
+            except User.DoesNotExist:
+                #Unique
+                user = User.objects.create_user(user_name,email,password)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+                print(user)
+                print(user_name,email,password,sep='\n')
+                return Response({"success":"User Registered"},status=status.HTTP_200_OK)
+            return Response({"error":"Email in Use"},status=status.HTTP_409_CONFLICT)
+
+        return Response({"error":"User Name in Use"},status=status.HTTP_409_CONFLICT)
+        
