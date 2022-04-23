@@ -98,7 +98,7 @@ const Navbar = () => {
             className={classes.link}
             style={{ color: getCol("/bookings") }}
           >
-            Your Bookings
+            Your Journeys
           </Link>
 
           <Button

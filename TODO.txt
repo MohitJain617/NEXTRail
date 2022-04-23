@@ -30,6 +30,15 @@ login page
 pnr backend query
 tickets redirecting to login if not logged in
 
-log in and user infos stuff
 convert everything to cursor
 make BackendQuerier singleton
+
+routing transitions
+
+make everything form
+improve frontend class type dict
+swap stations
+rework abhik's frontend
+wl query 
+
+auth

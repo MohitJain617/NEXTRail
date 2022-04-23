@@ -3,6 +3,7 @@ from datetime import datetime
 from html5lib import serialize
 from rest_framework import generics, status
 from rest_framework.views import APIView
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 
 from django.db import connection
@@ -24,7 +25,6 @@ class BackEndQuerier():
             row = BackEndQuerier.dictfetchall(cursor)
         # print(row)
         return row
-    
 
 class TrainDetailView(APIView):
 
@@ -36,7 +36,6 @@ class TrainDetailView(APIView):
         src = request.data.get('src')
         doj = request.data.get('doj')
         doja = datetime.strptime(doj,'%Y-%m-%d').weekday()+1
-        print(classType,dest,src,doja,classReq,sep=' ')
         #Write your queries here
 
         query = """SELECT T.train_no FROM time_table as T NATURAL JOIN sched as S
@@ -102,7 +101,6 @@ class TrainDetailView(APIView):
             varString = varString[:-1]
             queryset[i]["trip_nos"] = varString
 
-        print(queryset)
 
         if(len(queryset) >= 1):
             return Response(queryset,status=status.HTTP_200_OK)
@@ -114,32 +112,32 @@ class TrainDetailView(APIView):
         train_no = request.GET.get('id')
         if train_no != None:
             query = 'SELECT * FROM train WHERE id = %s'
-            queryset = BackEndQuerier.cursor_querier(query,[train_no])[0]
-            queryClasses = """select distinct class_type from struct where train_no = %s;"""
-            queryTrips = """select trip_no from sched where train_no = %s;"""
-            queryTT = """select st_code,arrival,departure,dist,day_no from time_table where train_no = %s order by dist ;"""
+            queryset = BackEndQuerier.cursor_querier(query,[train_no])
+            if len(queryset) >= 1:
+                queryset = queryset[0]
+                queryClasses = """select distinct class_type from struct where train_no = %s;"""
+                queryTrips = """select trip_no from sched where train_no = %s;"""
+                queryTT = """select st_code,arrival,departure,dist,day_no from time_table where train_no = %s order by dist ;"""
 
             # appending required values
             # classes in this train:
-            varclasses = BackEndQuerier.cursor_querier(queryClasses,[train_no])
+                varclasses = BackEndQuerier.cursor_querier(queryClasses,[train_no])
             # making comma seperated string
-            varString=""
-            for temp in varclasses:
-                varString = varString + temp["class_type"]+','
-            varString = varString[:-1]
-            queryset["class_types"] = varString
+                varString=""
+                for temp in varclasses:
+                    varString = varString + temp["class_type"]+','
+                varString = varString[:-1]
+                queryset["class_types"] = varString
 
             # days(trip nos) at which this train starts from actual source
-            varDays = BackEndQuerier.cursor_querier(queryTrips,[train_no])
-            varString = ""
-            for temp in varDays:
-                x = temp["trip_no"]
-                varString = varString + str(x)+","
-            varString = varString[:-1]
-            queryset["trip_nos"] = varString
-            queryset["time_table"] = BackEndQuerier.cursor_querier(queryTT,[train_no])
-
-            if(len(queryset) >= 1):
+                varDays = BackEndQuerier.cursor_querier(queryTrips,[train_no])
+                varString = ""
+                for temp in varDays:
+                    x = temp["trip_no"]
+                    varString = varString + str(x)+","
+                varString = varString[:-1]
+                queryset["trip_nos"] = varString
+                queryset["time_table"] = BackEndQuerier.cursor_querier(queryTT,[train_no])
                 return Response(queryset,status=status.HTTP_200_OK)
             else:
                 return Response({"Train not Found!":"Cannot find the train."},
@@ -149,7 +147,6 @@ class TrainDetailView(APIView):
 class TrainSeatsView(APIView):
 
     def post(self,request,format=None):
-        print("post called")
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         train_no = request.data.get('id')
@@ -178,3 +175,31 @@ class StationView(APIView):
             return Response(queryset,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class RegisterUserView(APIView):
+
+    def post(self,request,format=None):
+        user_name = request.data.get('userName')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        first_name = request.data.get('firstName')
+        last_name = request.data.get('lastName')
+        
+        try:
+            match = User.objects.get(username=user_name)
+        except User.DoesNotExist:
+            try:
+                match = User.objects.get(email=email)
+            except User.DoesNotExist:
+                #Unique
+                user = User.objects.create_user(user_name,email,password)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+                print(user)
+                print(user_name,email,password,sep='\n')
+                return Response({"success":"User Registered"},status=status.HTTP_200_OK)
+            return Response({"error":"Email in Use"},status=status.HTTP_409_CONFLICT)
+
+        return Response({"error":"User Name in Use"},status=status.HTTP_409_CONFLICT)
+        

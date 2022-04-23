@@ -91,13 +91,13 @@ function TrainBwStation() {
   }
 
   function searchTrain() {
-    rqstParam.doj = value.toLocaleDateString('en-CA');
+    rqstParam.doj = value.toLocaleDateString("en-CA");
     if (rqstParam.src === null || rqstParam.dest === null) {
-      setOpen(true);
       setAlertMsg("Source or Destination missing!");
-    } else if (rqstParam.src == rqstParam.dest) {
       setOpen(true);
+    } else if (rqstParam.src == rqstParam.dest) {
       setAlertMsg("Source and Destination cannot be the same!");
+      setOpen(true);
     } else {
       const requestOptions = {
         method: "POST",
@@ -129,7 +129,7 @@ function TrainBwStation() {
 
   const handleDateChangeRaw = (e) => {
     e.preventDefault();
-  }
+  };
 
   return (
     <div>
@@ -181,17 +181,17 @@ function TrainBwStation() {
                   }}
                   renderInput={(params) => (
                     <TextField
-                    onKeyDown={e => {
-                      if(e.code !== "Tab" && !e.ctrlKey){
-                        e.preventDefault();
-                      }
-                    }
-                      }
-                    variant="outlined"
+                      style={{ backgroundColor: "#FFFFFF" }}
+                      onKeyDown={(e) => {
+                        if (e.code !== "Tab" && !e.ctrlKey) {
+                          e.preventDefault();
+                        }
+                      }}
+                      variant="outlined"
                       {...params}
                       sx={{ width: "50%" }}
                       value={value}
-                    onClick={() => setDatePickerOpen(true)}
+                      onClick={() => setDatePickerOpen(true)}
                     />
                   )}
                 />
@@ -203,6 +203,7 @@ function TrainBwStation() {
                 select
                 variant="outlined"
                 label="Class Type"
+                style={{ backgroundColor: "#FFFFFF" }}
                 onChange={(e) => {
                   rqstParam.classType = classes[e.target.value].code;
                 }}
