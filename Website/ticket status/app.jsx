@@ -374,7 +374,7 @@ const App = () => {
             </Card>
             </div>
             </Grid>
-            </Grid>
+            </Grid> 
         </div>
         </>
     );
