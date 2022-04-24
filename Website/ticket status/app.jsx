@@ -1,10 +1,26 @@
 import React from "react";
-import {Typography, AppBar,MenuItem, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField} from "@material-ui/core";
+import {Typography,List, ListItem, ListItemText, AppBar,MenuItem, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField} from "@material-ui/core";
 import Logo from "./images/NEXTRAIL.svg";
 import TrainIcon from '@mui/icons-material/Train';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 
+const products = [
+    {
+      name: 'Chennai Express',
+      desc: '1 Adult',
+      price: 'Rs 1749',
+    },
+    { name: 'Convenience', desc: '', price: 'Free' },
+  ];
+
+  const addresses = ['306 Mahagun Maple', 'Sector-50', 'Noida', '201301'];
+  const payments = [
+    { name: 'Card type', detail: 'Visa' },
+    { name: 'Card holder', detail: 'Mr Abhik S Basu' },
+    { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
+    { name: 'Expiry date', detail: '04/2024' },
+  ];
 
 const App = () => {
     return(
@@ -87,10 +103,10 @@ const App = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs = {6}>
-                                <Button style={{display: "inline",textAlign: "left", backgroundColor: "#F69175", borderRadius: 10, marginTop:"20px", float:"right", marginRight:"20px"}}>
+                                <Button style={{display: "inline",textAlign: "left", backgroundColor: "#7C8DB0", borderRadius: 10, marginTop:"20px", float:"right", marginRight:"20px"}}>
                                     <Typography style = {{color: "#000",fontSize: 25, fontWeight: 'bold', float: "right", clear:"both",  textTransform: "none" }}>Cancel Ticket</Typography>
                                 </Button>
-                                <Button variant="outlined" style={{display: "inline",textAlign: "left", backgroundColor: "#9FC8CC", borderRadius: 10, marginLeft:"15px", marginTop:"20px", float:"right", marginRight:"20px"}}>
+                                <Button variant="outlined" style={{display: "inline",textAlign: "left", backgroundColor: "#8397FF", borderRadius: 10, marginLeft:"15px", marginTop:"20px", float:"right", marginRight:"20px"}}>
                                     <Typography style = {{color: "#000",fontSize: 25, fontWeight: 'bold', float: "right", clear:"both",  textTransform: "none" }}>Get Status</Typography>
                                 </Button>
                             </Grid>
@@ -287,10 +303,66 @@ const App = () => {
 
             <Grid item xs = {4}>
             <div style= {{marginTop:"20px", marginLeft:"10px", marginRight:"20px"}}>
-            <Card sx={{ maxWidth: 200 }} style={{backgroundColor:"#E4E4E4"}}>
+            <Card sx={{ maxWidth: 200 }} style={{backgroundColor:"#fff"}}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>
-                    <div textAlign="center">
+                    <div style= {{backgroundColor: "#CDD9DF"}}>
+                <center>
+                            <ReceiptIcon   display ="inline" fontSize = "small" style = {{width:40, height:40, color:"#606060",}}></ReceiptIcon>
+                            </center>
+                            <center>
+                            <Typography display = "inline" style = {{color:"#606060" ,fontSize: 30, fontWeight: 'bold',}}>
+                                Receipt
+                            </Typography>
+                            </center>
+                </div>
+                {/* <Typography variant="h6" gutterBottom>
+        Order summary
+      </Typography> */}
+      <div style= {{backgroundColor: "#FDD08D"}}>
+      <List disablePadding>
+        {products.map((product) => (
+          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
+            <ListItemText primary={product.name} secondary={product.desc} />
+            <Typography variant="body2">{product.price}</Typography>
+          </ListItem>
+        ))}
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Total" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            Rs. 1749
+          </Typography>
+        </ListItem>
+      </List>
+      <Grid container spacing={2}>
+        <Grid  item xs={12} sm={6}>
+          <Typography variant="h6"  gutterBottom sx={{ mt: 2 }}>
+            Booking
+          </Typography>
+          <Typography gutterBottom>Abhik Basu</Typography>
+          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+        </Grid>
+        <Grid  marginLeft="10px" item container direction="column" xs={12} sm={6}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            Payment details
+          </Typography>
+          <Grid container>
+            {payments.map((payment) => (
+              <React.Fragment key={payment.name}>
+                <Grid item xs={6}>
+                  <Typography gutterBottom>{payment.name}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography gutterBottom>{payment.detail}</Typography>
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid> 
+      </div>
+                    {/* <div textAlign="center">
                             <center>
                             <ReceiptIcon  fontSize = "small" style = {{width:40, height:40, color:"#000",}}></ReceiptIcon>
                             </center>
@@ -369,7 +441,7 @@ const App = () => {
                     Rs. 1789
                   </Typography>
                 </Grid>
-                </Grid>
+                </Grid> */}
                 </CardContent>
             </Card>
             </div>
