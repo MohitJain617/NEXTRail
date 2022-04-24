@@ -102,7 +102,7 @@ const App = () => {
             <Grid container spacing = {24}>
                 <Grid item xs = {8}>
             <div style= {{marginTop:"20px", marginLeft:"10px", marginRight:"20px"}}>
-            <Card sx={{ maxWidth: 200 }} style={{backgroundColor:"#D7E7E9"}}>
+            <Card sx={{ maxWidth: 200 }} style={{backgroundColor:"#fff"}}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>
                     <Grid container spacing = {24}>
@@ -287,7 +287,7 @@ const App = () => {
 
             <Grid item xs = {4}>
             <div style= {{marginTop:"20px", marginLeft:"10px", marginRight:"20px"}}>
-            <Card sx={{ maxWidth: 200 }} style={{backgroundColor:"#F5D2C8"}}>
+            <Card sx={{ maxWidth: 200 }} style={{backgroundColor:"#E4E4E4"}}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>
                     <div textAlign="center">
