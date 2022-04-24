@@ -13,46 +13,15 @@ import LockOutlinedIcon from "@material-ui/icons/Lock";
 import "../static/css/LogInPage.css";
 import { Link, useNavigate } from "react-router-dom";
 
-function LogInPage() {
+function LogInPage(props) {
   const navigate = useNavigate();
   const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  function loginUser(e) {
-    e.preventDefault();
-
-    const requestOptions = {
-      method: "POST",
-      credentials: "include",
-      mode: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-      body: JSON.stringify({
-        userName: userName,
-        password: password,
-      }),
-    };
-    fetch("/accounts/login/", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.key) {
-          localStorage.clear();
-          localStorage.setItem("token", data.key);
-          navigate("/");
-        } else {
-          setEmail("");
-          setPassword("");
-          localStorage.clear();
-          setErrors(true);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
+  // function loginUser(e) {
+  //   e.preventDefault();
+  //   
+  // }
 
   return (
     <div>
@@ -81,7 +50,10 @@ function LogInPage() {
                 Log In
               </Typography>
             </div>
-            <form onSubmit={loginUser}>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              props.login(userName,password)
+              }}>
               <div style={{ marginTop: "50px" }}>
                 <Grid container spacing={2} align="center" direction="column">
                   <Grid item xs={16}>

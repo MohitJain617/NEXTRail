@@ -61,6 +61,7 @@ function SignUpPage() {
           return Promise.reject(data.error);
         }
         else{
+          localStorage.setItem('token', data.token)
           navigate("/");
         }
       })
