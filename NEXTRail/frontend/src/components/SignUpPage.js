@@ -13,10 +13,9 @@ import LockOutlinedIcon from "@material-ui/icons/Lock";
 import "../static/css/SignUpPage.css";
 import { Alert, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ERROR } from "./AlertTypes";
 
-function SignUpPage() {
-  const [open, setOpen] = React.useState(false);
-  const [alertMsg, setAlertMsg] = React.useState("");
+function SignUpPage(props) {
   const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
@@ -28,14 +27,6 @@ function SignUpPage() {
   const [number, setNumber] = useState("");
   
   const navigate = useNavigate();
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
-
 
   function registerUser(e) {
     e.preventDefault();
@@ -66,8 +57,7 @@ function SignUpPage() {
         }
       })
       .catch((error) => {
-        setAlertMsg(error);
-        setOpen(true);
+        props.sendAlert(error,ERROR);
       });
   }
   function changeValue(e) {
@@ -233,11 +223,6 @@ function SignUpPage() {
           </CardContent>
         </Card>
       </Container>
-      <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          {alertMsg || ''}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

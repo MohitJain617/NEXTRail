@@ -1,6 +1,6 @@
 import React from "react";
 import TrainDetails from "./TrainDetails";
-import {  Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import PnrPageDetails from "./PnrPageDetails";
 import NavBar from "./NavBar";
 import TrainBwStation from "./TrainBwStation";
@@ -10,45 +10,56 @@ import PayementPage from "./PaymentPage";
 import BookingPage from "./BookingPage";
 import PnrPageResult from "./PnrPageResult";
 import TrainResults from "./TrainResults";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@mui/material";
+import { ERROR, INFO } from "./AlertTypes";
 
 function HomePage() {
   const defaultUser = "Stranger";
   const [isAuth, setIsAuth] = React.useState(false);
   const [user, setUser] = React.useState(defaultUser);
   const navigate = useNavigate();
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [alertMsg, setAlertMsg] = React.useState("Default Alert");
+  const [severity, setSeverity] = React.useState(INFO);
 
-   React.useEffect(() => {
+  React.useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       const requestOptions = {
         method: "GET",
-        headers: { "Authorization": "Token ".concat(localStorage.getItem("token")) }
+        headers: {
+          Authorization: "Token ".concat(localStorage.getItem("token")),
+        },
       };
       fetch("/accounts/user/", requestOptions)
-      .then(async (response) => {
-        const data = await response.json();
-        if (!response.ok) {
-          return Promise.reject(data.error);
-        }
-        else{
-          setIsAuth(true);
-          setUser(data.username);
-        }
-      })
-      .catch((error) => {
-        setIsAuth(false)
-        setUser("Strange")
-        localStorage.removeItem("token")
-      });
-    }
-    else{
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            return Promise.reject(data.error);
+          } else {
+            setIsAuth(true);
+            setUser(data.username);
+          }
+        })
+        .catch((error) => {
+          setIsAuth(false);
+          setUser("Strange");
+          localStorage.removeItem("token");
+        });
+    } else {
       setIsAuth(false);
       setUser(defaultUser);
-      localStorage.removeItem("token")
+      localStorage.removeItem("token");
     }
   }, []);
 
+  function sendAlert(alert, severity = INFO) {
+    setSeverity(severity);
+    setAlertOpen(true);
+    setAlertMsg(alert);
+  }
+
   function loginUser(userName, password) {
-    setIsAuth(true);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -64,48 +75,68 @@ function HomePage() {
           return Promise.reject(data.error);
         } else {
           localStorage.setItem("token", data.token);
-          setUser(data.username)
+          setIsAuth(true);
+          setUser(data.username);
           navigate("/");
         }
       })
       .catch((error) => {
-        console.log(error);
+        sendAlert("Invalid Credentials!", ERROR);
       });
   }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlertOpen(false);
+  };
+
   function logoutUser() {
     if (localStorage.getItem("token") !== null) {
-          const requestOptions = {
-            method: "POST",
-            headers: { "Authorization": "Token ".concat(localStorage.getItem("token")) }
-          };
-          fetch("/accounts/logout/", requestOptions)
-          .then(async (response) => {
-            const data = await response.json();
-            if (!response.ok) {
-              return Promise.reject(data.error);
-            }
-            else if(response.status == 204){
-              console.log("Invalidated token")
-            }
-          })
-          .catch((error) => {
-            console.error()
-          });
-        }
-        setIsAuth(false);
-        setUser(defaultUser);
-        localStorage.removeItem("token")
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: "Token ".concat(localStorage.getItem("token")),
+        },
+      };
+      fetch("/accounts/logout/", requestOptions)
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            return Promise.reject(data.error);
+          } else if (response.status == 204) {
+            console.log("Invalidated token");
+          }
+        })
+        .catch((error) => {
+          console.error();
+        });
+    }
+    setIsAuth(false);
+    setUser(defaultUser);
+    localStorage.removeItem("token");
   }
 
   return (
     <div>
       <NavBar isAuth={isAuth} logout={logoutUser} user={user} />
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        style={{ bottom: "85%"}}
+      >
+        <Alert severity={severity} onClose={handleClose} sx={{ width: "100%" }}>
+          {alertMsg}
+        </Alert>
+      </Snackbar>
       <Routes>
         {/* <Route exact path='/'><p>This is home page</p></Route> */}
-        <Route path="/" element={<TrainBwStation />} />
-        <Route path="/train" element={<TrainDetails />} />
+        <Route path="/" element={<TrainBwStation sendAlert={sendAlert} />} />
+        <Route path="/train" element={<TrainDetails sendAlert={sendAlert} />} />
         <Route path="/results" element={<TrainResults />} />
-        <Route path="/pnr" element={<PnrPageDetails />} />
+        <Route path="/pnr" element={<PnrPageDetails sendAlert={sendAlert} />} />
         <Route path="/pnr/success" element={<PnrPageResult />} />
         <Route
           path="/login"
@@ -113,12 +144,18 @@ function HomePage() {
         />
         <Route
           path="/signup"
-          element={<SignUpPage isAuth={isAuth} login={loginUser} />}
+          element={
+            <SignUpPage
+              isAuth={isAuth}
+              login={loginUser}
+              sendAlert={sendAlert}
+            />
+          }
         />
         <Route path="/payment" element={<PayementPage />} />
-        <Route path="/bookings" element={<BookingPage isAuth={isAuth}/>} />
+        <Route path="/bookings" element={<BookingPage isAuth={isAuth} />} />
       </Routes>
-      </div>
+    </div>
   );
 }
 

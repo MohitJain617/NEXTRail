@@ -15,7 +15,7 @@ import {
   TextField,
 } from "@material-ui/core";
 
-function PnrPageDetails() {
+function PnrPageDetails(props) {
   const[value,setValue] = React.useState('');
 
   function changeValue(e){
