@@ -6,9 +6,12 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
+import { ERROR, WARNING } from "./AlertTypes";
+import { useNavigate } from "react-router-dom";
 
-function TrainDetails() {
+function TrainDetails(props) {
   const [trainId,setTrainId] = React.useState('');
+  const navigate = useNavigate();
 
   function changeValue(e){
     if(!isNaN(e.target.value)){
@@ -17,9 +20,23 @@ function TrainDetails() {
   }
 
   function handleSearchPressed() {
-
-    fetch("/data/train/"+ "?id=" +trainId).then((response) => response.json())
-    .then((data) => console.log(data))
+    if(trainId.length < 5){
+      props.sendAlert("Incomplete Train No.",WARNING)
+    }
+    else{
+      fetch("/data/train/"+ "?id=" +trainId)
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            return Promise.reject(data.error);
+          } else  {
+            navigate("/results/")
+          }
+        })
+        .catch((error) => {
+      props.sendAlert("Cannot Find Train",ERROR)
+        });
+    }
     // todo catch 404 in case of 200 do more fetches for sched and timetable
 }
   return (

@@ -77,13 +77,6 @@ GRANT UPDATE
 ON receipt
 TO 'Financials'@'localhost';
 
-GRANT SELECT 
-ON waiting_list_count, station, fare_lookup, struct, train, time_table, sched, class_layout, seat_no
-TO 'Employees'@'localhost'; 
-
-GRANT ALL 
-ON train,time_table,sched, station, train, time_table, sched, class_layout, seat_no
-TO 'Ministry'@'localhost';
 
 GRANT SELECT 
 ON fare_lookup

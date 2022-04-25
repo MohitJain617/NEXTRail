@@ -11,9 +11,18 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/Lock";
 import "../static/css/LogInPage.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function LogInPage() {
+function LogInPage(props) {
+  const navigate = useNavigate();
+  const [userName, setUserName] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  // function loginUser(e) {
+  //   e.preventDefault();
+  //   
+  // }
+
   return (
     <div>
       <Container
@@ -41,46 +50,61 @@ function LogInPage() {
                 Log In
               </Typography>
             </div>
-            <div style={{ marginTop: "50px" }}>
-              <Grid container spacing={2} align="center" direction="column">
-                <Grid item xs={16}>
-                  <TextField
-                    className="textbox"
-                    id="outlined-basic"
-                    label="Username"
-                    variant="outlined"
-                  />
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              props.login(userName,password)
+              }}>
+              <div style={{ marginTop: "50px" }}>
+                <Grid container spacing={2} align="center" direction="column">
+                  <Grid item xs={16}>
+                    <TextField
+                      className="textbox"
+                      label="Username"
+                      variant="outlined"
+                      value={userName}
+                      onChange={(e) => {
+                        setUserName(e.target.value);
+                      }}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={16}>
+                    <TextField
+                      className="textbox"
+                      label="Password"
+                      variant="outlined"
+                      value={password}
+                      type="password"
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                      }}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={16} style={{ marginTop: "30px" }}>
+                    <Button
+                      className="loginbutt"
+                      style={{ backgroundColor: "#DC532D" }}
+                      variant="contained"
+                      type="submit"
+                    >
+                      Log In
+                    </Button>
+                  </Grid>
+                  <Grid item style={{ marginTop: "-10px" }}>
+                    <Button
+                      className="signup"
+                      style={{ color: "#242038" }}
+                      variant="text"
+                    >
+                      <Link to="/signup/" className="navbutton">
+                        Sign Up
+                      </Link>
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={16}>
-                  <TextField
-                    className="textbox"
-                    id="outlined-basic"
-                    label="Password"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={16} style={{ marginTop: "30px" }}>
-                  <Button
-                    className="loginbutt"
-                    style={{ backgroundColor: "#DC532D" }}
-                    variant="contained"
-                  >
-                    Log In
-                  </Button>
-                </Grid>
-                <Grid item style={{ marginTop: "-10px" }}>
-                  <Button
-                    className="signup"
-                    style={{ color: "#242038" }}
-                    variant="text"
-                  >
-                    <Link to='/signup/' className="navbutton">
-                      Sign Up
-                    </Link>
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
+              </div>
+            </form>
           </CardContent>
         </Card>
       </Container>

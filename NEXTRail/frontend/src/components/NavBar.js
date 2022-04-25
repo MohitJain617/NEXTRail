@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -10,6 +10,8 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Logo from "../static/img/NEXTRAIL.svg";
+import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
 
 const useStyles = makeStyles((theme) => ({
   navlinks: {
@@ -36,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   linkbtn: {
     backgroundColor: "#DC532D",
     color: "#000",
-    width: "80px",
+    width: "100px",
     height: "45px",
     fontSize: "14px",
     marginTop: "-12px",
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbar = () => {
+const Navbar = (props) => {
   const classes = useStyles();
   function getCol(curr) {
     const location = useLocation();
@@ -56,6 +58,16 @@ const Navbar = () => {
       return "#FFF";
     }
   }
+  const navigate = useNavigate();
+
+ 
+  
+  // function logOutUser(){
+  //   localStorage.removeItem('token')
+  //   setIsAuth(false)
+  //   setUser("Stranger")
+  //   navigate("/");
+  // }
 
   return (
     <AppBar position="relative" style={{ background: "#388087" }}>
@@ -66,11 +78,14 @@ const Navbar = () => {
             <img src={Logo} alt="logo" />
           </Link>
         </Box>
-        <Box style={{
-            marginLeft: "20px", 
+        <Box
+          style={{
+            marginLeft: "20px",
             marginTop: "10px",
-            color: "#242038"}}>
-          <h4>Hello, cxsUJsnv.</h4>
+            color: "#242038",
+          }}
+        >
+          <h4>Hello, {props.user}!</h4>
         </Box>
         <div className={classes.navlinks} style={{ marginLeft: "auto" }}>
           <Link to="/" className={classes.link} style={{ color: getCol("/") }}>
@@ -100,16 +115,9 @@ const Navbar = () => {
           >
             Your Journeys
           </Link>
-
-          <Button
-            component={Link}
-            to="/login"
-            variant="contained"
-            className={classes.linkbtn}
-            style={{ background: getCol("/login") }}
-          >
-            Log In
-          </Button>
+          {props.isAuth? 
+          <LogoutButton logout={props.logout} className={classes.linkbtn}/>:
+           <LoginButton className={classes.linkbtn}/>}
         </div>
       </Toolbar>
     </AppBar>

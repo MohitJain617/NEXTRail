@@ -10890,11 +10890,9 @@ create function get_daytime(weekno INT, days INT)
     
     
     
-
 -- TRIGGERS:
 
 -- find additional cost given a train type
-
 drop trigger if exists  additional_cost;
 -- TRIGGER FOR ADDITIONAL FARE COST
 DELIMITER $$
@@ -10946,7 +10944,6 @@ $$
 DELIMITER ;
 
 -- TRIGGER FOR ASSIGNING A SEAT TO PASSENGER
-
 drop trigger if exists book_seat_if_avail;
 DELIMITER $$
 CREATE TRIGGER book_seat_if_avail
@@ -11017,5 +11014,4 @@ begin
 END;
 $$
 DELIMITER ;
-
 

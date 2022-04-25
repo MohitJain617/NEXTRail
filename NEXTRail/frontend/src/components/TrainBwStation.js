@@ -10,7 +10,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import StnAutoComplete from "./StnAutoComplete";
-import { Alert, Snackbar } from "@mui/material";
+import { ERROR, WARNING } from "./AlertTypes";
 const classes = [
   {
     value: 0,
@@ -61,7 +61,7 @@ const classes = [
 
 //Fix calendar size
 
-function TrainBwStation() {
+function TrainBwStation(props) {
   const [value, setValue] = React.useState(new Date());
   const [stnList, setStnList] = React.useState([]);
   const [rqstParam, setRqstParam] = React.useState({
@@ -70,8 +70,6 @@ function TrainBwStation() {
     src: null,
     doj: null,
   });
-  const [open, setOpen] = React.useState(false);
-  const [alertMsg, setAlertMsg] = React.useState("");
   const [datePickerOpen, setDatePickerOpen] = React.useState(false);
 
   function getSrc(e, val) {
@@ -93,18 +91,26 @@ function TrainBwStation() {
   function searchTrain() {
     rqstParam.doj = value.toLocaleDateString("en-CA");
     if (rqstParam.src === null || rqstParam.dest === null) {
-      setAlertMsg("Source or Destination missing!");
-      setOpen(true);
+      props.sendAlert("Source or Destination missing!",WARNING);
     } else if (rqstParam.src == rqstParam.dest) {
-      setAlertMsg("Source and Destination cannot be the same!");
-      setOpen(true);
+      props.sendAlert("Source and Destination cannot be the same!",WARNING);
     } else {
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rqstParam),
       };
-      fetch("/data/train/", requestOptions);
+      fetch("/data/train/", requestOptions).then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) {
+          return Promise.reject(data.error);
+        } else  {
+          console.log("Success");
+        }
+      })
+      .catch((error) => {
+        props.sendAlert("No Trains Found!",ERROR)
+      });
     }
   }
 
@@ -118,18 +124,6 @@ function TrainBwStation() {
   useEffect(() => {
     getStns();
   }, []);
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  const handleDateChangeRaw = (e) => {
-    e.preventDefault();
-  };
 
   return (
     <div>
@@ -236,11 +230,6 @@ function TrainBwStation() {
           </Grid>
         </div>
       </Container>
-      <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          {alertMsg}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
