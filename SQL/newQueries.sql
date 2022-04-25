@@ -333,7 +333,7 @@ set @tripweek = get_weekNo(@tempdate);
 set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 
-SELECT count(*) 
+SELECT count(*) as WL, W.class_type
 FROM waiting_list as W
 WHERE W.train_no = @trainNo
 	AND W.week_no = @tripweek
@@ -358,8 +358,46 @@ WHERE W.train_no = @trainNo
 			WHERE TT2.train_no = W.train_no 
 			AND TT2.st_code = W.going_to)
 		)
-	);
-    
+	) GROUP BY class_type;
+ 
+ 
+SELECT count(*) as Avail, S.class_type as class_type
+FROM struct AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
+WHERE S.train_no = @trainNo
+    AND S.class_type = C.class_type
+    AND SN2.num <= S.size
+    AND SN.num <= C.capacity
+    AND NOT EXISTS (
+		SELECT * FROM reserve as R, ticket as T, passenger as P
+		WHERE T.train_no = S.train_no AND R.class_type = S.class_type AND R.coach_no = SN2.num AND R.seat_no = SN.num
+        AND R.pnr = T.pnr 
+        AND T.pnr = P.pnr AND P.stat='CNF'
+		AND T.train_no = @trainNo
+		AND T.trip_no = @tripno
+		AND T.week_no = @tripweek
+		AND NOT(
+			(
+				(SELECT dist FROM time_table as TT1 
+				WHERE TT1.train_no = T.train_no 
+				AND TT1.st_code = @tempdest) 
+				<=
+				(SELECT dist FROM time_table as TT2 
+				WHERE TT2.train_no = T.train_no 
+				AND TT2.st_code = T.boarding_from)
+			) 
+			OR
+			(
+				(SELECT dist FROM time_table as TT1 
+				WHERE TT1.train_no = T.train_no 
+				AND TT1.st_code = @tempsrc) 
+				>=
+				(SELECT dist FROM time_table as TT2 
+				WHERE TT2.train_no = T.train_no 
+				AND TT2.st_code = T.going_to)
+			)
+		)
+	) GROUP BY S.class_type;
+
 -- ----------------- VIEWS --------------------- 
 -- Waiting List View with ranks
 drop view if exists waiting_list_count;
@@ -376,7 +414,7 @@ WHERE P.pnr = T.pnr
 
 drop view if exists waiting_list;
 CREATE VIEW waiting_list as
-SELECT dense_rank() over (order by R.transaction_time) as priority, P.pid, T.pnr, T.train_no, T.boarding_from, T.going_to, T.week_no, T.trip_no
+SELECT dense_rank() over (order by R.transaction_time) as priority, P.pid, T.pnr, T.train_no, T.boarding_from, T.going_to, T.week_no, T.trip_no, P.class_type
 FROM passenger as P, ticket as T, receipt as R
 WHERE p.pnr = T.pnr
 	AND P.pnr = R.pnr
