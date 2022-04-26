@@ -8,7 +8,7 @@
   }
 
   .box{
-      position: fixed;
+      position: relative;
       margin-top: -190px;
       background-color: #c4c4c4;
       overflow-y: hidden;

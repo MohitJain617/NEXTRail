@@ -8,7 +8,6 @@ import {
 } from "@material-ui/core";
 import { ERROR, WARNING } from "./AlertTypes";
 import { useNavigate } from "react-router-dom";
-import "../static/css/Test.css";
 
 function TrainDetails(props) {
   const [trainId,setTrainId] = React.useState('');

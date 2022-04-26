@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ERROR, WARNING } from "./AlertTypes";
 import { useNavigate } from "react-router-dom";
-import "../static/css/Test.css";
+import "../static/css/Transitions.css";
 import TrainDetailsResults from "./TrainDetailsResult";
 
 function TrainDetails(props) {
