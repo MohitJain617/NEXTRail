@@ -3,29 +3,6 @@ drop database if exists reservation_system;
 CREATE database reservation_system;
 use reservation_system;
 
-CREATE TABLE credentials (
-	user_name varchar(20) PRIMARY KEY,
-    passcode varchar(20) NOT NULL,
-    CHECK (LENGTH(passcode) > 5)
-);
-
- CREATE TABLE user_account (
-    user_id INT NOT NULL AUTO_INCREMENT,
-    user_name VARCHAR(20) NOT NULL UNIQUE,
-    first_name VARCHAR(20) NOT NULL,
-    middle_name VARCHAR(20),
-    last_name VARCHAR(20),
-    first_line VARCHAR(255) NOT NULL,
-    second_line VARCHAR(255),
-    pin INT NOT NULL,
-    age INT,
-    phone_no VARCHAR(10),
-    PRIMARY KEY(user_id),
-    CHECK (age>=18),
-    CHECK ((pin > 99999) AND (pin < 1000000)),
-    FOREIGN KEY (user_name) REFERENCES credentials(user_name)
-);
-
 CREATE TABLE station (
 	st_code VARCHAR(10) PRIMARY KEY,
     st_name VARCHAR(36) NOT NULL
@@ -54,8 +31,8 @@ CREATE TABLE ticket (
     booking_details VARCHAR(255),
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
-    FOREIGN KEY (train_no) REFERENCES train(id),            
-    FOREIGN KEY (user_id) REFERENCES user_account(user_id)     -- Buys
+    FOREIGN KEY (train_no) REFERENCES train(id)            
+    -- FOREIGN KEY (user_id) REFERENCES auth_user(id)     -- Buys
 );
 
 CREATE TABLE receipt (
@@ -65,7 +42,7 @@ CREATE TABLE receipt (
     pnr VARCHAR(10) NOT NULL,
 	user_id INT,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
-    FOREIGN KEY (user_id) REFERENCES user_account(user_id), -- keeps 
+    -- FOREIGN KEY (user_id) REFERENCES auth_user(id), -- keeps 
     CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer','Pending'))
 );
 
@@ -76,7 +53,6 @@ CREATE TABLE adm (
 );
 
 CREATE TABLE passenger (
-	pid INT auto_increment primary key,
 	pnr VARCHAR(10) NOT NULL,
     pname VARCHAR(30) NOT NULL,
     gender VARCHAR(10) NOT NULL,
@@ -145,8 +121,6 @@ CREATE TABLE struct (
     size INT NOT NULL,
     PRIMARY KEY(train_no, class_type)
 );
-
-
 -- ---------------Indexes-------------------
 CREATE INDEX station_index ON station (st_name);
 CREATE INDEX trainname_index ON train (train_name);
@@ -157,33 +131,32 @@ CREATE INDEX receipt_index ON receipt (pnr);
 CREATE INDEX passenger_index ON passenger(pnr);
 CREATE INDEX class_layout_index ON class_layout (class_name);
 CREATE INDEX time_table_index ON time_table (train_no);
-
 -- ----------------------------
 
 -- Data Population
 
-INSERT INTO adm VALUES
-('rwinsor0','Gai0gccZYhAj'),
-('ejantet1','AAgRUhV'),
-('eladloe2','mDA7wx7'),
-('josullivan3','iKnCKuR'),
-('ecalles4','HYsB01oVkk');
+-- INSERT INTO adm VALUES
+-- ('rwinsor0','Gai0gccZYhAj'),
+-- ('ejantet1','AAgRUhV'),
+-- ('eladloe2','mDA7wx7'),
+-- ('josullivan3','iKnCKuR'),
+-- ('ecalles4','HYsB01oVkk');
 
 
-INSERT INTO credentials VALUES
-('cpharro0','c3nrRpkG'),
-('agergolet1','B4WuHtn'),
-('tscutcheon2','2yQRP5b'),
-('gderyebarrett3','pcs7lSG24M'),
-('gbeedell4','OkkaQh');
+-- INSERT INTO credentials VALUES
+-- ('cpharro0','c3nrRpkG'),
+-- ('agergolet1','B4WuHtn'),
+-- ('tscutcheon2','2yQRP5b'),
+-- ('gderyebarrett3','pcs7lSG24M'),
+-- ('gbeedell4','OkkaQh');
 
 
-INSERT INTO user_account VALUES
-(1,'cpharro0','Natwar','Singh','Dara','19\, VaishaliGunj','Faridabad\, UP',167690,23,7483338568),
-(2,'agergolet1','Preet','','Narang','86\, Kim Villas\, SeemaGarh','Surat\, Gujarat',329398,34,4954796648),
-(3,'tscutcheon2','Naval','Kumar','Persaud','29\, Sheetal Society\, Kormangala','Kochi\,',173172,64,9552807196),
-(4,'gderyebarrett3','Mohit','','Arora','37\, Himanshu Villas','Pune\, Maharashtra',541991,25,6860232045),
-(5,'gbeedell4','Julie','','Bora','65\, Marathahalli','Nashik',592010,64,5473926838);
+-- INSERT INTO user_account VALUES
+-- (1,'cpharro0','Natwar','Singh','Dara','19\, VaishaliGunj','Faridabad\, UP',167690,23,7483338568),
+-- (2,'agergolet1','Preet','','Narang','86\, Kim Villas\, SeemaGarh','Surat\, Gujarat',329398,34,4954796648),
+-- (3,'tscutcheon2','Naval','Kumar','Persaud','29\, Sheetal Society\, Kormangala','Kochi\,',173172,64,9552807196),
+-- (4,'gderyebarrett3','Mohit','','Arora','37\, Himanshu Villas','Pune\, Maharashtra',541991,25,6860232045),
+-- (5,'gbeedell4','Julie','','Bora','65\, Marathahalli','Nashik',592010,64,5473926838);
 
 INSERT INTO station VALUES
 ('ACAB','A Cabin'),

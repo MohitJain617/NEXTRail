@@ -13,6 +13,14 @@ SET SQL_SAFE_UPDATES = 0;
 -- delete from reserve;
 -- delete from ticket; 
 
+ALTER TABLE ticket
+ADD FOREIGN KEY (user_id) 
+REFERENCES auth_user(id);
+
+ALTER TABLE receipt
+ADD FOREIGN KEY (user_id) 
+REFERENCES auth_user(id);
+
 
 -- GIVEN SECTION
 SET @tempdatetime = DATE('2022-04-23'); -- datetime of journey
@@ -36,7 +44,7 @@ set @tripweek = get_weekNo(@tempdatetime);
 set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 insert into ticket values
-('3410381',2,'22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null);
+('3410381',1,'22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null);
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
 ('3410381', 'Aadit Kant Jha', 'Male', 20, 'CNF', null,'A'),
 ('3410381', 'Rohit J', 'Male', 19, 'CNF', null,'A'),
@@ -72,7 +80,7 @@ INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VA
 
 
 insert into ticket values
-('3410382',2,'22210',@tripno, (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime)), 'KOTA', 'BRC',0,null);
+('3410382',1,'22210',@tripno, (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime)), 'KOTA', 'BRC',0,null);
 
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
 ('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
@@ -82,9 +90,6 @@ INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VA
 ('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
 ('3410382', 'Abhik', 'Male', 19, 'WL', null,'A');
 
-select * from passenger where stat = 'WL';
-
-select * from waiting_list;
 INSERT INTO reserve VALUES
 (1,1,'A','3410381'),
 (1,2,'A','3410381');

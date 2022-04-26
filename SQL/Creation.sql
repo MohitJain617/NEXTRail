@@ -3,29 +3,6 @@ drop database if exists reservation_system;
 CREATE database reservation_system;
 use reservation_system;
 
-CREATE TABLE credentials (
-	user_name varchar(20) PRIMARY KEY,
-    passcode varchar(20) NOT NULL,
-    CHECK (LENGTH(passcode) > 5)
-);
-
- CREATE TABLE user_account (
-    user_id INT NOT NULL AUTO_INCREMENT,
-    user_name VARCHAR(20) NOT NULL UNIQUE,
-    first_name VARCHAR(20) NOT NULL,
-    middle_name VARCHAR(20),
-    last_name VARCHAR(20),
-    first_line VARCHAR(255) NOT NULL,
-    second_line VARCHAR(255),
-    pin INT NOT NULL,
-    age INT,
-    phone_no VARCHAR(10),
-    PRIMARY KEY(user_id),
-    CHECK (age>=18),
-    CHECK ((pin > 99999) AND (pin < 1000000)),
-    FOREIGN KEY (user_name) REFERENCES credentials(user_name)
-);
-
 CREATE TABLE station (
 	st_code VARCHAR(10) PRIMARY KEY,
     st_name VARCHAR(36) NOT NULL
@@ -54,8 +31,8 @@ CREATE TABLE ticket (
     booking_details VARCHAR(255),
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
-    FOREIGN KEY (train_no) REFERENCES train(id),            
-    FOREIGN KEY (user_id) REFERENCES user_account(user_id)     -- Buys
+    FOREIGN KEY (train_no) REFERENCES train(id)            
+--     FOREIGN KEY (user_id) REFERENCES auth_user(id)     -- Buys
 );
 
 CREATE TABLE receipt (
@@ -65,7 +42,7 @@ CREATE TABLE receipt (
     pnr VARCHAR(10) NOT NULL,
 	user_id INT,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
-    FOREIGN KEY (user_id) REFERENCES user_account(user_id), -- keeps 
+  --   FOREIGN KEY (user_id) REFERENCES auth_user(id), -- keeps 
     CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer','Pending'))
 );
 
@@ -133,7 +110,7 @@ CREATE TABLE reserve (
     seat_no INT NOT NULL,
     class_type VARCHAR (20) NOT NULL,
     pnr VARCHAR(10),
-    PRIMARY KEY(pnr,class_type,seat_no,id),
+    PRIMARY KEY(pnr,class_type,seat_no,coach_no),
     FOREIGN KEY (pnr) REFERENCES ticket(pnr)
 );
 
@@ -144,8 +121,6 @@ CREATE TABLE struct (
     size INT NOT NULL,
     PRIMARY KEY(train_no, class_type)
 );
-
-
 -- ---------------Indexes-------------------
 CREATE INDEX station_index ON station (st_name);
 CREATE INDEX trainname_index ON train (train_name);

@@ -311,3 +311,12 @@ WHERE S.train_no = @trainNo
 	) GROUP BY S.class_type;
 -- -------------------------------------------
 
+SET @trainno = '11123';
+
+-- Calculating duration of time it takes to reach station (in seconds)
+SELECT T1.st_code, TIME_TO_SEC(TIMEDIFF(T1.arrival,T2.departure))+86400*(T1.day_no-T2.day_no) as seconds
+FROM time_table as T1, time_table as T2
+WHERE T1.train_no = @trainno
+AND T2.train_no = @trainno
+AND T2.dist = 0
+ORDER BY seconds;
