@@ -16,7 +16,7 @@ export default function BookingPage() {
             </Box>
             <div style={{ marginTop: "40px", marginLeft: "20%", marginRight: "20%" }}>
                     {/* add cards here */}
-            <TripCard />
+                <TripCard />
 
             </div>
         </div>
