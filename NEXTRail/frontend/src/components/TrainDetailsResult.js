@@ -51,30 +51,6 @@ function TrainDetailsResults(props) {
               {data.time_table[0].st_name} ({data.src}) - {data.time_table[parseInt(data.stops)-1].st_name} ({data.dest})
             </Typography>
           </Grid>
-          <Grid item xs={2}>
-            <Button
-              style={{
-                width: "200px",
-                display: "block",
-                textAlign: "center",
-                backgroundColor: "#DC532D",
-                borderRadius: 7,
-                float: "right",
-              }}
-            >
-              <Typography
-                style={{
-                  color: "#ffffff",
-                  fontSize: 25,
-                  fontWeight: "bold",
-                  clear: "both",
-                  textTransform: "none",
-                }}
-              >
-                Book Now
-              </Typography>
-            </Button>
-          </Grid>
         </Grid>
         <Typography
           component="div"
