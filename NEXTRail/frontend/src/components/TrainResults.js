@@ -1,21 +1,15 @@
 import React from "react";
 import { Typography, AppBar, MenuItem, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField } from "@material-ui/core";
-<<<<<<< HEAD
-=======
 import TripCard from "./TripCard";
 import TrainCardAvailability from "./TrainAvailabilityCard";
->>>>>>> 19917ce (ignore)
 
 const TrainResults = () => {
 	return (
 		<div style={{ marginTop: "40px", marginLeft: "10%", marginRight: "10%" }}>
-<<<<<<< HEAD
 			<Card sx={{ maxWidth: 200 }}>
 				{/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
-=======
 			<TrainCardAvailability />
 			<Card sx={{ maxWidth: 200 }}>
->>>>>>> 19917ce (ignore)
 				<CardContent>
 					<div style={{ backgroundColor: "#00afb9", borderRadius: 10, }}>
 						<Typography variant="h3" component="div" style={{ color: "#ffffff", fontSize: 30, marginLeft: "10px", fontWeight: 'bold', paddingBottom: "5px", paddingTop: "5px" }}>
@@ -23,26 +17,18 @@ const TrainResults = () => {
 						</Typography>
 					</div>
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 19917ce (ignore)
 					<Grid container spacing={24} style={{ paddingTop: "10px" }}>
 						<Grid item xs={6}>
 							<Typography variant="h3" display="inline" component="div" style={{ color: "#7C8DB0", fontSize: 30, fontWeight: 'bold', float: "left", clear: "both", marginLeft: 5 }}>
 								<strong>KOTA</strong>
 							</Typography>
 						</Grid>
-<<<<<<< HEAD
 						{/* <center><Grid item xs = {4} alignContent= "center">
                   <Typography  variant="h3"  display="inline" component="div" style = {{fontSize: 20, fontWeight: 'bold', float: "right", clear:"both", marginLeft: 5, float: "center" }}>
                     06:00
                   </Typography>
                   </Grid></center> */}
-=======
 
->>>>>>> 19917ce (ignore)
 						<Grid item xs={6}>
 							<Typography variant="h3" display="inline" component="div" style={{ color: "#7C8DB0", fontSize: 30, fontWeight: 'bold', float: "right", clear: "both", marginLeft: 5 }}>
 								<strong>VDRA </strong>
@@ -50,18 +36,8 @@ const TrainResults = () => {
 						</Grid>
 					</Grid>
 
-<<<<<<< HEAD
-=======
 
 
-
-
-
-
-
-
-
->>>>>>> 19917ce (ignore)
 					<Grid container spacing={24}>
 						<Grid item xs={4}>
 							<Typography variant="h3" display="inline" component="div" style={{ color: "#606060", fontSize: 35, fontWeight: 'regular', float: "left", clear: "both", marginLeft: 5 }}>
@@ -74,15 +50,11 @@ const TrainResults = () => {
 								6hr 22min &nbsp; &nbsp; &nbsp; &nbsp; 440 km
 							</Typography></center>
 						</Grid>
-<<<<<<< HEAD
 						{/* <center><Grid item xs = {4} alignContent= "center">
                   <Typography  variant="h3"  display="inline" component="div" style = {{fontSize: 20, fontWeight: 'bold', float: "right", clear:"both", marginLeft: 5, float: "center" }}>
                     06:00
                   </Typography>
                   </Grid></center> */}
-=======
-
->>>>>>> 19917ce (ignore)
 						<Grid item xs={4}>
 							<Typography variant="h3" display="inline" component="div" style={{ color: "#606060", fontSize: 35, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5 }}>
 								<strong>19:40 </strong>
@@ -96,8 +68,6 @@ const TrainResults = () => {
 								<strong>Fri, 22 Apr</strong>
 							</Typography>
 						</Grid>
-
-<<<<<<< HEAD
 						{/* <Grid item xs = {4}>
                   <center><Typography   component="div" style = {{color:"#3152ff" ,fontSize: 25,fontWeight: 'bold'}}>
                     6hr 22min &nbsp; &nbsp; &nbsp; &nbsp; 440 km
@@ -108,8 +78,6 @@ const TrainResults = () => {
                     06:00
                   </Typography>
                   </Grid></center> */}
-=======
->>>>>>> 19917ce (ignore)
 						<Grid item xs={6}>
 							<Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5 }}>
 								<strong>Fri, 22 Apr </strong>
@@ -117,15 +85,12 @@ const TrainResults = () => {
 						</Grid>
 					</Grid>
 
-<<<<<<< HEAD
 
 
 					{/* <center><Typography   component="div" style = {{color:"red" ,fontSize: 25,fontWeight: 'bold'}}>
                     ------6:00-------
                   </Typography></center> */}
 
-=======
->>>>>>> 19917ce (ignore)
 					<Grid container spacing={2} style={{ paddingTop: "10px" }}>
 						<Grid item>
 							<Button variant="outlined" style={{ display: "block", textAlign: "left", backgroundColor: "#BEE7EA" }}>
@@ -162,7 +127,6 @@ const TrainResults = () => {
 								<Typography style={{ fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Seat Availability</Typography>
 							</Button>
 						</Grid>
-<<<<<<< HEAD
 						{/* <Grid item >
                   <Button variant = "outlined"style={{display: "block",textAlign: "left"}}>
                             <Typography style = {{fontSize: 15, fontWeight: 'regular', float: "right", clear:"both",  textTransform: "none" }}>Other Dates</Typography>
@@ -175,10 +139,7 @@ const TrainResults = () => {
                   <Button size="small">Share</Button>
                   <Button size="small">Learn More</Button>
                 </CardActions> */}
-=======
-					</Grid>
-				</CardContent>
->>>>>>> 19917ce (ignore)
+			</Card>
 			</Card>
 		</div>
 	);
