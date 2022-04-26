@@ -13,6 +13,7 @@ import TrainResults from "./TrainResults";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 import { ERROR, INFO } from "./AlertTypes";
+import TrainDetailsResults from "./TrainDetailsResult";
 
 function HomePage() {
   const defaultUser = "Stranger";
@@ -135,6 +136,7 @@ function HomePage() {
         {/* <Route exact path='/'><p>This is home page</p></Route> */}
         <Route path="/" element={<TrainBwStation sendAlert={sendAlert} />} />
         <Route path="/train" element={<TrainDetails sendAlert={sendAlert} />} />
+        <Route path="/trains" element={<TrainDetailsResults />} />
         <Route path="/results" element={<TrainResults />} />
         <Route path="/pnr" element={<PnrPageDetails sendAlert={sendAlert} />} />
         <Route path="/pnr/success" element={<PnrPageResult />} />

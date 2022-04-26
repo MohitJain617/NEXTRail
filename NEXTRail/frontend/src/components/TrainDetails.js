@@ -30,7 +30,7 @@ function TrainDetails(props) {
           if (!response.ok) {
             return Promise.reject(data.error);
           } else  {
-            navigate("/results/")
+            navigate("/trains/",{state:{data:data}});
           }
         })
         .catch((error) => {

@@ -4,6 +4,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from datetime import date, datetime,timedelta
 
 from django.db import connection
 # Create your views here.
@@ -25,6 +26,20 @@ class DateFunctions():
         d = timedelta(days = (weeks*7)+days-1)
         x = x + d
         return x
+        
+    def getDuration(src,dest):
+        src_time = src["departure"]
+        dest_time = dest["arrival"]
+        todaydate = datetime.date(datetime.today())
+        src_time = datetime.combine(todaydate,src_time)
+        dest_time = datetime.combine(todaydate,dest_time)
+        src_time += timedelta(days=src["day_no"])
+        dest_time += timedelta(days=dest["day_no"])
+        timediff = str(dest_time-src_time)
+        timediff = timediff.split(":")
+        timediff = str(timediff[0]+" hrs "+timediff[1]+" mins")
+        timediff = timediff.replace(",","")
+        return timediff
         
 
 class BackEndQuerier():
@@ -135,7 +150,7 @@ class TrainDetailView(APIView):
                 queryset = queryset[0]
                 queryClasses = """select distinct class_type from struct where train_no = %s;"""
                 queryTrips = """select trip_no from sched where train_no = %s;"""
-                queryTT = """select st_code,arrival,departure,dist,day_no from time_table where train_no = %s order by dist ;"""
+                queryTT = """select st_code,st_name,arrival,departure,dist,day_no from time_table natural join station where train_no = %s order by dist ;"""
 
             # appending required values
             # classes in this train:
@@ -156,6 +171,9 @@ class TrainDetailView(APIView):
                 varString = varString[:-1]
                 queryset["trip_nos"] = varString
                 queryset["time_table"] = BackEndQuerier.cursor_querier(queryTT,[train_no])
+                queryset["stops"] = len(queryset["time_table"])
+                queryset["distance"] = queryset["time_table"][int(queryset["stops"])-1]["dist"]
+                queryset["duration"] = DateFunctions.getDuration(queryset["time_table"][0],queryset["time_table"][int(queryset["stops"])-1])
                 return Response(queryset,status=status.HTTP_200_OK)
             else:
                 return Response({"Train not Found!":"Cannot find the train."},
@@ -228,10 +246,19 @@ class SeatAvailibility(APIView):
         src = request.data.get('src')
         doj = request.data.get('doj')
         trainNo = request.data.get('train_no')
-
-        #Write your queries here
         queryClasses = """select distinct class_type from struct where train_no = %s;"""
         querySrcDayNo = """select day_no from time_table where train_no=%s and st_code=%s"""
+        #calculation
+        dayNo = BackEndQuerier.cursor_querier(querySrcDayNo,[trainNo,src])[0]["day_no"]
+        tripNo = DateFunctions.getDayNo(doj) - 1 + dayNo
+        if(tripNo < 1):
+            tripNo = tripNo + 7
+        
+        weekNo = DateFunctions.getWeekNo(doj)
+        if(tripNo + dayNo - 1 > 7):
+            weekNo = weekNo - 1
+
+        #Write your queries here
         queryWL = """
             SELECT count(*) as WL, W.class_type
             FROM waiting_list as W
@@ -301,15 +328,6 @@ class SeatAvailibility(APIView):
         """
         paramsAvail = [trainNo, trainNo, tripNo, weekNo, dest, src]
 
-        #calculation
-        dayNo = BackEndQuerier.cursor_querier(querySrcDayNo,[trainNo,src])[0]["day_no"]
-        tripNo = DateFunctions.getDayNo(doj) - 1 + dayNo
-        if(tripNo < 1):
-            tripNo = tripNo + 7
-        
-        weekNo = DateFunctions.getWeekNo(doj)
-        if(tripNo + dayNo - 1 > 7):
-            weekNo = weekNo - 1
 
         queryset = BackEndQuerier.cursor_querier(queryClasses,[trainNo])
         queryWaitlist = BackEndQuerier.cursor_querier(queryWL,paramsWL)
