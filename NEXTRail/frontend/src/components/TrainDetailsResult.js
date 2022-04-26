@@ -10,6 +10,14 @@ import {
 } from "@material-ui/core";
 import { useLocation } from "react-router-dom";
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 
 function TrainDetailsResults() {
   const location = useLocation();
@@ -341,8 +349,41 @@ function TrainDetailsResults() {
         >
           Stations
         </Typography>
-      </div>
 
+        {/* Table */}
+
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Station Name</TableCell>
+                <TableCell align="right">Code</TableCell>
+                <TableCell align="right">Day</TableCell>
+                <TableCell align="right">Arrival</TableCell>
+                <TableCell align="right">Departure</TableCell>
+                <TableCell align="right">Distance</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.time_table.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.st_name}
+                  </TableCell>
+                  <TableCell align="right">{row.st_code}</TableCell>
+                  <TableCell align="right">{row.day_no}</TableCell>
+                  <TableCell align="right">{row.arrival}</TableCell>
+                  <TableCell align="right">{row.departure}</TableCell>
+                  <TableCell align="right">{row.dist}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
       <div
         style={{ marginTop: "40px", marginLeft: "10%", marginRight: "10%" }}
       ></div>
