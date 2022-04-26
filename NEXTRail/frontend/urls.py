@@ -8,6 +8,7 @@ urlpatterns = [
     path('results/', index),
     path('pnr/', index),
     path('login/',index),
+    path('test/',index),
     path('signup/',index),
     path('payment/',index),
     path('pnr/success', index),
