@@ -9,7 +9,11 @@ import {
 } from "@material-ui/core";
 import { ERROR, WARNING } from "./AlertTypes";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import "../static/css/Transitions.css";
+=======
+import "../static/css/Test.css";
+>>>>>>> 1395214 (Added Transitions)
 import TrainDetailsResults from "./TrainDetailsResult";
 
 function TrainDetails(props) {
