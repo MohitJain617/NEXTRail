@@ -21,7 +21,7 @@ CREATE TABLE train (
 
 CREATE TABLE ticket (
 	pnr VARCHAR(10) PRIMARY KEY,
-    user_id INT,
+    username VARCHAR(50) NOT NULL,
     train_no VARCHAR(6) NOT NULL,
     trip_no INT,
     week_no INT,
@@ -32,7 +32,7 @@ CREATE TABLE ticket (
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
     FOREIGN KEY (train_no) REFERENCES train(id)            
---     FOREIGN KEY (user_id) REFERENCES auth_user(id)     -- Buys
+--     FOREIGN KEY (user_name) REFERENCES auth_user(id)     -- Buys
 );
 
 CREATE TABLE receipt (
@@ -40,9 +40,9 @@ CREATE TABLE receipt (
     transaction_time DATETIME DEFAULT now(),
     payment_mode VARCHAR(20),
     pnr VARCHAR(10) NOT NULL,
-	user_id INT,
+	username VARCHAR(50) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
-  --   FOREIGN KEY (user_id) REFERENCES auth_user(id), -- keeps 
+  --   FOREIGN KEY (user_name) REFERENCES auth_user(id), -- keeps 
     CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer','Pending'))
 );
 
@@ -52,7 +52,9 @@ CREATE TABLE adm (
     CHECK (LENGTH(passcode) > 5)
 );
 
+drop table if exists passenger;
 CREATE TABLE passenger (
+	pid INT auto_increment UNIQUE,
 	pnr VARCHAR(10) NOT NULL,
     pname VARCHAR(30) NOT NULL,
     gender VARCHAR(10) NOT NULL,

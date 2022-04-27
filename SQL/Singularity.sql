@@ -21,7 +21,7 @@ CREATE TABLE train (
 
 CREATE TABLE ticket (
 	pnr VARCHAR(10) PRIMARY KEY,
-    user_id INT,
+    username VARCHAR(50) NOT NULL,
     train_no VARCHAR(6) NOT NULL,
     trip_no INT,
     week_no INT,
@@ -40,7 +40,7 @@ CREATE TABLE receipt (
     transaction_time DATETIME DEFAULT now(),
     payment_mode VARCHAR(20),
     pnr VARCHAR(10) NOT NULL,
-	user_id INT,
+	username VARCHAR(50) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
     -- FOREIGN KEY (user_id) REFERENCES auth_user(id), -- keeps 
     CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer','Pending'))
@@ -53,6 +53,7 @@ CREATE TABLE adm (
 );
 
 CREATE TABLE passenger (
+	pid INT auto_increment UNIQUE,
 	pnr VARCHAR(10) NOT NULL,
     pname VARCHAR(30) NOT NULL,
     gender VARCHAR(10) NOT NULL,
@@ -10911,7 +10912,7 @@ begin
 		SET @lastval = (select max(receipt_no) from receipt);
         SET @lastval = ifnull(@lastval,0);
 		INSERT INTO receipt VALUES
-        (@lastval+1,now(),'Pending',NEW.pnr, NEW.user_id);
+        (@lastval+1,now(),'Pending',NEW.pnr, NEW.username);
 END;
 $$
 DELIMITER ;
@@ -10987,4 +10988,3 @@ begin
 END;
 $$
 DELIMITER ;
-

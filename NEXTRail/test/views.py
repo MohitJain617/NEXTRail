@@ -134,6 +134,7 @@ class TrainDetailView(APIView):
             varString = varString[:-1]
             queryset[i]["trip_nos"] = varString
 
+        print(queryset)
 
         if(len(queryset) >= 1):
             return Response(queryset,status=status.HTTP_200_OK)
@@ -353,4 +354,7 @@ class SeatAvailibility(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        
+    
+class PnrStatus(APIView):
+    def post(self, request,format=None):
+        queryTickets = """select * from ticket where user_name = %s"""
