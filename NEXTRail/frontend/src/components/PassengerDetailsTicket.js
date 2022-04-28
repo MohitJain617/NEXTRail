@@ -4,7 +4,7 @@ import TrainIcon from '@mui/icons-material/Train';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const style1 = {color: "#606060", fontSize: 15, fontWeight: 'light', clear: "both", marginLeft: 10 }
-export default function TripCard() {
+export default function PassengerDetailsTicket() {
     // const data = props.data
     return (
         <>

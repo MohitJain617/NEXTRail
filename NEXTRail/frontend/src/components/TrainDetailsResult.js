@@ -30,7 +30,7 @@ function TrainDetailsResults(props) {
               component="div"
               style={{
                 color: "#000000",
-                fontSize: 20,
+                fontSize: 24,
                 marginLeft: "10px",
                 fontWeight: "bold",
                 paddingBottom: "5px",
@@ -43,7 +43,7 @@ function TrainDetailsResults(props) {
               component="div"
               style={{
                 color: "#000000",
-                fontSize: 15,
+                fontSize: 20,
                 marginLeft: "10px",
                 fontWeight: "light",
               }}

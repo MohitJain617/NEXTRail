@@ -35,10 +35,9 @@ make BackendQuerier singleton
 
 routing transitions
 
-make everything form
 improve frontend class type dict
-swap stations
-rework abhik's frontend
 wl query 
 
-auth
+make the card for pnr and journeys as the same
+remove booking status, seat type from tickets
+add meal option pass name for tickets 

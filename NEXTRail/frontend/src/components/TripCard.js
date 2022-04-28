@@ -7,7 +7,7 @@ import PassengerDetailsTicket from './PassengerDetailsTicket.js'
 
 export default function TripCard() {
     return (
-        <>
+        <div style={{ marginTop: "20px", marginLeft: "10%", marginRight: "10%" }}>
             <Card sx={{ maxWidth: 200 }}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>
@@ -96,7 +96,7 @@ export default function TripCard() {
                             </Grid>
                             <Grid item xs={2}>
                                 <Typography display="inline" component="div" style={{ color: "#606060", fontSize: 15, fontWeight: 'bold', clear: "both", marginLeft: 10 }}>
-                                    Booking Status
+                                    Passenger Name
                                 </Typography>
                             </Grid>
                             <Grid item xs={2}>
@@ -116,7 +116,7 @@ export default function TripCard() {
                             </Grid>
                             <Grid item xs={2}>
                                 <Typography display="inline" component="div" style={{ color: "#606060", fontSize: 15, fontWeight: 'bold', clear: "both", marginLeft: 10 }}>
-                                    Seat Type
+                                    Meal Option
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -131,6 +131,6 @@ export default function TripCard() {
                     
                 </CardContent>
             </Card>
-        </>
+        </div>
     )
 }

@@ -105,7 +105,7 @@ function TrainBwStation(props) {
         if (!response.ok) {
           return Promise.reject(data.error);
         } else  {
-          console.log("Success");
+          console.log(data);
         }
       })
       .catch((error) => {
