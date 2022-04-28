@@ -1,0 +1,92 @@
+.search_field {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .search_field[moveUp='1'] {
+    animation: moveUp 2s forwards;
+  }
+
+  .box{
+      position: relative;
+      margin-top: -190px;
+      background-color: #c4c4c4;
+      overflow-y: hidden;
+      width: 100%;
+      height: 190px;
+
+  }
+
+  .box[moveDown='1']{
+      animation: moveDown 2s forwards;
+  }
+
+  .search_result{
+      opacity: 0%;
+  }
+
+  .search_result[fadeIn='1']{
+      animation: fadeIn 0.5s forwards 0.2s;
+  }
+  .search_result[fadeIn='0']{
+    animation: fadeOut 0s forwards ;
+}
+@keyframes moveUp {
+    25% {
+      transform: translateY(-160px);
+    }
+    50% {
+      transform: translateY(-160px);
+    }
+    75% {
+        transform: translateY(-160px);
+    }
+    100% {
+      transform: translateY(-160px);
+    }
+  }
+  
+@keyframes moveDown {
+    25% {
+      transform: translateY(190px);
+    }
+    50% {
+      transform: translateY(190px);
+    }
+    75% {
+        transform: translateY(190px);
+    }
+    100% {
+      transform: translateY(190px);
+    }
+  }
+  
+@keyframes fadeIn {
+    25%{
+        opacity: 25%;
+    }    
+    50%{
+        opacity: 50%;
+    }    
+    75%{
+        opacity: 75%;
+    }    
+    100%{
+        opacity: 100%;
+    }    
+}
+
+@keyframes fadeOut {
+    25%{
+        opacity: 75%;
+    }    
+    50%{
+        opacity: 50%;
+    }    
+    75%{
+        opacity: 25%;
+    }    
+    100%{
+        opacity: 0%;
+    }    
+}

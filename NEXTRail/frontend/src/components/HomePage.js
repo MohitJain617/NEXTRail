@@ -14,6 +14,7 @@ import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 import { ERROR, INFO } from "./AlertTypes";
 import TrainDetailsResults from "./TrainDetailsResult";
+import Test from "./Test";
 
 function HomePage() {
   const defaultUser = "Stranger";
@@ -126,7 +127,6 @@ function HomePage() {
         open={alertOpen}
         autoHideDuration={1500}
         onClose={handleClose}
-        style={{ bottom: "85%"}}
       >
         <Alert severity={severity} onClose={handleClose} sx={{ width: "100%" }}>
           {alertMsg}
@@ -138,6 +138,7 @@ function HomePage() {
         <Route path="/train" element={<TrainDetails sendAlert={sendAlert} />} />
         <Route path="/trains" element={<TrainDetailsResults />} />
         <Route path="/results" element={<TrainResults />} />
+        <Route path="/test" element={<Test sendAlert={sendAlert} />} />
         <Route path="/pnr" element={<PnrPageDetails sendAlert={sendAlert} />} />
         <Route path="/pnr/success" element={<PnrPageResult />} />
         <Route

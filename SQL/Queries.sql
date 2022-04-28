@@ -408,8 +408,24 @@ WHERE W.train_no = @trainNo
 	;
 -- -------------------------------------------
 
+-- 9)
+-- -------------------------------------------
+SET @user_name = "test";
+-- Query for all tickets booked by a user along with additional values
+-- ------------------QUERY--------------------
 select T.pnr, T.train_no,
-Date_add(get_daytime(week_no,trip_no-1),INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) as srcDate,
-Date_add(get_daytime(week_no,trip_no-1),INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day) as destDate,
+(select train_name from train as T2 where T2.id = T.train_no) as train_name,
+((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
 T.boarding_from, T.going_to, T.fare
-from ticket as T;
+from ticket as T
+where T.username = @user_name;
+-- -------------------------------------------
+
+select * from ticket;

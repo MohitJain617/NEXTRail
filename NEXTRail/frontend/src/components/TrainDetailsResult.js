@@ -8,7 +8,6 @@ import {
   Box,
   TextField,
 } from "@material-ui/core";
-import { useLocation } from "react-router-dom";
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -19,64 +18,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-function TrainDetailsResults() {
-  const location = useLocation();
-  const data = location.state.data;
-  console.log(data)
+function TrainDetailsResults(props) {
+  const data = props.data;
   return (
     <div>
-      <Box
-        maxWidth="sm"
-        style={{
-          marginTop: "0px",
-          background: "#C4C4C4",
-          overflowY: "hidden",
-          width: "100%",
-          height: "190px",
-        }}
-      >
-        <Typography
-          style={{ fontWeight: 550, marginTop: "10px" }}
-          variant="h2"
-          align="center"
-          position="relative"
-          gutterBottom
-        >
-          Search Trains
-        </Typography>
-        <div>
-          <Grid container spacing={0} justifyContent="center">
-            <Grid item>
-              <TextField
-                style={{
-                  width: "302px",
-                  height: "55px",
-                  fontSize: "14px",
-                  backgroundColor: "#FFFFFF",
-                }}
-                id="outlined-basic"
-                label="Enter Train Number"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                style={{
-                  backgroundColor: "#DC532D",
-                  color: "#FFFFFF",
-                  width: "88px",
-                  height: "55px",
-                  fontSize: "14px",
-                }}
-                variant="contained"
-              >
-                Search
-              </Button>
-            </Grid>
-          </Grid>
-        </div>
-      </Box>
-
       <div style={{ marginTop: "20px", marginLeft: "10%", marginRight: "10%" }}>
         <Grid container spacing={24} style={{ paddingTop: "10px" }}>
           <Grid item xs={10}>
@@ -105,30 +50,6 @@ function TrainDetailsResults() {
             >
               {data.time_table[0].st_name} ({data.src}) - {data.time_table[parseInt(data.stops)-1].st_name} ({data.dest})
             </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              style={{
-                width: "200px",
-                display: "block",
-                textAlign: "center",
-                backgroundColor: "#DC532D",
-                borderRadius: 7,
-                float: "right",
-              }}
-            >
-              <Typography
-                style={{
-                  color: "#ffffff",
-                  fontSize: 25,
-                  fontWeight: "bold",
-                  clear: "both",
-                  textTransform: "none",
-                }}
-              >
-                Book Now
-              </Typography>
-            </Button>
           </Grid>
         </Grid>
         <Typography

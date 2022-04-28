@@ -355,6 +355,52 @@ class SeatAvailibility(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     
-class PnrStatus(APIView):
+class TicketsView(APIView):
     def post(self, request,format=None):
-        queryTickets = """select * from ticket where user_name = %s"""
+        queryPastTickets = """select T.pnr, T.train_no,
+        (select train_name from train as T2 where T2.id = T.train_no) as train_name,
+        ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+    	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+    	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+        (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
+        T.boarding_from, T.going_to, T.fare
+        from ticket as T
+        where T.username = %s
+        AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) < %s)"""
+
+        queryFutureTickets = """select T.pnr, T.train_no,
+        (select train_name from train as T2 where T2.id = T.train_no) as train_name,
+        ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+    	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+    	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+        (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
+        T.boarding_from, T.going_to, T.fare
+        from ticket as T
+        where T.username = %s
+        AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) >= %s)"""
+        past = request.data.get('past')
+
+        # create sql time stamp:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # get current user please
+        current_user = request.data.get('username')
+
+        if(past == 'false'):
+            queryset = BackEndQuerier.cursor_querier(queryFutureTickets,[current_user,current_time])
+        else:
+            queryset = BackEndQuerier.cursor_querier(queryPastTickets,[current_user,current_time])
+
+        # append details of passengers
+        

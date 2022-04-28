@@ -100,7 +100,7 @@ set @tripweek = get_weekNo(@tempdatetime);
 set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 insert into ticket values
-('3410382','test','22210',@tripno, @tripweek, 'KOTA', 'BRC',0,null);
+('3410383','test2','22210',@tripno, @tripweek, 'KOTA', 'BRC',0,null);
 
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
 ('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
@@ -151,5 +151,3 @@ WHERE S.train_no = @temptrain
 		)
 	);
     
-
-
