@@ -16,66 +16,8 @@ import {
   TextField,
 } from "@material-ui/core";
 import TrainIcon from '@mui/icons-material/Train';
-const PnrPageResult = () => {
+function PnrPageResult() {
   return (
-      <div>
-        <CssBaseline />
-        <Toolbar />
-          <Box
-            maxWidth="sm"
-            style={{
-              marginTop: "0px",
-              background: "#C4C4C4",
-              overflowY: "hidden",
-              width: "100%",
-              height: "190px",
-            }}
-          >
-            <Typography
-              style={{ fontWeight: 550, marginTop: "10px" }}
-              variant="h2"
-              align="center"
-              position="relative"
-              gutterBottom
-            >
-              PNR Status
-            </Typography>
-            <div>
-              <Grid container spacing={0} justifyContent="center">
-                <Grid item>
-                  <TextField
-                    style={{
-                      width: "302px",
-                      height: "55px",
-                      fontSize: "18px",
-                      backgroundColor: "#FFFFFF",
-                    }}
-                    inputProps={{
-                      maxLength: 10,
-                    }}
-                    id="outlined-basic"
-                    label="Enter PNR Number"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item>
-                  <Button
-                    style={{
-                      backgroundColor: "#DC532D",
-                      color: "#FFFFFF",
-                      width: "88px",
-                      height: "55px",
-                      fontSize: "14px",
-                    }}
-                    variant="contained"
-                  >
-                    Search
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
-          </Box>
-
         <div
           style={{ marginTop: "40px", marginLeft: "20%", marginRight: "20%" }}
         >
@@ -474,7 +416,6 @@ const PnrPageResult = () => {
                 </CardActions> */}
           </Card>
         </div>
-      </div>
   );
 };
 
