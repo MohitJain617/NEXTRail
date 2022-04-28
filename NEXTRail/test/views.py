@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from colorama import Back
 from html5lib import serialize
 from rest_framework import generics, status
 from rest_framework.views import APIView
@@ -390,6 +391,7 @@ class TicketsView(APIView):
         AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
 	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
     (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) >= %s)"""
+
         past = request.data.get('past')
 
         # create sql time stamp:
@@ -402,5 +404,31 @@ class TicketsView(APIView):
         else:
             queryset = BackEndQuerier.cursor_querier(queryPastTickets,[current_user,current_time])
 
-        # append details of passengers
-        
+        queryPassengers = """select * from passenger where pnr = %s"""
+        queryReserve = """select * from reserve where pnr = %s"""
+        # append details of passengers and calc time
+        for i in range(len(queryset)):
+            srctime = queryset[i]["srctime"]
+            desttime = queryset[i]["desttime"]
+            tdelta = desttime - srctime 
+            duration = str(int(tdelta.total_seconds()//3600))+"h "+str(int((tdelta.total_seconds()%3600)//60))+"m"
+            queryset[i]["duration"] = duration
+            pnr = queryset[i]["pnr"]
+            passengers = BackEndQuerier.cursor_querier(queryPassengers,[pnr])
+            seats = BackEndQuerier.cursor_querier(queryReserve,[pnr])
+            j = min(len(passengers),len(seats))
+            for x in range(j):
+                passengers[x]["coach_no"] = seats[x]["coach_no"]
+                passengers[x]["seat_no"] = seats[x]["seat_no"]
+            while j < len(passengers):
+                passengers[j]["coach_no"] = '-'
+                passengers[j]["seat_no"] = '-'
+                j = j+1
+            
+            queryset[i]["passengers"] = passengers
+        # print(queryset)
+        if(len(queryset) >= 1):
+            return Response(queryset,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+

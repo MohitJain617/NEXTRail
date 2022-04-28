@@ -410,7 +410,8 @@ WHERE W.train_no = @trainNo
 
 -- 9)
 -- -------------------------------------------
-SET @user_name = "test";
+set @tempdatetime = "2022-04-25 03:50:00";
+
 -- Query for all tickets booked by a user along with additional values
 -- ------------------QUERY--------------------
 select T.pnr, T.train_no,
@@ -425,7 +426,43 @@ TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
     (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
 T.boarding_from, T.going_to, T.fare
 from ticket as T
-where T.username = @user_name;
+where T.username = "test2"
+AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) < "2022-04-24 03:50:00");
 -- -------------------------------------------
 
-select * from ticket;
+
+select * from passenger where pnr = '3410383';
+
+select * from reserve where pnr = '3410383';
+
+-- Given pid of passenger calculate the waiting list number if it's waiting listed
+SET @ppid = 1;
+
+SELECT count(*) as WL
+FROM waiting_list as W
+WHERE W.train_no = @trainNo
+	AND W.week_no = @tripweek
+	AND W.trip_no = @tripno
+	AND NOT(
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = @tempdest) 
+			<=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no =W.train_no 
+			AND TT2.st_code = W.boarding_from)
+		) 
+		OR
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = @tempsrc) 
+			>=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no = W.train_no 
+			AND TT2.st_code = W.going_to)
+		)
+	) GROUP BY class_type;

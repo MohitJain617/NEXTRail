@@ -9,9 +9,17 @@ export default function BookingPage() {
     const [data,setData] = React.useState("")
     const [result, setResult] = React.useState(false)
     
-    function handleSearchPressed() {
-
-        fetch("/data/tickets/" + "?past=" + (past?"true":"false"))
+    function loadTickets() {
+        
+        const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: "test",
+            past: "true",
+        }),
+        };
+        fetch("/data/tickets/", requestOptions)
         .then(async (response) => {
             const data = await response.json();
             if (!response.ok) {
@@ -19,15 +27,20 @@ export default function BookingPage() {
             } else {
                 setResult(true);
                 setData(data);
+                console.log(data);
                 // navigate("/trains/",{state:{data:data}});
             }
         })
         .catch((error) => {
           setResult(false)
           setData("")
-          props.sendAlert("Cannot Find Train", ERROR);
+          props.sendAlert("Cannot Find Tickets", error);
         });
     }
+    React.useEffect(() => {
+        loadTickets()
+    }, []);
+
     return (
         <div>
             <Box maxWidth="sm" style={{
@@ -37,9 +50,9 @@ export default function BookingPage() {
                     {past? ("Past Trips"):("Upcoming Trips")}
                 </Typography>
             </Box>
-            <div style={{ marginTop: "40px", marginLeft: "20%", marginRight: "20%" }}>
+            <div style={{ marginTop: "50px"}}>
                     {/* add cards here */}
-                <TripCard />
+                {result? data.map((val) =>(<TripCard data={val}/>)):("No tickets")}
 
             </div>
         </div>

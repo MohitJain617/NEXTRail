@@ -5,7 +5,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PassengerDetailsTicket from './PassengerDetailsTicket.js'
 
 
-export default function TripCard() {
+export default function TripCard(props) {
+    const data = props.data
     return (
         <>
             <Card sx={{ maxWidth: 200 }}>
@@ -14,7 +15,7 @@ export default function TripCard() {
                     <Grid container spacing={24}>
                         <Grid item xs={5}>
                             <Typography variant="h4" align="left" noWrap component="div" display="inline" style={{ color: "#606060", fontSize: 40, fontWeight: 'bold' }}>
-                                12420
+                                {data.train_no}
                             </Typography>
                         </Grid>
                         <Grid item xs={2}>
@@ -22,7 +23,7 @@ export default function TripCard() {
                         </Grid>
                         <Grid item xs={5}>
                             <Typography variant="h3" display="inline" marginRight="10px" justifyContent="flex-end" component="div" style={{ color: "#606060", fontSize: 40, fontWeight: 'bold', float: "right" }}>
-                                Chennai Express
+                                {data.train_name}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -30,7 +31,7 @@ export default function TripCard() {
                     <Grid container spacing={24}>
                         <Grid item xs={4}>
                             <Typography variant="h3" display="inline" component="div" style={{ color: "#7C8DB0", fontSize: 45, fontWeight: 'bold', float: "left", clear: "both", marginLeft: 5 }}>
-                                NDLS
+                                {data.boarding_from}
                             </Typography>
                         </Grid>
 
@@ -40,7 +41,7 @@ export default function TripCard() {
 
                         <Grid item xs={4}>
                             <Typography variant="h3" display="inline" component="div" style={{ color: "#7C8DB0", fontSize: 45, fontWeight: 'bold', float: "right", }}>
-                                CNB
+                                {data.going_to}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -48,19 +49,19 @@ export default function TripCard() {
                     <Grid container spacing={24}>
                         <Grid item xs={4}>
                             <Typography variant="h3" display="inline" component="div" style={{ color: "#606060", fontSize: 50, fontWeight: 'bold', float: "left", clear: "both" }}>
-                                12:20
+                                {data.srctime.substr(11,5)}
                             </Typography>
                         </Grid>
 
                         <Grid item xs={4}>
                             <center><Typography component="div" style={{ color: "#8397FF", fontSize: 25, fontWeight: 'bold' }}>
-                                7h 25m &nbsp; &nbsp; &nbsp; &nbsp;440 km
+                                {data.duration} &nbsp; &nbsp; &nbsp; &nbsp;{data.dist} km
                             </Typography></center>
                         </Grid>
 
                         <Grid item xs={4}>
                             <Typography variant="h3" display="inline" component="div" style={{ color: "#606060", fontSize: 50, fontWeight: 'bold', float: "right", }}>
-                                19:45
+                                {data.desttime.substr(11,5)}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -68,19 +69,19 @@ export default function TripCard() {
                     <Grid container spacing={24}>
                         <Grid item xs={4}>
                             <Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "left", clear: "both", marginLeft: 10 }}>
-                                Fri &nbsp; &nbsp; 27 May
+                                {data.srctime.substr(0,10)}
                             </Typography>
                         </Grid>
 
                         <Grid item xs={4}>
                             <center><Typography display="inline" component="div" style={{ color: "#000", fontSize: 20, fontWeight: 'bold', }}>
-                                PNR No. : 1234567890
+                                PNR No. : {data.pnr}
                             </Typography></center>
                         </Grid>
 
                         <Grid item xs={4}>
                             <center><Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "right", }}>
-                                Fri &nbsp; &nbsp; 27 May
+                                {data.desttime.substr(0,10)}
                             </Typography></center>
                         </Grid>
                     </Grid>
