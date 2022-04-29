@@ -151,7 +151,7 @@ function HomePage() {
           path="/past"
           element={
             localStorage.getItem("isAuth") === "true" ? (
-              <PastJourneys />
+              <BookingPage past="true" sendAlert={sendAlert} />
             ) : (
               <Navigate replace to="/login" />
             )
@@ -161,7 +161,7 @@ function HomePage() {
           path="/upcoming"
           element={
             localStorage.getItem("isAuth") === "true" ? (
-              <UpcomingJourneys />
+              <BookingPage past="false" sendAlert={sendAlert} />
             ) : (
               <Navigate replace to="/login" />
             )
