@@ -54,8 +54,7 @@ export default function BookingPage() {
             </Box>
             <div style={{ marginTop: "50px"}}>
                     {/* add cards here */}
-                {/* {result? data.map((val) =>(<TripCard data={val}/>)):("No tickets")} */}
-                <TrainResults/>
+                {result? data.map((val) =>(<TripCard data={val}/>)):("No tickets")}
             </div>
         </div>
     );
