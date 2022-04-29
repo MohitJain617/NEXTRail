@@ -10863,7 +10863,7 @@ create function get_daytime(weekno INT, days INT)
     END //
     
     
-    
+
 -- TRIGGERS:
 
 -- find additional cost given a train type
@@ -10885,12 +10885,12 @@ CREATE TRIGGER fare_update
 AFTER INSERT ON passenger FOR EACH ROW
 begin
 		-- CALCULATE DISTANCE
-		SET @distsrc = (SELECT dist FROM time_table as T, Ticket as TC
+		SET @distsrc = (SELECT dist FROM time_table as T, ticket as TC
 					WHERE TC.pnr = NEW.pnr
 					AND T.train_no = TC.train_no
 					AND T.st_code = TC.boarding_from) ;
 
-		SET @distdest = (SELECT dist FROM time_table as T, Ticket as TC
+		SET @distdest = (SELECT dist FROM time_table as T, ticket as TC
 					WHERE TC.pnr = NEW.pnr
 					AND T.train_no = TC.train_no
 					AND T.st_code = TC.going_to) ;
@@ -10982,7 +10982,7 @@ begin
 			SET NEW.stat = 'WL';
 		ELSE
 			SET NEW.stat = 'CNF';
-			INSERT INTO RESERVE VALUES (@coachno, @seatno, @coachtype, NEW.pnr);
+			INSERT INTO reserve VALUES (@coachno, @seatno, @coachtype, NEW.pnr);
 		END IF;
     
 END;

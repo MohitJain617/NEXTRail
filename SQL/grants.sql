@@ -6,18 +6,18 @@ TO 'Admins'@'localhost';
 
 GRANT SELECT 
 ON waiting_list_count 
+TO 'Employees'@'localhost', 'Ministry'@'localhost', 'Passenger'@'localhost';
+
+GRANT SELECT 
+ON waiting_list
 TO 'Employees'@'localhost', 'Ministry'@'localhost';
 
 GRANT SELECT
 ON station 
-TO 'Employees'@'localhost', 'Ministry'@'localhost', 'Passenger'@'localhost';
+TO 'Employees'@'localhost', 'Passenger'@'localhost';
 
 GRANT ALL 
 ON station 
-TO 'Ministry'@'localhost';
-
-GRANT ALL 
-ON train
 TO 'Ministry'@'localhost';
 
 GRANT ALL 
@@ -31,7 +31,6 @@ TO 'Ministry'@'localhost';
 GRANT ALL
 ON sched 
 TO 'Ministry'@'localhost';
-
 
 GRANT ALL
 ON class_layout 
