@@ -3,6 +3,8 @@ import { Typography, AppBar, MenuItem, Card, CardActions, CardContent, CardMedia
 import TrainIcon from '@mui/icons-material/Train';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import TripCard from './TripCard.js'
+import TrainCardAvailability from "./TrainAvailabilityCard.js";
+import TrainResults from "./TrainResults.js";
 
 export default function BookingPage() {
     const [past,setPast] = React.useState(false)
@@ -52,8 +54,8 @@ export default function BookingPage() {
             </Box>
             <div style={{ marginTop: "50px"}}>
                     {/* add cards here */}
-                {result? data.map((val) =>(<TripCard data={val}/>)):("No tickets")}
-
+                {/* {result? data.map((val) =>(<TripCard data={val}/>)):("No tickets")} */}
+                <TrainResults/>
             </div>
         </div>
     );

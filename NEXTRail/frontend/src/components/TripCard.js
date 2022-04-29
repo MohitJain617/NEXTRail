@@ -8,27 +8,27 @@ import PassengerDetailsTicket from './PassengerDetailsTicket.js'
 export default function TripCard(props) {
     const data = props.data
     return (
-        <div style={{ marginTop: "20px", marginLeft: "10%", marginRight: "10%" }}>
+        <div style={{marginLeft: "10%", marginRight: "10%"}}>
             <Card sx={{ maxWidth: 200 }}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>
                     <Grid container spacing={24}>
-                        <Grid item xs={5}>
-                            <Typography variant="h4" align="left" noWrap component="div" display="inline" style={{ color: "#606060", fontSize: 40, fontWeight: 'bold' }}>
-                                {data.train_no}
+                        <Grid item xs={4}>
+                            <Typography variant="h4" align="left" Wrap component="div" display="inline" style={{ color: "#606060", fontSize: 40, fontWeight: 'bold' }}>
+                                {data.train_name}
                             </Typography>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={4}>
                             <center><TrainIcon align="center" fontSize="small" style={{ width: 60, height: 60, color: "#606060", }}></TrainIcon></center>
                         </Grid>
-                        <Grid item xs={5}>
-                            <Typography variant="h3" display="inline" marginRight="10px" justifyContent="flex-end" component="div" style={{ color: "#606060", fontSize: 40, fontWeight: 'bold', float: "right" }}>
-                                {data.train_name}
+                        <Grid item xs={4}>
+                            <Typography variant="h4" display="inline" marginRight="10px" justifyContent="flex-end" component="div" style={{ color: "#606060", fontSize: 50, fontWeight: '850', float: "right" }}>
+                                {data.train_no}
                             </Typography>
                         </Grid>
                     </Grid>
 
-                    <Grid container spacing={24}>
+                    <Grid container spacing={24} marginTop="20px">
                         <Grid item xs={4}>
                             <Typography variant="h3" display="inline" component="div" style={{ color: "#7C8DB0", fontSize: 45, fontWeight: 'bold', float: "left", clear: "both", marginLeft: 5 }}>
                                 {data.boarding_from}
@@ -67,19 +67,25 @@ export default function TripCard(props) {
                     </Grid>
 
                     <Grid container spacing={24}>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "left", clear: "both", marginLeft: 10 }}>
                                 {data.srctime.substr(0,10)}
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <center><Typography display="inline" component="div" style={{ color: "#000", fontSize: 20, fontWeight: 'bold', }}>
                                 PNR No. : {data.pnr}
                             </Typography></center>
                         </Grid>
 
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
+                            <center><Typography display="inline" component="div" style={{ color: "#000", fontSize: 20, fontWeight: 'bold', }}>
+                                Fare: ₹4350
+                            </Typography></center>
+                        </Grid>
+
+                        <Grid item xs={3}>
                             <center><Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "right", }}>
                                 {data.desttime.substr(0,10)}
                             </Typography></center>
@@ -125,12 +131,6 @@ export default function TripCard(props) {
                         {data.passengers.map((val,index)=>(
                             <PassengerDetailsTicket data={val} idx = {index} />
                         ))}
-                        {/* <PassengerDetailsTicket />
-                        <PassengerDetailsTicket />
-                        <PassengerDetailsTicket />
-                        <PassengerDetailsTicket />
-                        <PassengerDetailsTicket /> */}
-
                     </div>
                     
                 </CardContent>
