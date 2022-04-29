@@ -16,4 +16,6 @@ urlpatterns = [
     path('login/', index),
     path('signup/', index),
     path('bookings/', index),
+    path('past/',index),
+    path('upcoming/',index),
 ]
