@@ -438,18 +438,22 @@ select * from passenger where pnr = '3410383';
 select * from reserve where pnr = '3410383';
 
 -- Given pid of passenger calculate the waiting list number if it's waiting listed
-SET @ppid = 1;
+SET @ppid = 163;
 
 SELECT count(*) as WL
-FROM waiting_list as W
-WHERE W.train_no = @trainNo
-	AND W.week_no = @tripweek
-	AND W.trip_no = @tripno
+FROM waiting_list as W, waiting_list as W2
+WHERE W.train_no = W2.train_no
+	AND W.week_no = W2.week_no
+	AND W.trip_no = W2.trip_no
+    AND W.class_type = W2.class_type
+    AND W2.pid = @ppid
+    AND W2.pid <> W.pid
+    AND ((W2.priority > W.priority) or ((W2.priority = W.priority) and (W2.pid >= W.pid)))
 	AND NOT(
 		(
 			(SELECT dist FROM time_table as TT1 
 			WHERE TT1.train_no = W.train_no 
-			AND TT1.st_code = @tempdest) 
+			AND TT1.st_code = W2.going_to) 
 			<=
 			(SELECT dist FROM time_table as TT2 
 			WHERE TT2.train_no =W.train_no 
@@ -459,10 +463,10 @@ WHERE W.train_no = @trainNo
 		(
 			(SELECT dist FROM time_table as TT1 
 			WHERE TT1.train_no = W.train_no 
-			AND TT1.st_code = @tempsrc) 
+			AND TT1.st_code = W2.boarding_from) 
 			>=
 			(SELECT dist FROM time_table as TT2 
 			WHERE TT2.train_no = W.train_no 
 			AND TT2.st_code = W.going_to)
 		)
-	) GROUP BY class_type;
+	);

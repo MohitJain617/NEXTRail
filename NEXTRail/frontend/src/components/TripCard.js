@@ -122,11 +122,14 @@ export default function TripCard(props) {
                             </Grid>
                         </Grid>
 
+                        {data.passengers.map((val,index)=>(
+                            <PassengerDetailsTicket data={val} idx = {index} />
+                        ))}
+                        {/* <PassengerDetailsTicket />
                         <PassengerDetailsTicket />
                         <PassengerDetailsTicket />
                         <PassengerDetailsTicket />
-                        <PassengerDetailsTicket />
-                        <PassengerDetailsTicket />
+                        <PassengerDetailsTicket /> */}
 
                     </div>
                     

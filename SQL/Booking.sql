@@ -110,6 +110,8 @@ INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VA
 ('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
 ('3410383', 'Abhik', 'Male', 19, 'CNF', null,'A');
 
+
+select * from waiting_list;
 -- query for available seats 
 
 set @tripweek = (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime));
@@ -150,4 +152,3 @@ WHERE S.train_no = @temptrain
 			)
 		)
 	);
-    
