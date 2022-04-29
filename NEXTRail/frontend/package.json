@@ -47,6 +47,7 @@
     "date-fns": "^2.28.0",
     "react-animations": "^1.0.0",
     "react-router-dom": "^6.3.0",
+    "react-router-redirect": "^1.0.1",
     "react-spring": "^9.0.0-rc.3",
     "styled-components": "^5.3.5"
   }

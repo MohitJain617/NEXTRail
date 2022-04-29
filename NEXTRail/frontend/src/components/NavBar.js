@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Logo from "../static/img/NEXTRAIL.svg";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
+import "../static/css/NavBar.css";
 
 const useStyles = makeStyles((theme) => ({
   navlinks: {
@@ -52,23 +53,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = (props) => {
   const classes = useStyles();
+
   function getCol(curr) {
     const location = useLocation();
     if (location.pathname === curr) {
       return "#FFF";
     }
   }
-  const navigate = useNavigate();
-
- 
-  
-  // function logOutUser(){
-  //   localStorage.removeItem('token')
-  //   setIsAuth(false)
-  //   setUser("Stranger")
-  //   navigate("/");
-  // }
-
   return (
     <AppBar position="relative" style={{ background: "#388087" }}>
       <CssBaseline />
@@ -85,7 +76,7 @@ const Navbar = (props) => {
             color: "#242038",
           }}
         >
-          <h4>Hello, {props.user}!</h4>
+          <h4>Hello, {localStorage.getItem("user")}!</h4>
         </Box>
         <div className={classes.navlinks} style={{ marginLeft: "auto" }}>
           <Link to="/" className={classes.link} style={{ color: getCol("/") }}>
@@ -107,17 +98,24 @@ const Navbar = (props) => {
           >
             Search Trains
           </Link>
-
-          <Link
-            to="/bookings"
-            className={classes.link}
-            style={{ color: getCol("/bookings") }}
-          >
-            Your Journeys
-          </Link>
-          {props.isAuth? 
-          <LogoutButton logout={props.logout} className={classes.linkbtn}/>:
-           <LoginButton className={classes.linkbtn}/>}
+          <div className="dropdown">
+            <Link
+              to="/bookings"
+              className={classes.link}
+              style={{ color: getCol("/bookings") }}
+            >
+              Your Journeys
+            </Link>
+            <div className="dropdown-content">
+              <a href="/past">Past Journeys</a>
+              <a href="/upcoming">Upcoming Journeys</a>
+            </div>
+          </div>
+          {localStorage.getItem("isAuth")==="true" ? (
+            <LogoutButton logout={props.logout} className={classes.linkbtn} />
+          ) : (
+            <LoginButton className={classes.linkbtn} />
+          )}
         </div>
       </Toolbar>
     </AppBar>

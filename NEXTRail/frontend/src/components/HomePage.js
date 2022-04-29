@@ -1,6 +1,6 @@
 import React from "react";
 import TrainDetails from "./TrainDetails";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import PnrPageDetails from "./PnrPageDetails";
 import NavBar from "./NavBar";
 import TrainBwStation from "./TrainBwStation";
@@ -13,8 +13,9 @@ import TrainResults from "./TrainResults";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 import { ERROR, INFO } from "./AlertTypes";
-import TrainDetailsResults from "./TrainDetailsResult";
 import Test from "./Test";
+import PastJourneys from "./PastJourneys";
+import UpcomingJourneys from "./UpcomingJourneys";
 
 function HomePage() {
   const defaultUser = "Stranger";
@@ -41,17 +42,23 @@ function HomePage() {
           } else {
             setIsAuth(true);
             setUser(data.username);
+            localStorage.setItem("user", data.username);
+            localStorage.setItem("isAuth", true);
           }
         })
         .catch((error) => {
           setIsAuth(false);
           setUser("Strange");
+          localStorage.setItem("user", defaultUser);
           localStorage.removeItem("token");
+          localStorage.setItem("isAuth", false);
         });
     } else {
       setIsAuth(false);
       setUser(defaultUser);
+      localStorage.setItem("user", defaultUser);
       localStorage.removeItem("token");
+      localStorage.setItem("isAuth", false);
     }
   }, []);
 
@@ -77,6 +84,8 @@ function HomePage() {
           return Promise.reject(data.error);
         } else {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("user", data.username);
+          localStorage.setItem("isAuth", true);
           setIsAuth(true);
           setUser(data.username);
           navigate("/");
@@ -118,16 +127,14 @@ function HomePage() {
     setIsAuth(false);
     setUser(defaultUser);
     localStorage.removeItem("token");
+    localStorage.setItem("user", defaultUser);
+    localStorage.setItem("isAuth", false);
   }
 
   return (
     <div>
       <NavBar isAuth={isAuth} logout={logoutUser} user={user} />
-      <Snackbar
-        open={alertOpen}
-        autoHideDuration={1500}
-        onClose={handleClose}
-      >
+      <Snackbar open={alertOpen} autoHideDuration={1500} onClose={handleClose}>
         <Alert severity={severity} onClose={handleClose} sx={{ width: "100%" }}>
           {alertMsg}
         </Alert>
@@ -140,6 +147,26 @@ function HomePage() {
         <Route path="/test" element={<Test sendAlert={sendAlert} />} />
         <Route path="/pnr" element={<PnrPageDetails sendAlert={sendAlert} />} />
         <Route path="/pnr/success" element={<PnrPageResult />} />
+        <Route
+          path="/past"
+          element={
+            localStorage.getItem("isAuth") === "true" ? (
+              <PastJourneys />
+            ) : (
+              <Navigate replace to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/upcoming"
+          element={
+            localStorage.getItem("isAuth") === "true" ? (
+              <UpcomingJourneys />
+            ) : (
+              <Navigate replace to="/login" />
+            )
+          }
+        />
         <Route
           path="/login"
           element={<LogInPage isAuth={isAuth} login={loginUser} />}
