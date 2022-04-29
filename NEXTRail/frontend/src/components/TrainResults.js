@@ -23,11 +23,7 @@ const TrainResults = () => {
 								<strong>KOTA</strong>
 							</Typography>
 						</Grid>
-						{/* <center><Grid item xs = {4} alignContent= "center">
-                  <Typography  variant="h3"  display="inline" component="div" style = {{fontSize: 20, fontWeight: 'bold', float: "right", clear:"both", marginLeft: 5, float: "center" }}>
-                    06:00
-                  </Typography>
-                  </Grid></center> */}
+						
 
 						<Grid item xs={6}>
 							<Typography variant="h3" display="inline" component="div" style={{ color: "#7C8DB0", fontSize: 30, fontWeight: 'bold', float: "right", clear: "both", marginLeft: 5 }}>
@@ -50,11 +46,7 @@ const TrainResults = () => {
 								6hr 22min &nbsp; &nbsp; &nbsp; &nbsp; 440 km
 							</Typography></center>
 						</Grid>
-						{/* <center><Grid item xs = {4} alignContent= "center">
-                  <Typography  variant="h3"  display="inline" component="div" style = {{fontSize: 20, fontWeight: 'bold', float: "right", clear:"both", marginLeft: 5, float: "center" }}>
-                    06:00
-                  </Typography>
-                  </Grid></center> */}
+						
 						<Grid item xs={4}>
 							<Typography variant="h3" display="inline" component="div" style={{ color: "#606060", fontSize: 35, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5 }}>
 								<strong>19:40 </strong>
@@ -68,16 +60,7 @@ const TrainResults = () => {
 								<strong>Fri, 22 Apr</strong>
 							</Typography>
 						</Grid>
-						{/* <Grid item xs = {4}>
-                  <center><Typography   component="div" style = {{color:"#3152ff" ,fontSize: 25,fontWeight: 'bold'}}>
-                    6hr 22min &nbsp; &nbsp; &nbsp; &nbsp; 440 km
-                  </Typography></center>
-                  </Grid> */}
-						{/* <center><Grid item xs = {4} alignContent= "center">
-                  <Typography  variant="h3"  display="inline" component="div" style = {{fontSize: 20, fontWeight: 'bold', float: "right", clear:"both", marginLeft: 5, float: "center" }}>
-                    06:00
-                  </Typography>
-                  </Grid></center> */}
+						
 						<Grid item xs={6}>
 							<Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5 }}>
 								<strong>Fri, 22 Apr </strong>
@@ -87,30 +70,24 @@ const TrainResults = () => {
 
 
 
-					{/* <center><Typography   component="div" style = {{color:"red" ,fontSize: 25,fontWeight: 'bold'}}>
-                    ------6:00-------
-                  </Typography></center> */}
 
 					<Grid container spacing={2} style={{ paddingTop: "10px" }}>
 						<Grid item>
 							<Button variant="outlined" style={{ display: "block", textAlign: "left", backgroundColor: "#BEE7EA" }}>
 								<Typography style={{ fontSize: 25, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5, textTransform: "none" }}>AC 3 Tier (3A)</Typography>
 								<Typography style={{ marginLeft: "5px", paddingTop: "10px", paddingBottom: "10px", color: "red", fontWeight: "bold", textTransform: "none" }}> WL4 (77%) </Typography>
-								{/* <Typography style = {{marginLeft: "5px", fontWeight: "bold",textTransform:"none", fontSize:15}}> Rs. 1655</Typography> */}
 							</Button>
 						</Grid>
 						<Grid item>
 							<Button variant="outlined" style={{ display: "block", textAlign: "left", backgroundColor: "#BEE7EA" }}>
 								<Typography style={{ fontSize: 25, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5, textTransform: "none" }}>AC 2 Tier (2A)</Typography>
 								<Typography style={{ marginLeft: "5px", paddingTop: "10px", paddingBottom: "10px", color: "green", fontWeight: "bold", textTransform: "none" }}> AVAILABLE </Typography>
-								{/* <Typography style = {{marginLeft: "5px", fontWeight: "bold",textTransform:"none", fontSize:15}}> Rs. 2235</Typography> */}
 							</Button>
 						</Grid>
 						<Grid item>
 							<Button variant="outlined" style={{ display: "block", textAlign: "left", backgroundColor: "#BEE7EA" }}>
 								<Typography style={{ fontSize: 25, fontWeight: 'light', float: "right", clear: "both", marginLeft: 5, textTransform: "none" }}>AC First Class (1A)</Typography>
 								<Typography style={{ marginLeft: "5px", paddingTop: "10px", paddingBottom: "10px", color: "red", fontWeight: "bold", textTransform: "none" }}> WL1 (57%) </Typography>
-								{/* <Typography style = {{marginLeft: "5px", fontWeight: "bold",textTransform:"none", fontSize:15}}> Rs. 2470</Typography> */}
 							</Button>
 						</Grid>
 					</Grid>
@@ -127,18 +104,9 @@ const TrainResults = () => {
 								<Typography style={{ fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Seat Availability</Typography>
 							</Button>
 						</Grid>
-						{/* <Grid item >
-                  <Button variant = "outlined"style={{display: "block",textAlign: "left"}}>
-                            <Typography style = {{fontSize: 15, fontWeight: 'regular', float: "right", clear:"both",  textTransform: "none" }}>Other Dates</Typography>
-                        </Button>
-                  </Grid> */}
 					</Grid>
-					{/* <br></br> <br></br> <br></br> */}
 				</CardContent>
-				{/* <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions> */}
+				
 			</Card>
 			</Card>
 		</div>

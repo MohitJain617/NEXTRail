@@ -66,19 +66,25 @@ export default function TripCard() {
                     </Grid>
 
                     <Grid container spacing={24}>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "left", clear: "both", marginLeft: 10 }}>
                                 Fri &nbsp; &nbsp; 27 May
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <center><Typography display="inline" component="div" style={{ color: "#000", fontSize: 20, fontWeight: 'bold', }}>
                                 PNR No. : 1234567890
                             </Typography></center>
                         </Grid>
 
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
+                            <center><Typography display="inline" component="div" style={{ color: "#000", fontSize: 20, fontWeight: 'bold', }}>
+                                Fare: ₹4350
+                            </Typography></center>
+                        </Grid>
+
+                        <Grid item xs={3}>
                             <center><Typography display="inline" component="div" style={{ color: "#606060", fontSize: 20, fontWeight: 'light', float: "right", }}>
                                 Fri &nbsp; &nbsp; 27 May
                             </Typography></center>
