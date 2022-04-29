@@ -10,17 +10,6 @@ SET @tempday = get_dayNo(@tempdate);
 -- ------------------QUERY--------------------
 -- -------------------------------------------
 -- To check the validity of a username
-SET @tempusername = 'cpharro0';
-SELECT user_name FROM credentials WHERE user_name = @tempusername;
-
--- To authenticate a user -- 
-SET @tempusername1 = 'cpharro0';
-SET @temppassword1 = 'c3nrRpkG';
-
-SELECT user_id, user_name 
-FROM credentials NATURAL JOIN user_account
-WHERE user_name = @tempusername1 
-	AND passcode = @temppassword1;
     
 -- 1)
 -- ------------------SETUP--------------------
@@ -29,14 +18,9 @@ SET @tempdest = "MMCT";
 SET @tempdate = DATE('2022-04-23');
 SET @tempdayno = get_dayNo(@tempdate);
 
--- updated query
-SET @tempdayno = get_dayNo(@tempdate);
 SET @classReq = FALSE;
 SET @classPref = 'S';
-
-select * from struct;
 -- -------------------------------------------
-
 -- Query for trains between two stations -- 
 -- ------------------QUERY--------------------
 SELECT T.train_no, T.departure FROM time_table as T NATURAL JOIN sched as S
@@ -126,8 +110,8 @@ FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
 WHERE S.train_no = @temptrain
 	AND S.class_type = C.class_type
     AND SN2.num <= S.size
-	AND SN.num <= C.capacity;
-	ORDER BY (coach_no,seat_no)
+	AND SN.num <= C.capacity
+	ORDER BY (coach_no,seat_no);
 -- -------------------------------------------
     
 
@@ -201,13 +185,6 @@ SELECT * FROM ticket as T, passenger as P
 WHERE T.pnr = @temppnr
 AND P.pnr = T.pnr;
 
-
--- Query for all ticket booked by a user
-SET @tempuser = 'cpharro0';
-SELECT T.pnr, T.boarding_time, T.boarding_from, T.going_to, T.fare
-FROM ticket as T, user_account as U
-WHERE U.user_name = @tempuser
-AND T.user_id = U.user_id;
 
 -- Query to cancel a ticket with a given pnr
 SET @temppnr = '111111111';
@@ -310,13 +287,186 @@ WHERE S.train_no = @trainNo
 		)
 	) GROUP BY S.class_type;
 -- -------------------------------------------
-
+-- 7)
+-- ------------------SETUP--------------------
 SET @trainno = '11123';
-
+-- -------------------------------------------
 -- Calculating duration of time it takes to reach station (in seconds)
+-- ------------------QUERY--------------------
 SELECT T1.st_code, TIME_TO_SEC(TIMEDIFF(T1.arrival,T2.departure))+86400*(T1.day_no-T2.day_no) as seconds
 FROM time_table as T1, time_table as T2
 WHERE T1.train_no = @trainno
 AND T2.train_no = @trainno
 AND T2.dist = 0
 ORDER BY seconds;
+-- -------------------------------------------
+
+-- 8) Query to check all the passengers in waiting list f
+-- for a specific train info, and given them seat if it's available now
+-- ------------------SETUP--------------------
+SET @trainNo = '22210';
+SET @tempsrc = 'NDLS';
+SET @tempdest = 'MMCT';
+SET @tempdate = DATE("2022-04-23");
+-- CALCULATE SECTION
+SET @dayno = (select day_no from time_table where train_no=@trainNo and st_code=@tempsrc);
+
+-- formulate tripno
+set @tripno = get_dayNo(@tempdate) + 1 - @dayno;
+set @tripno = if(@tripno = 0,7,@tripno); -- started last week's sunday
+set @tripno = if(@tripno = -1,6,@tripno); -- started last week's saturday
+
+-- tripno is correct or not
+-- select count(*) from sched where train_no = '15232' and trip_no = @tripno;
+set @tripweek = get_weekNo(@tempdate);
+set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
+set @classtype = 'A';
+-- -------------------------------------------
+-- ------------------QUERY--------------------
+SELECT * 
+FROM waiting_list as W
+WHERE W.train_no = @trainNo
+	AND W.week_no = @tripweek
+	AND W.trip_no = @tripno
+    AND W.class_type = @classtype
+
+	AND NOT EXISTS (
+		SELECT * 
+		FROM waiting_list as W2
+		WHERE W.train_no = W2.train_no
+		AND W.trip_no = W2.trip_no
+		AND W.class_type = W2.class_type
+		AND ((W.priority > W2.priority) OR ((W.priority = W2.priority) AND (W.pid > W2.pid)) )
+
+		-- W2 lies between tempsrc and tempdest
+		AND(
+			(
+				(SELECT dist FROM time_table as TT1 
+				WHERE TT1.train_no = W2.train_no 
+				AND TT1.st_code = @tempsrc) 
+				<=
+				(SELECT dist FROM time_table as TT2 
+				WHERE TT2.train_no = W2.train_no 
+				AND TT2.st_code = W2.boarding_from)
+			) 
+			AND
+			(
+				(SELECT dist FROM time_table as TT1 
+				WHERE TT1.train_no = W2.train_no 
+				AND TT1.st_code = @tempdest) 
+				>=
+				(SELECT dist FROM time_table as TT2 
+				WHERE TT2.train_no = W2.train_no 
+				AND TT2.st_code = W2.going_to)
+			)
+		)
+		-- and intersection between W1 and W2
+		AND NOT(
+			(
+				(SELECT dist FROM time_table as TT1 
+				WHERE TT1.train_no = W2.train_no 
+				AND TT1.st_code = W2.going_to) 
+				<=
+				(SELECT dist FROM time_table as TT2 
+				WHERE TT2.train_no =W.train_no 
+				AND TT2.st_code = W.boarding_from)
+			) 
+			OR
+			(
+				(SELECT dist FROM time_table as TT1 
+				WHERE TT1.train_no = W2.train_no 
+				AND TT1.st_code = W2.boarding_from) 
+				>=
+				(SELECT dist FROM time_table as TT2 
+				WHERE TT2.train_no = W.train_no 
+				AND TT2.st_code = W.going_to)
+			)
+		)
+	)
+	-- W1 lies between tempsrc and tempdest
+	AND(
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = @tempsrc) 
+			<=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no = W.train_no 
+			AND TT2.st_code = W.boarding_from)
+		) 
+		AND
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = @tempdest) 
+			>=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no = W.train_no 
+			AND TT2.st_code = W.going_to)
+		)
+	)
+	;
+-- -------------------------------------------
+
+-- 9)
+-- -------------------------------------------
+set @tempdatetime = "2022-04-25 03:50:00";
+
+-- Query for all tickets booked by a user along with additional values
+-- ------------------QUERY--------------------
+select T.pnr, T.train_no,
+(select train_name from train as T2 where T2.id = T.train_no) as train_name,
+((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
+T.boarding_from, T.going_to, T.fare
+from ticket as T
+where T.username = "test2"
+AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) < "2022-04-24 03:50:00");
+-- -------------------------------------------
+
+
+select * from passenger where pnr = '3410383';
+
+select * from reserve where pnr = '3410383';
+
+-- Given pid of passenger calculate the waiting list number if it's waiting listed
+SET @ppid = 163;
+
+SELECT count(*) as WL
+FROM waiting_list as W, waiting_list as W2
+WHERE W.train_no = W2.train_no
+	AND W.week_no = W2.week_no
+	AND W.trip_no = W2.trip_no
+    AND W.class_type = W2.class_type
+    AND W2.pid = @ppid
+    AND W2.pid <> W.pid
+    AND ((W2.priority > W.priority) or ((W2.priority = W.priority) and (W2.pid >= W.pid)))
+	AND NOT(
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = W2.going_to) 
+			<=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no =W.train_no 
+			AND TT2.st_code = W.boarding_from)
+		) 
+		OR
+		(
+			(SELECT dist FROM time_table as TT1 
+			WHERE TT1.train_no = W.train_no 
+			AND TT1.st_code = W2.boarding_from) 
+			>=
+			(SELECT dist FROM time_table as TT2 
+			WHERE TT2.train_no = W.train_no 
+			AND TT2.st_code = W.going_to)
+		)
+	);

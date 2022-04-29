@@ -8,8 +8,8 @@ SET SQL_SAFE_UPDATES = 0;
 -- calculate: pnr, dayno, trip no, Week no, fare, status, seats to be allotted
 -- updates: reserve, ticket, passenger, receipt
 
--- delete from passenger;
--- delete from receipt;
+--  delete from passenger;
+--  delete from receipt;
 -- delete from reserve;
 -- delete from ticket; 
 
@@ -44,7 +44,7 @@ set @tripweek = get_weekNo(@tempdatetime);
 set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 insert into ticket values
-('3410381',1,'22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null);
+('3410381','test','22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null);
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
 ('3410381', 'Aadit Kant Jha', 'Male', 20, 'CNF', null,'A'),
 ('3410381', 'Rohit J', 'Male', 19, 'CNF', null,'A'),
@@ -78,22 +78,40 @@ INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VA
 ('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
 ('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A');
 
+-- GIVEN SECTION
+SET @tempdatetime = DATE('2022-04-24'); -- datetime of journey
+SET @tempsrc = 'KOTA'; -- src
+SET @tempdest = 'BRC'; -- dest
+SET @temptrain = '22210';
+SET @coachType = 'A';
+
+-- assume passenger details
+
+-- CALCULATE SECTION
+set @dayno = (select day_no from time_table where train_no=@temptrain and st_code=@tempsrc);
+-- formulate tripno
+set @tripno = get_dayNo(@tempdatetime) + 1 - @dayno;
+set @tripno = if(@tripno = 0,7,@tripno); -- started last week's sunday
+set @tripno = if(@tripno = -1,6,@tripno); -- started last week's saturday
+
+-- tripno is correct or not
+-- select count(*) from sched where train_no = '15232' and trip_no = @tripno;
+set @tripweek = get_weekNo(@tempdatetime);
+set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 insert into ticket values
-('3410382',1,'22210',@tripno, (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime)), 'KOTA', 'BRC',0,null);
+('3410383','test2','22210',@tripno, @tripweek, 'KOTA', 'BRC',0,null);
 
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
-('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
-('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
-('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
-('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
-('3410382', 'Sohum', 'Male', 20, 'WL', null,'A'),
-('3410382', 'Abhik', 'Male', 19, 'WL', null,'A');
+('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('3410383', 'Abhik', 'Male', 19, 'CNF', null,'A');
 
-INSERT INTO reserve VALUES
-(1,1,'A','3410381'),
-(1,2,'A','3410381');
 
+select * from waiting_list;
 -- query for available seats 
 
 set @tripweek = (SELECT TIMESTAMPDIFF(WEEK,@startdate,@tempdatetime));
@@ -134,6 +152,3 @@ WHERE S.train_no = @temptrain
 			)
 		)
 	);
-    
-
-

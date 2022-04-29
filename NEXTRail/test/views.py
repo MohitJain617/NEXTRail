@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from colorama import Back
 from html5lib import serialize
 from rest_framework import generics, status
 from rest_framework.views import APIView
@@ -134,6 +135,7 @@ class TrainDetailView(APIView):
             varString = varString[:-1]
             queryset[i]["trip_nos"] = varString
 
+        print(queryset)
 
         if(len(queryset) >= 1):
             return Response(queryset,status=status.HTTP_200_OK)
@@ -353,4 +355,198 @@ class SeatAvailibility(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        
+    
+class TicketsView(APIView):
+    def post(self, request,format=None):
+        queryPastTickets = """select T.pnr, T.train_no,
+        (select train_name from train as T2 where T2.id = T.train_no) as train_name,
+        ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+    	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+    	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+        (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
+        T.boarding_from, T.going_to, T.fare
+        from ticket as T
+        where T.username = %s
+        AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) < %s)"""
+
+        queryFutureTickets = """select T.pnr, T.train_no,
+        (select train_name from train as T2 where T2.id = T.train_no) as train_name,
+        ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+    	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+    	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+        (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
+        T.boarding_from, T.going_to, T.fare
+        from ticket as T
+        where T.username = %s
+        AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) >= %s)"""
+
+        past = request.data.get('past')
+
+        # create sql time stamp:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # get current user please
+        current_user = request.data.get('username')
+
+        if(past == 'false'):
+            queryset = BackEndQuerier.cursor_querier(queryFutureTickets,[current_user,current_time])
+        else:
+            queryset = BackEndQuerier.cursor_querier(queryPastTickets,[current_user,current_time])
+
+        queryPassengers = """select * from passenger where pnr = %s"""
+        queryReserve = """select * from reserve where pnr = %s"""
+        queryWaitlist = """SELECT count(*) as WL
+            FROM waiting_list as W, waiting_list as W2
+            WHERE W.train_no = W2.train_no
+                AND W.week_no = W2.week_no
+                AND W.trip_no = W2.trip_no
+                AND W.class_type = W2.class_type
+                AND W2.pid = %s
+                AND ((W2.priority > W.priority) or ((W2.priority = W.priority) and (W2.pid >= W.pid)))
+                AND NOT(
+                    (
+                        (SELECT dist FROM time_table as TT1 
+                        WHERE TT1.train_no = W.train_no 
+                        AND TT1.st_code = W2.going_to) 
+                        <=
+                        (SELECT dist FROM time_table as TT2 
+                        WHERE TT2.train_no =W.train_no 
+                        AND TT2.st_code = W.boarding_from)
+                    ) 
+                    OR
+                    (
+                        (SELECT dist FROM time_table as TT1 
+                        WHERE TT1.train_no = W.train_no 
+                        AND TT1.st_code = W2.boarding_from) 
+                        >=
+                        (SELECT dist FROM time_table as TT2 
+                        WHERE TT2.train_no = W.train_no 
+                        AND TT2.st_code = W.going_to)
+                    )
+                );
+        """
+        # append details of passengers and calc time
+        for i in range(len(queryset)):
+            srctime = queryset[i]["srctime"]
+            desttime = queryset[i]["desttime"]
+            tdelta = desttime - srctime 
+            duration = str(int(tdelta.total_seconds()//3600))+"h "+str(int((tdelta.total_seconds()%3600)//60))+"m"
+            queryset[i]["duration"] = duration
+            pnr = queryset[i]["pnr"]
+            passengers = BackEndQuerier.cursor_querier(queryPassengers,[pnr])
+            seats = BackEndQuerier.cursor_querier(queryReserve,[pnr])
+            j = min(len(passengers),len(seats))
+            for x in range(j):
+                passengers[x]["coach_no"] = seats[x]["coach_no"]
+                passengers[x]["seat_no"] = seats[x]["seat_no"]
+            while j < len(passengers):
+                passengers[j]["coach_no"] = '-'
+                passengers[j]["seat_no"] = '-'
+                if(passengers[j]["stat"] == "WL"):
+                    ctr = BackEndQuerier.cursor_querier(queryWaitlist,[passengers[j]["pid"]])[0]["WL"]
+                    passengers[j]["stat"] = "WL" + str(ctr)
+                j = j+1
+            
+            queryset[i]["passengers"] = passengers
+        # print(queryset)
+        if(len(queryset) >= 1):
+            return Response(queryset,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class PnrView(APIView):
+    def post(self, request,format=None):
+        queryPnrTicket = """select T.pnr, T.train_no,
+        (select train_name from train as T2 where T2.id = T.train_no) as train_name,
+        ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
+    	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
+    	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
+        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
+    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
+        (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
+        T.boarding_from, T.going_to, T.fare
+        from ticket as T
+        where T.username = %s
+        AND T.pnr = %s"""
+
+        # get current user please
+        current_user = request.data.get('username')
+        pnr = request.data.get('pnr')
+
+        queryset = BackEndQuerier.cursor_querier(queryPnrTicket,[current_user,pnr])
+
+        queryPassengers = """select * from passenger where pnr = %s"""
+        queryReserve = """select * from reserve where pnr = %s"""
+        queryWaitlist = """SELECT count(*) as WL
+            FROM waiting_list as W, waiting_list as W2
+            WHERE W.train_no = W2.train_no
+                AND W.week_no = W2.week_no
+                AND W.trip_no = W2.trip_no
+                AND W.class_type = W2.class_type
+                AND W2.pid = %s
+                AND ((W2.priority > W.priority) or ((W2.priority = W.priority) and (W2.pid >= W.pid)))
+                AND NOT(
+                    (
+                        (SELECT dist FROM time_table as TT1 
+                        WHERE TT1.train_no = W.train_no 
+                        AND TT1.st_code = W2.going_to) 
+                        <=
+                        (SELECT dist FROM time_table as TT2 
+                        WHERE TT2.train_no =W.train_no 
+                        AND TT2.st_code = W.boarding_from)
+                    ) 
+                    OR
+                    (
+                        (SELECT dist FROM time_table as TT1 
+                        WHERE TT1.train_no = W.train_no 
+                        AND TT1.st_code = W2.boarding_from) 
+                        >=
+                        (SELECT dist FROM time_table as TT2 
+                        WHERE TT2.train_no = W.train_no 
+                        AND TT2.st_code = W.going_to)
+                    )
+                );
+        """
+        # append details of passengers and calc time
+        for i in range(len(queryset)):
+            srctime = queryset[i]["srctime"]
+            desttime = queryset[i]["desttime"]
+            tdelta = desttime - srctime 
+            duration = str(int(tdelta.total_seconds()//3600))+"h "+str(int((tdelta.total_seconds()%3600)//60))+"m"
+            queryset[i]["duration"] = duration
+            pnr = queryset[i]["pnr"]
+            passengers = BackEndQuerier.cursor_querier(queryPassengers,[pnr])
+            seats = BackEndQuerier.cursor_querier(queryReserve,[pnr])
+            j = min(len(passengers),len(seats))
+            for x in range(j):
+                passengers[x]["coach_no"] = seats[x]["coach_no"]
+                passengers[x]["seat_no"] = seats[x]["seat_no"]
+            while j < len(passengers):
+                passengers[j]["coach_no"] = '-'
+                passengers[j]["seat_no"] = '-'
+                if(passengers[j]["stat"] == "WL"):
+                    ctr = BackEndQuerier.cursor_querier(queryWaitlist,[passengers[j]["pid"]])[0]["WL"]
+                    passengers[j]["stat"] = "WL" + str(ctr)
+                j = j+1
+            
+            queryset[i]["passengers"] = passengers
+        # print(queryset)
+        if(len(queryset) >= 1):
+            queryset = queryset[0]
+            return Response(queryset,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)

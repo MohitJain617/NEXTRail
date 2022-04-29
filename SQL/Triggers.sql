@@ -48,7 +48,7 @@ begin
 		SET @lastval = (select max(receipt_no) from receipt);
         SET @lastval = ifnull(@lastval,0);
 		INSERT INTO receipt VALUES
-        (@lastval+1,now(),'Pending',NEW.pnr, NEW.user_id);
+        (@lastval+1,now(),'Pending',NEW.pnr, NEW.username);
 END;
 $$
 DELIMITER ;
