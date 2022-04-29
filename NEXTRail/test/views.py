@@ -467,7 +467,7 @@ class TicketsView(APIView):
 
 
 class PnrView(APIView):
-    def post(self, request,format=None):
+    def get(self, request,format=None):
         queryPnrTicket = """select T.pnr, T.train_no,
         (select train_name from train as T2 where T2.id = T.train_no) as train_name,
         ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
@@ -480,14 +480,11 @@ class PnrView(APIView):
         (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
         T.boarding_from, T.going_to, T.fare
         from ticket as T
-        where T.username = %s
-        AND T.pnr = %s"""
+        where T.pnr = %s"""
 
-        # get current user please
-        current_user = request.data.get('username')
-        pnr = request.data.get('pnr')
+        pnr = request.GET.get('pnr')
 
-        queryset = BackEndQuerier.cursor_querier(queryPnrTicket,[current_user,pnr])
+        queryset = BackEndQuerier.cursor_querier(queryPnrTicket,[pnr])
 
         queryPassengers = """select * from passenger where pnr = %s"""
         queryReserve = """select * from reserve where pnr = %s"""

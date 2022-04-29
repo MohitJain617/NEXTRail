@@ -8,19 +8,18 @@ SET SQL_SAFE_UPDATES = 0;
 -- calculate: pnr, dayno, trip no, Week no, fare, status, seats to be allotted
 -- updates: reserve, ticket, passenger, receipt
 
---  delete from passenger;
---  delete from receipt;
--- delete from reserve;
--- delete from ticket; 
+  delete from passenger;
+  delete from receipt;
+ delete from reserve;
+ delete from ticket; 
 
 ALTER TABLE ticket
-ADD FOREIGN KEY (user_id) 
-REFERENCES auth_user(id);
+ADD FOREIGN KEY (username) 
+REFERENCES auth_user(username);
 
 ALTER TABLE receipt
-ADD FOREIGN KEY (user_id) 
-REFERENCES auth_user(id);
-
+ADD FOREIGN KEY (username) 
+REFERENCES auth_user(username);
 
 -- GIVEN SECTION
 SET @tempdatetime = DATE('2022-04-23'); -- datetime of journey
@@ -43,40 +42,42 @@ set @tripno = if(@tripno = -1,6,@tripno); -- started last week's saturday
 set @tripweek = get_weekNo(@tempdatetime);
 set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
+set @pnr1 = '9810123753';
+set @pnr2 = '7303023233';
+set @pnr3 = '2389483240';
+set @pnr4 = '4309403590';
+set @pnr5 = '2190480344';
+set @pnr6 = '3290480593';
+set @pnr7 = '8239479585';
+set @pnr8 = '5943870533';
+set @pnr9 = '9823592343';
+set @pnr10 = '3248929379';
+
 insert into ticket values
-('3410381','test','22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null);
+(@pnr1,'test','22210',@tripno, @tripweek+1, 'NDLS', 'MMCT',0,null),
+(@pnr2,'test','22210',@tripno, @tripweek+2, 'NDLS', 'MMCT',0,null),
+(@pnr3,'test','22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null),
+(@pnr4,'test2','22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null),
+(@pnr5,'test2','22210',@tripno, @tripweek+3, 'NDLS', 'BRC',0,null),
+(@pnr6,'test','22210',@tripno, @tripweek+3, 'NDLS', 'KOTA',0,null),
+(@pnr7,'test2','22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null),
+(@pnr8,'test','22210',@tripno, @tripweek, 'NDLS', 'RTM',0,null),
+(@pnr9,'test','22210',@tripno, @tripweek, 'NDLS', 'RTM',0,null),
+(@pnr10,'test','22210',@tripno, @tripweek, 'NDLS', 'MMCT',0,null);
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
-('3410381', 'Aadit Kant Jha', 'Male', 20, 'CNF', null,'A'),
-('3410381', 'Rohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Jogith J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Purjit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Harshit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Saumik J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Abhik J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Sick J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Gulab J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Rasmalai J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 20, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 21, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 18, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 17, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 16, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 15, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 14, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A'),
-('3410381', 'Mohit J', 'Male', 19, 'CNF', null,'A');
+(@pnr1, 'Aadit Kant Jha', 'Male', 20, 'CNF', null,'A'),
+(@pnr2, 'Rohit J', 'Male', 19, 'CNF', null,'A'),
+(@pnr3, 'Jogith J', 'Male', 19, 'CNF', null,'A'),
+(@pnr4, 'Purjit J', 'Male', 19, 'CNF', null,'A'),
+(@pnr5, 'Harshit J', 'Male', 19, 'CNF', null,'A'),
+(@pnr6, 'Saumik J', 'Male', 19, 'CNF', null,'A'),
+(@pnr7, 'Abhik J', 'Male', 19, 'CNF', null,'A'),
+(@pnr8, 'Sick J', 'Male', 19, 'CNF', null,'A'),
+(@pnr9, 'Gulab J', 'Male', 19, 'CNF', null,'A'),
+(@pnr10, 'Rasmalai J', 'Male', 19, 'CNF', null,'A'),
+(@pnr9, 'Mohit J', 'Male', 20, 'CNF', null,'A'),
+(@pnr4, 'Mohit J', 'Male', 21, 'CNF', null,'A'),
+(@pnr5, 'Mohit J', 'Male', 18, 'CNF', null,'A');
 
 -- GIVEN SECTION
 SET @tempdatetime = DATE('2022-04-24'); -- datetime of journey

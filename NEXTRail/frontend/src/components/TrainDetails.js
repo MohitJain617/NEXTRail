@@ -40,7 +40,6 @@ function TrainDetails(props) {
             setData(data);
             setFadeIn(1);
             setMoveUp(1);
-            // navigate("/trains/",{state:{data:data}});
           }
         })
         .catch((error) => {
@@ -49,7 +48,6 @@ function TrainDetails(props) {
           props.sendAlert("Cannot Find Train", ERROR);
         });
     }
-    // todo catch 404 in case of 200 do more fetches for sched and timetable
   }
   return (
     <>

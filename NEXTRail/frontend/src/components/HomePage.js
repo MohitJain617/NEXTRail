@@ -8,14 +8,11 @@ import LogInPage from "./LogInPage";
 import SignUpPage from "./SignUpPage";
 import PayementPage from "./PaymentPage";
 import BookingPage from "./BookingPage";
-import PnrPageResult from "./PnrPageResult";
 import TrainResults from "./TrainResults";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 import { ERROR, INFO } from "./AlertTypes";
 import Test from "./Test";
-import PastJourneys from "./PastJourneys";
-import UpcomingJourneys from "./UpcomingJourneys";
 
 function HomePage() {
   const defaultUser = "Stranger";
@@ -146,12 +143,11 @@ function HomePage() {
         <Route path="/results" element={<TrainResults />} />
         <Route path="/test" element={<Test sendAlert={sendAlert} />} />
         <Route path="/pnr" element={<PnrPageDetails sendAlert={sendAlert} />} />
-        <Route path="/pnr/success" element={<PnrPageResult />} />
         <Route
           path="/past"
           element={
             localStorage.getItem("isAuth") === "true" ? (
-              <PastJourneys />
+              <BookingPage past="true" sendAlert={sendAlert} />
             ) : (
               <Navigate replace to="/login" />
             )
@@ -161,7 +157,7 @@ function HomePage() {
           path="/upcoming"
           element={
             localStorage.getItem("isAuth") === "true" ? (
-              <UpcomingJourneys />
+              <BookingPage past="false" sendAlert={sendAlert} />
             ) : (
               <Navigate replace to="/login" />
             )

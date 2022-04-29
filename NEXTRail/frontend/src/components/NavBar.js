@@ -100,7 +100,7 @@ const Navbar = (props) => {
           </Link>
           <div className="dropdown">
             <Link
-              to="/bookings"
+              to="#"
               className={classes.link}
               style={{ color: getCol("/bookings") }}
             >

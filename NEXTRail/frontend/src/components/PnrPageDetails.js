@@ -28,33 +28,27 @@ function TrainDetails(props) {
     if (pnrId.length < 10) {
       props.sendAlert("Incomplete PNR No.", WARNING);
     } 
-    else if(data == "" || data.id != pnrId)  {
+    else if(data == "" || data.pnr != pnrId)  {
       setFadeIn(0);
 
-            setResult(true);
+      fetch("/data/pnr/" + "?pnr=" + pnrId)
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            return Promise.reject(data.error);
+          } else {
             setData(data);
+            setResult(true);
             setFadeIn(1);
             setMoveUp(1);
-      // fetch("/data/train/" + "?id=" + pnrId)
-      //   .then(async (response) => {
-      //     const data = await response.json();
-      //     if (!response.ok) {
-      //       return Promise.reject(data.error);
-      //     } else {
-      //       setResult(true);
-      //       setData(data);
-      //       setFadeIn(1);
-      //       setMoveUp(1);
-      //       // navigate("/trains/",{state:{data:data}});
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     setResult(false)
-      //     setData("")
-      //     props.sendAlert("Invalid PNR No.", ERROR);
-      //   });
+          }
+        })
+        .catch((error) => {
+          setResult(false)
+          setData("")
+          props.sendAlert("Invalid PNR No.", ERROR);
+        });
     }
-    // todo catch 404 in case of 200 do more fetches for sched and timetable
   }
   return (
     <>

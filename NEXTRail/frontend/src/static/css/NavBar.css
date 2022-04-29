@@ -11,7 +11,6 @@
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit;
-  margin: 0;
 }
 
 .navbar a:hover,
@@ -22,6 +21,7 @@
 .dropdown-content {
   display: none;
   position: absolute;
+  font-size: 15px;
   /* margin-top: 22px; */
   background-color: #388087;
   min-width: 160px;
