@@ -14,7 +14,6 @@ const TrainResults = (props) => {
 		console.log(data,classType)
 	}
 	function getSeatAvailability(){
-		console.log(data);
       	const requestOptions = {
         	method: "POST",
         	headers: { "Content-Type": "application/json" },
@@ -31,7 +30,6 @@ const TrainResults = (props) => {
           	return Promise.reject(data.error);
         } else  {
         	setClassDetails(data)
-			console.log(data)
         }
       })
       .catch((error) => {
@@ -40,7 +38,7 @@ const TrainResults = (props) => {
 	}
   	useEffect(() => {
 		getSeatAvailability()
-  	}, []);
+  	}, [data]);
 	return (
 		<div className="zoom">
 			<Card sx={{ maxWidth: 200 }}>
@@ -49,7 +47,7 @@ const TrainResults = (props) => {
 					<TrainCardAvailability data={data}/>
 
 					{/* Class Wise Buttons */}
-					<Grid container spacing={2}  alignItems="center" justifyContent="center"  >
+					<Grid container spacing={4}  alignItems="center" justifyContent="center"  >
 						{classDetails.map((val, index)=>(<TicketClassButton trainClass={val} classes={props.classes} selected={classType} setSelected={setClassType}/>))}
 					</Grid>
 
