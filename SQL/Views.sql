@@ -16,7 +16,7 @@ drop view if exists waiting_list;
 CREATE VIEW waiting_list as
 SELECT dense_rank() over (order by R.transaction_time) as priority, P.pid, T.pnr, T.train_no, T.boarding_from, T.going_to, T.week_no, T.trip_no, P.class_type
 FROM passenger as P, ticket as T, receipt as R
-WHERE p.pnr = T.pnr
+WHERE P.pnr = T.pnr
 	AND P.pnr = R.pnr
 	AND P.stat = 'WL'
     ORDER by priority,pid;
