@@ -11,6 +11,18 @@ A railway reservation system made as the course project for DBMS/CSE202 made usi
 
 ![Alt text](statics/trainsearch.png "Search Page") 
 
+<br>
+
+## <B> PNR Enquiry </B> 🧐 <br>
+
+![Alt text](statics/pnr.png "Search Page") 
+
+<br>
+
+## <B> Book Tickets </B> 🔖 <br>
+
+![Alt text](statics/available.png "Search Page") 
+
 ## <B> Diagrams </B> 📊 <br>
 1) ### Entity-relationship Diagram
     

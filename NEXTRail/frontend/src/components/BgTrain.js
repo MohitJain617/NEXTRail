@@ -14,8 +14,8 @@ export default function BgTrain() {
         </Box>
       </Box>
       <Box>
-        <Box item marginTop="250px">
-          <img src={bridgeimg} alt="bridgeimg" style={{ position:"fixed", width: "100%" }} />
+        <Box item marginTop="180px" marginLeft="-10px">
+          <img src={bridgeimg} alt="bridgeimg" style={{ position:"fixed", width: "110%", height: "400px"}} />
         </Box>
       </Box>
     </>
