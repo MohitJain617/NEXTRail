@@ -494,7 +494,7 @@ class TicketsView(APIView):
 class PnrView(APIView):
     def get(self, request,format=None):
         queryPnrTicket = """select * from ticket_view 
-         where T.pnr = %s"""
+         where pnr = %s"""
 
         pnr = request.GET.get('pnr')
 
