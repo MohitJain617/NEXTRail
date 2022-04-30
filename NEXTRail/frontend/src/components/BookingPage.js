@@ -76,7 +76,7 @@ export default function BookingPage(props) {
       </Box>
       <div style={{ marginTop: "50px" }}>
         {/* add cards here */}
-        {result ? data.map((val) => <TripCard data={val} cancel={props.past !== "true"}  />) : ""}
+        {result ? data.map((val) => <TripCard data={val} cancel={props.past !== "true"} sendAlert={props.sendAlert}  />) : ""}
       </div>
     </div>
   );
