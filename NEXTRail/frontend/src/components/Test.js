@@ -1,155 +1,115 @@
-import React, { Component } from "react";
-import {
-  Typography,
-  Grid,
-  Container,
-  Button,
-  TextField,
-} from "@material-ui/core";
-import { ERROR, WARNING } from "./AlertTypes";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+// import CssBaseline from '@mui/material/CssBaseline';
+// import AppBar from '@mui/material/AppBar';
+// import Box from '@mui/material/Box';
+// import Container from '@mui/material/Container';
+// import Toolbar from '@mui/material/Toolbar';
+import Paper from '@mui/material/Paper';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+// import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
+// import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AddressForm from './AddressForm';
+import PaymentForm from './PaymentForm.js';
+import Review from './Review';
+import {Typography, AppBar,MenuItem, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField} from "@material-ui/core";
 
-function TrainDetails(props) {
-  const [trainId,setTrainId] = React.useState('');
-  const [moveUp,setMoveUp] = React.useState(0);
-  const navigate = useNavigate();
 
-  function changeValue(e){
-    if(!isNaN(e.target.value)){
-      setTrainId(e.target.value)
-    }
-  }
-
-  function handleSearchPressed() {
-    if(trainId.length < 5){
-      props.sendAlert("Incomplete Train No.",WARNING)
-    }
-    else{
-      setMoveUp(1);
-      fetch("/data/train/"+ "?id=" +trainId)
-        .then(async (response) => {
-          const data = await response.json();
-          if (!response.ok) {
-            return Promise.reject(data.error);
-          } else  {
-            console.log(data)
-            // navigate("/trains/",{state:{data:data}});
-          }
-        })
-        .catch((error) => {
-      props.sendAlert("Cannot Find Train",ERROR)
-        });
-    }
-    // todo catch 404 in case of 200 do more fetches for sched and timetable
-}
+function Copyright() {
   return (
-    <div
-      className="search_field"
-      moveUp={moveUp}
-    >
-      <Container
-        maxWidth="sm"
-        style={{
-          marginTop: "180px",
-        }}
-      >
-        <Typography
-          style={{ fontWeight: 550 }}
-          variant="h2"
-          align="center"
-          position="relative"
-          gutterBottom
-        >
-          Search Trains
-        </Typography>
-        <div>
-          <Grid container spacing={0} justifyContent="center">
-            <Grid item>
-              <TextField
-                style={{
-                  width: "302px",
-                  height: "55px",
-                  fontSize: "14px",
-                  backgroundColor: "#FFFFFF",
-                }}
-                onKeyDown={(e)=>{
-                  if(e.code === "Enter" && parseInt(trainId) >= 10000){
-                    handleSearchPressed();
-                  }
-                }}
-                value={trainId}
-                onChange={changeValue}
-                inputProps={{
-                  maxLength: 5,
-                }}
-                id="outlined-basic"
-                label="Enter Train No."
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                style={{
-                  backgroundColor: "#DC532D",
-                  color: "#FFFFFF",
-                  width: "88px",
-                  height: "55px",
-                  fontSize: "14px",
-                }}
-                variant="contained"
-                onClick={handleSearchPressed}
-              >
-                Search
-              </Button>
-            </Grid>
-          </Grid>
-        </div>
-      </Container>
-    </div>
+    <Typography variant="body2" color="text.secondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        NEXTRail
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
   );
 }
-export default TrainDetails;
 
-/*
-    handleTrainNoChanged(e) {
-        this.setState({
-            train_id: e.target.value,
-        });
-    }
+const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
-    
-    handleSeatsPressed() {
-        console.log("requesting /data/train/seats")
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                id: this.state.train_id,
-            }),
-        };
-        fetch("/data/train/seats",requestOptions).then((response) => response.json())
-        .then((data) => console.log(data[75]))
-        // todo catch 404 in case of 200 do more fetches for sched and timetable
-    }
-    
-    handleSearchPressed2() {
-        // GET request using fetch with error handling
-        console.log("/data/train/"+this.state.train_id)
-        fetch("/data/train/"+this.state.train_id)
-            .then(async response => {
-                const data = await response.json();
+function getStepContent(step) {
+  switch (step) {
+    case 0:
+      return <AddressForm />;
+    case 1:
+      return <PaymentForm />;
+    case 2:
+      return <Review />;
+    default:
+      throw new Error('Unknown step');
+  }
+}
 
-                // check for error response
-                if (!response.ok) {
-                    // get error message from body or default to response statusText
-                    const error = (data && data.message) || response.statusText;
-                    return Promise.reject(error);
-                }
-                console.log(data)
-            })
-            .catch(error => {
-                this.setState({ errorMessage: error.toString() });
-                console.error('There was an error!', error);
-            });
-    }
-*/
+const theme = createTheme();
+
+export default function Test() {
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = () => {
+    setActiveStep(activeStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+          <Typography component="h1" variant="h4" align="center">
+            Checkout
+          </Typography>
+          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <React.Fragment>
+            {activeStep === steps.length ? (
+              <React.Fragment>
+                <Typography variant="h5" gutterBottom>
+                  Thank you for your order.
+                </Typography>
+                <Typography variant="subtitle1">
+                  Your order number is #2001539. We have emailed your order
+                  confirmation, and will send you an update when your order has
+                  shipped.
+                </Typography>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                {getStepContent(activeStep)}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  {activeStep !== 0 && (
+                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                      Back
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    sx={{ mt: 3, ml: 1 }}
+                  >
+                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                  </Button>
+                </Box>
+              </React.Fragment>
+            )}
+          </React.Fragment>
+        </Paper>
+        <Copyright />
+      </Container>
+    </ThemeProvider>
+  );
+}

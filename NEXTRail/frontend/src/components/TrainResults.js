@@ -59,7 +59,6 @@ const TrainResults = (props) => {
 								<Typography style={{ color: "#ffffff", fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Book Now</Typography>
 							</Button>
 						</Grid>
-
 					</Grid>
 				</CardContent>
 
