@@ -258,6 +258,8 @@ class SeatAvailibility(APIView):
         src = request.data.get('src')
         doj = request.data.get('doj')
         trainNo = request.data.get('train_no')
+        dist = request.data.get('dist')
+        pcount = request.data.get('pcount')
         queryClasses = """select distinct class_type from struct where train_no = %s;"""
         querySrcDayNo = """select day_no from time_table where train_no=%s and st_code=%s"""
         #calculation
@@ -338,6 +340,9 @@ class SeatAvailibility(APIView):
                     )
                 ) GROUP BY S.class_type;
         """
+        queryFare = """select  %s*%s*(select distinct cost_per_km from class_layout as C where C.class_type=%s) + 
+            (SELECT DISTINCT FL.additional_cost FROM fare_lookup as FL, train as T WHERE T.id=%s AND T.train_type=FL.train_type) as fare;
+            """
         paramsAvail = [trainNo, trainNo, tripNo, weekNo, dest, src]
 
 
@@ -360,6 +365,9 @@ class SeatAvailibility(APIView):
                 queryset[i]["stat"] = "WL"
                 queryset[i]["num"] = 1
         
+        for i in range(len(queryset)):
+            queryset[i]["fare"] = BackEndQuerier(queryFare,[pcount,dist,queryset[i]["class_type"],trainNo])[0]["fare"]
+
         if(len(queryset) >= 1):
             return Response(queryset,status=status.HTTP_200_OK)
         else:
