@@ -8,18 +8,18 @@ SET SQL_SAFE_UPDATES = 0;
 -- calculate: pnr, dayno, trip no, Week no, fare, status, seats to be allotted
 -- updates: reserve, ticket, passenger, receipt
 
-  delete from passenger;
-  delete from receipt;
- delete from reserve;
- delete from ticket; 
+--   delete from passenger;
+--   delete from receipt;
+--  delete from reserve;
+--  delete from ticket; 
 
-ALTER TABLE ticket
-ADD FOREIGN KEY (username) 
-REFERENCES auth_user(username);
+-- ALTER TABLE ticket
+-- ADD FOREIGN KEY (username) 
+-- REFERENCES auth_user(username);
 
-ALTER TABLE receipt
-ADD FOREIGN KEY (username) 
-REFERENCES auth_user(username);
+-- ALTER TABLE receipt
+-- ADD FOREIGN KEY (username) 
+-- REFERENCES auth_user(username);
 
 -- GIVEN SECTION
 SET @tempdatetime = DATE('2022-04-23'); -- datetime of journey
@@ -101,13 +101,13 @@ set @tripweek = get_weekNo(@tempdatetime);
 set @tripweek = if(@tripno+@dayno-1 > 7, @tripweek-1, @tripweek);
 
 insert into ticket values
-('3410383','test2','22210',@tripno, @tripweek, 'KOTA', 'BRC',0,null);
+('1010101010','test3','22210',@tripno, @tripweek, 'KOTA', 'BRC',0,null);
 
 INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
-('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
-('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
-('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
-('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
-('3410383', 'Sohum', 'Male', 20, 'CNF', null,'A'),
-('3410383', 'Abhik', 'Male', 19, 'CNF', null,'A');
+('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
+('1010101010', 'Abhik', 'Male', 19, 'CNF', null,'A');
 

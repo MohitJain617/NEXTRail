@@ -83,6 +83,7 @@ class TrainDetailView(APIView):
         src = request.data.get('src')
         doj = request.data.get('doj')
         doja = DateFunctions.getDayNo(doj)
+        srcdate = datetime.strptime(doj,'%Y-%m-%d')
         #Write your queries here
 
         query = """SELECT T.train_no FROM time_table as T NATURAL JOIN sched as S
@@ -106,8 +107,8 @@ class TrainDetailView(APIView):
         params = [src,doja,dest,classReq,classType]
 
         queryset = BackEndQuerier.cursor_querier(query,params)
-        queryClasses = """select distinct class_type from struct where train_no = %s;"""
-        queryStationTime = """select arrival,departure,day_no from time_table where train_no = %s and st_code=%s;"""
+        queryClasses = """select distinct class_type as class_type from struct where train_no = %s;"""
+        queryStationTime = """select arrival,departure,day_no,dist,st_code from time_table where train_no = %s and st_code=%s;"""
         queryTrainName = """select train_name from train where id = %s;"""
         queryTrips = """select trip_no from sched where train_no = %s;"""
         
@@ -119,34 +120,31 @@ class TrainDetailView(APIView):
 
             # classes in this train:
             varclasses = BackEndQuerier.cursor_querier(queryClasses,[currId])
-            # making comma seperated string
-            varString=""
-            for temp in varclasses:
-                varString = varString + temp["class_type"]+','
-            varString = varString[:-1]
-            queryset[i]["class_types"] = varString
+            queryset[i]["class_types"] = varclasses
 
             # station timings
             varTimes = BackEndQuerier.cursor_querier(queryStationTime,[currId,src])[0]
-            queryset[i]["src_arrival"] = varTimes["arrival"]
-            queryset[i]["src_departure"] = varTimes["departure"]
-            queryset[i]["src_day_no"] = varTimes["day_no"]
-
+            queryset[i]["src"] = varTimes
             varTimes = BackEndQuerier.cursor_querier(queryStationTime,[currId,dest])[0]
-            queryset[i]["dest_arrival"] = varTimes["arrival"]
-            queryset[i]["dest_departure"] = varTimes["departure"]
-            queryset[i]["dest_day_no"] = varTimes["day_no"]
+            queryset[i]["dest"] = varTimes
+
+            queryset[i]["dist"] = queryset[i]["dest"]["dist"]-queryset[i]["src"]["dist"]
+            queryset[i]["duration"] = DateFunctions.getDuration(queryset[i]["src"],queryset[i]["dest"])
+
+            destdate = srcdate + timedelta(days=queryset[i]["dest"]["day_no"] - queryset[i]["src"]["day_no"])
+            queryset[i]["src"]["date"] = srcdate
+            queryset[i]["dest"]["date"] = destdate
 
             # days(trip nos) at which this train starts from actual source
             varDays = BackEndQuerier.cursor_querier(queryTrips,[currId])
-            varString = ""
-            for temp in varDays:
+            for j in range(len(varDays)):
+                temp = varDays[i]
                 # offset for current source
-                x = (temp["trip_no"]+queryset[i]["src_day_no"]-1) % 7
+                x = (temp["trip_no"]+queryset[i]["src"]["day_no"]-1) % 7
                 x = 7 if(x == 0) else x;
-                varString = varString + str(x)+","
-            varString = varString[:-1]
-            queryset[i]["trip_nos"] = varString
+                varDays[i]["trip_no"] = x
+
+            queryset[i]["trip_nos"] = varDays
 
         # print(queryset)
 

@@ -4,13 +4,16 @@ import {
   Grid,
   Container,
   Button,
+  Box,
   TextField,
 } from "@material-ui/core";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import StnAutoComplete from "./StnAutoComplete";
+import TrainResults from "./TrainResults.js";
 import { ERROR, WARNING } from "./AlertTypes";
+import "../static/css/Transitions.css";
 const classes = [
   {
     value: 0,
@@ -62,6 +65,11 @@ const classes = [
 //Fix calendar size
 
 function TrainBwStation(props) {
+  const [result, setResult] = React.useState(false);
+  const [fadeIn, setFadeIn] = React.useState(0);
+  const [data, setData] = React.useState("");
+  const [moveUp, setMoveUp] = React.useState(0);
+
   const [value, setValue] = React.useState(new Date());
   const [stnList, setStnList] = React.useState([]);
   const [rqstParam, setRqstParam] = React.useState({
@@ -105,6 +113,10 @@ function TrainBwStation(props) {
         if (!response.ok) {
           return Promise.reject(data.error);
         } else  {
+          setData(data)
+          setResult(true)
+          setFadeIn(1)
+          setMoveUp(1)
           console.log(data);
         }
       })
@@ -124,27 +136,31 @@ function TrainBwStation(props) {
   useEffect(() => {
     getStns();
   }, []);
-
+  
   return (
-    <div>
-      <Container
-        maxWidth="sm"
-        style={{
-          marginTop: "180px",
-        }}
-      >
-        <Typography
-          style={{ color: "#242038", fontWeight: 550 }}
-          variant="h3"
-          color="common.white"
-          justifyContent="center"
-          align="center"
-          position="relative"
-          gutterBottom
+    <>
+      <div>
+        <Box className="box" moveDown={moveUp} maxWidth="sm"></Box>
+      </div>
+    <div className="search_field" moveUp={moveUp}>
+        <Container
+          maxWidth="sm"
+          style={{
+            marginTop: "180px",
+          }}
         >
-          Powering the next gen of railways in India.
-        </Typography>
-      </Container>
+          <Typography
+            style={{ color: "#242038", fontWeight: 550 }}
+            variant="h3"
+            color="common.white"
+            justifyContent="center"
+            align="center"
+            position="relative"
+            gutterBottom
+          >
+            Powering the next gen of railways in India.
+          </Typography>
+        </Container>
       <Container align="center">
         <div>
           <Grid container spacing={0} align="center" justifyContent="center">
@@ -231,6 +247,8 @@ function TrainBwStation(props) {
         </div>
       </Container>
     </div>
+    {result && data.map((val, index)=>(<TrainResults data={val}/>))}
+    </>
   );
 }
 

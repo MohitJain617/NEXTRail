@@ -5,13 +5,14 @@ import TicketClassButton from "./TicketClassButton.js";
 
 import TrainCardAvailability from "./TrainAvailabilityCard";
 
-const TrainResults = () => {
+const TrainResults = (props) => {
+	const data = props.data
 	return (
 		<div style={{ marginTop: "40px", marginLeft: "10%", marginRight: "10%" }}>
 			<Card sx={{ maxWidth: 200 }}>
 				<CardContent>
 					{/* Contains the Train Details */}
-					<TrainCardAvailability />
+					<TrainCardAvailability data={data}/>
 
 					{/* Class Wise Buttons */}
 					<Grid container spacing={2} style={{ paddingTop: "-50px" }}>
