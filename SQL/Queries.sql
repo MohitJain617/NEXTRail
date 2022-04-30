@@ -477,3 +477,5 @@ SET @classType = 'A';
 SET @trainno = '22210';
 select  @pcnt*(@dist)*(select distinct cost_per_km from class_layout as C where C.class_type=@classType) + 
 (SELECT DISTINCT FL.additional_cost FROM fare_lookup as FL, train as T WHERE T.id=@trainno AND T.train_type=FL.train_type) as fare;
+
+select * from receipt;

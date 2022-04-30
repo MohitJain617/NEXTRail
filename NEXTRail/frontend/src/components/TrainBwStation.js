@@ -113,7 +113,6 @@ function TrainBwStation(props) {
 		} else if (rqstParam.src == rqstParam.dest) {
 			props.sendAlert("Source and Destination cannot be the same!", WARNING);
 		} else {
-      // console.log("GAY",rqstParam)
 			setFadeIn(0);
 			const requestOptions = {
 				method: "POST",
@@ -159,7 +158,7 @@ return (
         <Container
           maxWidth="md"
           style={{
-            marginTop: "180px",
+            marginTop: "200px",
           }}
         >
           <Typography
@@ -290,7 +289,7 @@ return (
         >
           {result &&
             data.map((val, index) => (
-              <TrainResults data={val} classes={classes} />
+              <TrainResults data={val} classes={classes} sendAlert={props.sendAlert} />
             ))}
         </div>
       </div>

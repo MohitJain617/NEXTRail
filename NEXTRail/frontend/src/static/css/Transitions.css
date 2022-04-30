@@ -31,6 +31,34 @@
   .search_result[fadeIn='0']{
     animation: fadeOut 0s forwards ;
 }
+
+
+.train{
+  margin-left: 3000px;
+  animation: moveLeft 10s linear infinite;
+}
+
+
+
+@keyframes moveLeft {
+  25%{
+    transform: translateX(-1500px);
+  }
+
+  50%{
+    transform: translateX(-3000px);
+  }
+
+  75%{
+    transform: translateX(-4500px);
+  }
+
+  100%{
+    transform: translateX(-6000px);
+  }
+}
+
+
 @keyframes moveUp {
     25% {
       transform: translateY(-160px);

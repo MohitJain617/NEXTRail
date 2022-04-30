@@ -78,8 +78,8 @@ function TicketClassButton(props) {
         <Typography
           style={{
             fontSize: 25,
-            fontWeight: "light",
-            float: "right",
+            fontWeight: "bolder",
+            float: "center",
             clear: "both",
             marginLeft: 5,
             textTransform: "none",
@@ -95,9 +95,9 @@ function TicketClassButton(props) {
         </Typography>
         <Typography
           style={{
-            fontSize: 15,
-            fontWeight: "light",
-            float: "right",
+            fontSize: 20,
+            fontWeight: "bold",
+            float: "center",
             clear: "both",
             marginLeft: 5,
             textTransform: "none",

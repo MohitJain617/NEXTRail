@@ -110,7 +110,7 @@ class TrainDetailView(APIView):
         queryset = BackEndQuerier.cursor_querier(query,params)
         queryClasses = """select distinct class_type as class_type from struct where train_no = %s;"""
         queryStationTime = """select arrival,departure,day_no,dist,st_code from time_table where train_no = %s and st_code=%s;"""
-        queryTrainName = """select train_name from train where id = %s;"""
+        queryTrainName = """select train_name,pantry_avl from train where id = %s;"""
         queryTrips = """select trip_no from sched where train_no = %s;"""
         
         # appending required values
@@ -118,7 +118,9 @@ class TrainDetailView(APIView):
             queryset[i]["pcount"] = pcnt
             #train name
             currId = queryset[i]["train_no"]
-            queryset[i]["train_name"] = BackEndQuerier.cursor_querier(queryTrainName,[currId])[0]["train_name"]
+            train_query = BackEndQuerier.cursor_querier(queryTrainName,[currId])[0]
+            queryset[i]["train_name"] =train_query["train_name"]
+            queryset[i]["pantry_avl"] =train_query["pantry_avl"]
 
             # classes in this train:
             varclasses = BackEndQuerier.cursor_querier(queryClasses,[currId])
@@ -569,7 +571,7 @@ class BookTickets(APIView):
         src = request.data.get('src')
         dest = request.data.get('dest')
         doj = request.data.get('doj')
-        username = request.data.get('user')
+        username = request.data.get('username')
         pcount = request.data.get("pcount")
         passengers = request.data.get('pass') #pname, age, gender, meal
         for i in range(pcount):
@@ -578,7 +580,9 @@ class BookTickets(APIView):
             if(passengers[i]["payment"] == 0):
                 passengers[i]["payment"] = "UPI" 
             if(passengers[i]["meal"] == "none"):
-                passengers[i]["meal"] = None
+                passengers[i]["meal"] = "none"
+
+        print(passengers)
 
         bookingMethod = passengers[0]["payment"]
 
@@ -600,11 +604,12 @@ class BookTickets(APIView):
                     (%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
         # really book ticket
-        BackEndQuerier(bookTicket,[pnr,username,trainNo,tripNo,weekNo,src,dest,0,"details"])
-        booked = False
+        with connection.cursor() as cursor:
+            cursor.execute(bookTicket,[pnr,username,trainNo,tripNo,weekNo,src,dest,0,"details"])
 
         # update receipt
-        if(len(BackEndQuerier("select * from ticket where pnr = %s"),[pnr]) >= 1):
+        check = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[pnr])
+        if(len(check) > 0):
             booked = True
             with connection.cursor() as cursor:
                 cursor.execute("update receipt set payment_mode = %s where pnr = %s", [bookingMethod,pnr])
@@ -613,8 +618,10 @@ class BookTickets(APIView):
         bookPassenger = """INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
             (%s, %s, %s, %s, %s, %s,%s)"""
 
-        for passenger in passengers:
-            BackEndQuerier(bookPassenger,[pnr,passenger["name"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
+        for ctr in range(pcount):
+            passenger = passengers[ctr]
+            with connection.cursor() as cursor:
+                cursor.execute(bookPassenger,[pnr,passenger["name"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
 
         if(booked == True):
             return Response(status=status.HTTP_200_OK)

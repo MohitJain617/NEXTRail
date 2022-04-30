@@ -33,31 +33,101 @@ function Copyright() {
 
 const steps = ['Passenger Details', 'Payment details', 'Review your Booking'];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
 const theme = createTheme();
 
-export default function Checkout() {
+export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
-
+  const pass = [
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    }
+  ]
+  const [rqstParam,setRqstParam] = React.useState({
+    pcount: props.data.pcount,
+    pass: pass,
+  });
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <AddressForm data={props.data} pass={pass}/>;
+      case 2:
+        return <Review data={props.data}/>;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if(activeStep === steps.length-1){
+      rqstParam["class_type"] = props.data.classType
+      rqstParam["train_no"] = props.data.train_no
+      rqstParam["src"] = props.data.src
+      rqstParam["dest"] = props.data.dest
+      rqstParam["doj"] = props.data.dod
+      rqstParam["username"] = localStorage.getItem("user")
+      console.log("BOOK TICKET")
+      console.log(rqstParam)
+      // fetch request
+      
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rqstParam),
+      };
+      fetch("/data/book/", requestOptions)
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            return Promise.reject(data.error);
+          }
+        })
+        .catch((error) => {
+          props.sendAlert("Cannot Book Tickets", ERROR);
+        });
+      }
+    else{
+      setActiveStep(activeStep + 2);
+    }
   };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -90,12 +160,6 @@ export default function Checkout() {
               <React.Fragment>
                 {getStepContent(activeStep)}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: "20px"}}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                      Back
-                    </Button>
-                  )}
-
                   <Button
                     variant="contained"
                     onClick={handleNext}

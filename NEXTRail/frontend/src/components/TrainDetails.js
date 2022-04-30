@@ -10,6 +10,7 @@ import {
 import { ERROR, WARNING } from "./AlertTypes";
 import "../static/css/Transitions.css";
 import TrainDetailsResults from "./TrainDetailsResult";
+import BgTrain from "./BgTrain";
 
 function TrainDetails(props) {
   const [trainId, setTrainId] = React.useState("");
@@ -121,6 +122,7 @@ function TrainDetails(props) {
           {result && <TrainDetailsResults data={data} />}
         </div>
       </div>
+      <BgTrain />
     </>
   );
 }

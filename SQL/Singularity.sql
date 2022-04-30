@@ -52,6 +52,7 @@ CREATE TABLE adm (
     CHECK (LENGTH(passcode) > 5)
 );
 
+drop table if exists passenger;
 CREATE TABLE passenger (
 	pid INT auto_increment UNIQUE,
 	pnr VARCHAR(10) NOT NULL,
@@ -62,7 +63,7 @@ CREATE TABLE passenger (
 	meal_option VARCHAR(10),
     class_type VARCHAR(2) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),       -- Belongs To 
-	CHECK (meal_option in ('veg','non-veg',null)),
+	CHECK (meal_option in ('veg','non-veg','none',null)),
     CHECK (stat in ('CNF','WL','CAN')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
