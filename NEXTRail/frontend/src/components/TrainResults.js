@@ -4,39 +4,32 @@ import TripCard from "./TripCard";
 import TicketClassButton from "./TicketClassButton.js";
 
 import TrainCardAvailability from "./TrainAvailabilityCard";
+import "../static/css/TripCard.css"
 
 const TrainResults = (props) => {
 	const data = props.data
+	const [classType,setClassType] = React.useState("");
+	function bookTicket(){
+		console.log(data,classType)
+	}
 	return (
-		<div style={{ marginTop: "40px", marginLeft: "10%", marginRight: "10%" }}>
+		<div className="zoom">
 			<Card sx={{ maxWidth: 200 }}>
 				<CardContent>
 					{/* Contains the Train Details */}
 					<TrainCardAvailability data={data}/>
 
 					{/* Class Wise Buttons */}
-					<Grid container spacing={2} style={{ paddingTop: "-50px" }}>
-						<TicketClassButton />
-						<TicketClassButton />
-						<TicketClassButton />
+					<Grid container spacing={2}  alignItems="center" justifyContent="center"  >
+						{data.class_types.map((val, index)=>(<TicketClassButton trainClass={val} classes={props.classes} selected={classType} setSelected={setClassType}/>))}
 					</Grid>
 
-					<Grid container spacing={2} style={{ paddingTop: "10px" }}>
+					<Grid container spacing={2} alignItems="center" justifyContent="center" style={{ paddingTop: "10px"}}>
 						<Grid item>
-							<Button style={{ display: "block", textAlign: "left", backgroundColor: "#DC532D", borderRadius: 5 }}>
+							<Button onClick={bookTicket} style={{ display: "block", textAlign: "left", backgroundColor: "#DC532D", borderRadius: 5 }}>
 								<Typography style={{ color: "#ffffff", fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Book Now</Typography>
 							</Button>
 						</Grid>
-
-						<Grid item>
-							<Button variant="outlined" style={{ display: "block", textAlign: "left", borderRadius: 5 }}>
-								<Typography style={{ fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Seat Availability</Typography>
-							</Button>
-						</Grid>	
-
-						<Grid item>
-							<TextField label="Passengers" variant="outlined"size="small"/>
-						</Grid>	
 
 					</Grid>
 				</CardContent>

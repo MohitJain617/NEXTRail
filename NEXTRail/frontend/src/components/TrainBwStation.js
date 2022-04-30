@@ -12,59 +12,59 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import StnAutoComplete from "./StnAutoComplete";
 import TrainResults from "./TrainResults.js";
-import { ERROR, WARNING } from "./AlertTypes";
+import { ERROR,WARNING } from "./AlertTypes";
 import "../static/css/Transitions.css";
-const classes = [
-  {
-    value: 0,
-    label: "All Classes",
-    code: "",
-  },
-  {
-    value: 1,
-    label: "AC 1 Tier",
-    code: "H",
-  },
-  {
-    value: 2,
-    label: "AC 2 Tier",
-    code: "A",
-  },
-  {
-    value: 3,
-    label: "AC 3 Tier",
-    code: "B",
-  },
-  {
-    value: 4,
-    label: "AC 3 Tier Economy",
-    code: "BE",
-  },
-  {
-    value: 5,
-    label: "AC Chair Car",
-    code: "C",
-  },
-  {
-    value: 6,
-    label: "Executive Chair Car",
-    code: "E",
-  },
-  {
-    value: 7,
-    label: "Sleeper Class",
-    code: "S",
-  },
-  {
-    value: 8,
-    label: "Second Seating",
-    code: "D",
-  },
-];
-
 //Fix calendar size
 
 function TrainBwStation(props) {
+  const classes = [
+		{
+		  value: 0,
+		  label: "All Classes",
+		  code: "",
+		},
+		{
+		  value: 1,
+		  label: "AC 1 Tier",
+		  code: "H",
+		},
+		{
+		  value: 2,
+		  label: "AC 2 Tier",
+		  code: "A",
+		},
+		{
+		  value: 3,
+		  label: "AC 3 Tier",
+		  code: "B",
+		},
+		{
+		  value: 4,
+		  label: "AC 3 Tier Economy",
+		  code: "BE",
+		},
+		{
+		  value: 5,
+		  label: "AC Chair Car",
+		  code: "C",
+		},
+		{
+		  value: 6,
+		  label: "Executive Chair Car",
+		  code: "E",
+		},
+		{
+		  value: 7,
+		  label: "Sleeper Class",
+		  code: "S",
+		},
+		{
+		  value: 8,
+		  label: "Second Seating",
+		  code: "D",
+		},
+	  ];
+	  
   const [result, setResult] = React.useState(false);
   const [fadeIn, setFadeIn] = React.useState(0);
   const [data, setData] = React.useState("");
@@ -103,6 +103,7 @@ function TrainBwStation(props) {
     } else if (rqstParam.src == rqstParam.dest) {
       props.sendAlert("Source and Destination cannot be the same!",WARNING);
     } else {
+      setFadeIn(0);
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -117,7 +118,6 @@ function TrainBwStation(props) {
           setResult(true)
           setFadeIn(1)
           setMoveUp(1)
-          console.log(data);
         }
       })
       .catch((error) => {
@@ -158,7 +158,7 @@ function TrainBwStation(props) {
             position="relative"
             gutterBottom
           >
-            Powering the next gen of railways in India.
+            Your Journey starts here
           </Typography>
         </Container>
       <Container align="center">
@@ -246,8 +246,14 @@ function TrainBwStation(props) {
           </Grid>
         </div>
       </Container>
+    <div
+          style={{ marginTop: "50px" }}
+          className="search_result"
+          fadeIn={fadeIn}
+        >
+    {result && data.map((val, index)=>(<TrainResults data={val} classes={classes}/>))}
     </div>
-    {result && data.map((val, index)=>(<TrainResults data={val}/>))}
+    </div>
     </>
   );
 }

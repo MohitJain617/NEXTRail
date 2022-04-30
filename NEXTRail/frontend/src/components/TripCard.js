@@ -3,12 +3,12 @@ import { Typography, AppBar, MenuItem, Card, CardActions, CardContent, CardMedia
 import TrainIcon from '@mui/icons-material/Train';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PassengerDetailsTicket from './PassengerDetailsTicket.js'
-
+import "../static/css/TripCard.css"
 
 export default function TripCard(props) {
     const data = props.data
     return (
-        <div style={{marginLeft: "10%", marginRight: "10%", marginTop: "25px"}}>
+        <div className="zoom" style={{marginLeft: "10%", marginRight: "10%", marginTop: "25px"}}>
             <Card sx={{ maxWidth: 200 }}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>

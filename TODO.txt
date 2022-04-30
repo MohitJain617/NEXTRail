@@ -44,8 +44,8 @@ add meal option pass name for tickets
 
 
 veg non veg
-hover pe white
-fade in anim for trip card
-trip card zoom anim on hover
 completed cancelled
-error error error
+error card not found generic
+runs on
+
+low low low low: redirect on login

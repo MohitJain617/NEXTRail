@@ -15,13 +15,14 @@
 
 .navbar a:hover,
 .dropdown:hover .dropbtn {
-  background-color: red;
+  color: red;
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
   font-size: 15px;
+  font-weight: 500;
   /* margin-top: 22px; */
   background-color: #388087;
   min-width: 160px;
@@ -37,7 +38,7 @@
 }
 
 .dropdown-content a:hover {
-  background-color: #ddd;
+  color: #ddd;
 }
 
 .dropdown:hover .dropdown-content {

@@ -15,11 +15,7 @@ import {
   Box,
   TextField,
 } from "@material-ui/core";
-import TrainIcon from "@mui/icons-material/Train";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import TripCard from "./TripCard.js";
-import TrainCardAvailability from "./TrainAvailabilityCard.js";
-import TrainResults from "./TrainResults.js";
 import { ERROR, INFO } from "./AlertTypes.js";
 
 export default function BookingPage(props) {
@@ -43,8 +39,6 @@ export default function BookingPage(props) {
         } else {
           setResult(true);
           setData(data);
-          console.log(data);
-          // navigate("/trains/",{state:{data:data}});
         }
       })
       .catch((error) => {
@@ -57,7 +51,6 @@ export default function BookingPage(props) {
     loadTickets();
   }, [props.past]);
 
-  console.log(props.past);
 
   return (
     <div>
@@ -78,12 +71,12 @@ export default function BookingPage(props) {
           position="relative"
           gutterBottom
         >
-          {props.past === "true" ? "Past Trips" : "Upcoming Trips"}
+          {props.past === "true" ? "Past Journeys" : "Upcoming Journeys"}
         </Typography>
       </Box>
       <div style={{ marginTop: "50px" }}>
         {/* add cards here */}
-        {result ? data.map((val) => <TripCard data={val} />) : ""}
+        {result ? data.map((val) => <TripCard data={val}  />) : ""}
       </div>
     </div>
   );
