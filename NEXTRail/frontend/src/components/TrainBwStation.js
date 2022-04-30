@@ -90,6 +90,14 @@ function TrainBwStation(props) {
 	});
 	const [datePickerOpen, setDatePickerOpen] = React.useState(false);
 
+  function getSrc(e, val) {
+    if (val === null) {
+      rqstParam.src = null;
+    } else {
+      rqstParam.src = val.st_code;
+    }
+  }
+  
   function getDest(e, val) {
     if (val === null) {
       rqstParam.dest = null;
