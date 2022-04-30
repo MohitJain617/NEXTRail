@@ -411,7 +411,6 @@ WHERE W.train_no = @trainNo
 -- 9)
 -- -------------------------------------------
 set @tempdatetime = "2022-04-25 03:50:00";
-
 -- Query for all tickets booked by a user along with additional values
 -- ------------------QUERY--------------------
 select T.pnr, T.train_no,
@@ -470,3 +469,11 @@ WHERE W.train_no = W2.train_no
 			AND TT2.st_code = W.going_to)
 		)
 	);
+
+-- Calculate fare
+SET @pcnt = 1;
+SET @dist = 1384;
+SET @classType = 'A';
+SET @trainno = '22210';
+select  @pcnt*(@dist)*(select distinct cost_per_km from class_layout as C where C.class_type=@classType) + 
+(SELECT DISTINCT FL.additional_cost FROM fare_lookup as FL, train as T WHERE T.id=@trainno AND T.train_type=FL.train_type) as fare;

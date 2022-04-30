@@ -395,8 +395,8 @@ class TicketsView(APIView):
         from ticket as T
         where T.username = %s
         AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
-	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
-    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) < %s)"""
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day),
+    (select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) < %s)"""
 
         queryFutureTickets = """select T.pnr, T.train_no,
         (select train_name from train as T2 where T2.id = T.train_no) as train_name,
@@ -412,8 +412,8 @@ class TicketsView(APIView):
         from ticket as T
         where T.username = %s
         AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
-	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
-    (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) >= %s)"""
+	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day),
+    (select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) >= %s)"""
 
         past = request.data.get('past')
 
@@ -491,19 +491,8 @@ class TicketsView(APIView):
 
 class PnrView(APIView):
     def get(self, request,format=None):
-        queryPnrTicket = """select T.pnr, T.train_no,
-        (select train_name from train as T2 where T2.id = T.train_no) as train_name,
-        ((select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)-
-    	(select dist from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as dist,
-        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
-    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.boarding_from)-1) day) ,
-    	(select departure from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.boarding_from)) as srctime,
-        TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
-    	INTERVAL ((select day_no from time_table as TT where TT.train_no = T.train_no and TT.st_code = T.going_to)-1) day),
-        (select arrival from time_table as T2 where T2.train_no = T.train_no and T2.st_code = T.going_to)) as desttime,
-        T.boarding_from, T.going_to, T.fare
-        from ticket as T
-        where T.pnr = %s"""
+        queryPnrTicket = """select * from ticket_view 
+         where T.pnr = %s"""
 
         pnr = request.GET.get('pnr')
 
@@ -572,7 +561,6 @@ class PnrView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
 class BookTickets(APIView):
     def post(self, request,format=None):
 
@@ -581,8 +569,18 @@ class BookTickets(APIView):
         src = request.data.get('src')
         dest = request.data.get('dest')
         doj = request.data.get('doj')
-        username = request.data.get('username')
-        passengers = request.data.get('passengers') #pname, age, gender, meal
+        username = request.data.get('user')
+        pcount = request.data.get("pcount")
+        passengers = request.data.get('pass') #pname, age, gender, meal
+        for i in range(pcount):
+            if(passengers[i]["gender"] == 0):
+                passengers[i]["gender"] = "Male"
+            if(passengers[i]["payment"] == 0):
+                passengers[i]["payment"] = "UPI" 
+            if(passengers[i]["meal"] == "none"):
+                passengers[i]["meal"] = None
+
+        bookingMethod = passengers[0]["payment"]
 
         querySrcDayNo = """select day_no from time_table where train_no=%s and st_code=%s"""
         #calculation
@@ -604,17 +602,153 @@ class BookTickets(APIView):
         # really book ticket
         BackEndQuerier(bookTicket,[pnr,username,trainNo,tripNo,weekNo,src,dest,0,"details"])
         booked = False
+
+        # update receipt
         if(len(BackEndQuerier("select * from ticket where pnr = %s"),[pnr]) >= 1):
             booked = True
+            with connection.cursor() as cursor:
+                cursor.execute("update receipt set payment_mode = %s where pnr = %s", [bookingMethod,pnr])
 
         # book passengers
         bookPassenger = """INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
             (%s, %s, %s, %s, %s, %s,%s)"""
 
         for passenger in passengers:
-            BackEndQuerier(bookPassenger,[pnr,passenger["pname"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
+            BackEndQuerier(bookPassenger,[pnr,passenger["name"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
 
         if(booked == True):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class CancelTickets(APIView):
+    def post(self, request,format=None):
+        pnr = request.data.get('pnr')
+        ticketq = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[pnr])[0]
+        trainInfo = BackEndQuerier.cursor_querier("select * from train where train_no = %s",trainInfo["train_no"])[0]
+
+        trainNo = trainInfo["train_no"]
+        tripno = ticketq["trip_no"]
+        weekno = ticketq["week_no"]
+        src = ticketq["boarding_from"]
+        dest = ticketq["going_to"]
+
+        passengers = BackEndQuerier.cursor_querier("select * from passenger where pnr = %s",[pnr])
+        queryWLPassengers = """SELECT * 
+            FROM waiting_list as W
+            WHERE W.train_no = %s
+	            AND W.trip_no = %s
+	            AND W.week_no = %s
+                AND W.class_type = %s
+            
+	            AND NOT EXISTS (
+		            SELECT * 
+		            FROM waiting_list as W2
+		            WHERE W.train_no = W2.train_no
+		            AND W.trip_no = W2.trip_no
+		            AND W.class_type = W2.class_type
+		            AND ((W.priority > W2.priority) OR ((W.priority = W2.priority) AND (W.pid > W2.pid)) )
+            
+		            AND(
+			            (
+				            (SELECT dist FROM time_table as TT1 
+				            WHERE TT1.train_no = W2.train_no 
+				            AND TT1.st_code = %s) 
+				            <=
+				            (SELECT dist FROM time_table as TT2 
+				            WHERE TT2.train_no = W2.train_no 
+				            AND TT2.st_code = W2.boarding_from)
+			            ) 
+			            AND
+			            (
+				            (SELECT dist FROM time_table as TT1 
+				            WHERE TT1.train_no = W2.train_no 
+				            AND TT1.st_code = %s) 
+				            >=
+				            (SELECT dist FROM time_table as TT2 
+				            WHERE TT2.train_no = W2.train_no 
+				            AND TT2.st_code = W2.going_to)
+			            )
+		            )
+		            AND NOT(
+			            (
+				            (SELECT dist FROM time_table as TT1 
+				            WHERE TT1.train_no = W2.train_no 
+				            AND TT1.st_code = W2.going_to) 
+				            <=
+				            (SELECT dist FROM time_table as TT2 
+				            WHERE TT2.train_no =W.train_no 
+				            AND TT2.st_code = W.boarding_from)
+			            ) 
+			            OR
+			            (
+				            (SELECT dist FROM time_table as TT1 
+				            WHERE TT1.train_no = W2.train_no 
+				            AND TT1.st_code = W2.boarding_from) 
+				            >=
+				            (SELECT dist FROM time_table as TT2 
+				            WHERE TT2.train_no = W.train_no 
+				            AND TT2.st_code = W.going_to)
+			            )
+		            )
+	            )
+	            AND(
+		            (
+			            (SELECT dist FROM time_table as TT1 
+			            WHERE TT1.train_no = W.train_no 
+			            AND TT1.st_code = %s) 
+			            <=
+			            (SELECT dist FROM time_table as TT2 
+			            WHERE TT2.train_no = W.train_no 
+			            AND TT2.st_code = W.boarding_from)
+		            ) 
+		            AND
+		            (
+			            (SELECT dist FROM time_table as TT1 
+			            WHERE TT1.train_no = W.train_no 
+			            AND TT1.st_code = %s) 
+			            >=
+			            (SELECT dist FROM time_table as TT2 
+			            WHERE TT2.train_no = W.train_no 
+			            AND TT2.st_code = W.going_to)
+		            )
+	            )
+	            ;
+            """
+        bookPassenger = """INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
+            (%s, %s, %s, %s, %s, %s,%s)"""
+            
+        for person in passengers:
+            # cancel this person's status
+            class_type = person["class_type"]
+
+            with connection.cursor() as cursor:
+                cursor.execute("update passenger set stat='CAN' where pid = %s", [person["pid"]])
+
+            #update waiting list
+            updatePassengers = BackEndQuerier.cursor_querier(queryWLPassengers,[trainNo,tripno,weekno,class_type,src,dest,src,dest])
+            # remove these from the passengers and add them again
+            for person2 in updatePassengers:
+                details = BackEndQuerier.cursor_querier("select * from passenger where pid = %s",[person2["pid"]])[0]
+                #store fare before
+                fare = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[person2["pnr"]])[0]["fare"]
+                with connection.cursor() as cursor:
+                    cursor.execute("delete from passenger where pid = %s",[person2["pid"]])
+                #add it again and update fare
+                with connection.cursor() as cursor:
+                    cursor.execute(bookPassenger, [details["pid"],details["pname"],details["gender"],details["age"],details["stat"],details["meal_option"],details["class_type"]])
+                    cursor.execute("update ticket set fare = %s where pnr = %s",[fare,details["pnr"]])
+                
+            
+
+
+        # book passengers
+
+        queryFare = """select  %s*%s*(select distinct cost_per_km from class_layout as C where C.class_type=%s) + 
+            (SELECT DISTINCT FL.additional_cost FROM fare_lookup as FL, train as T WHERE T.id=%s AND T.train_type=FL.train_type) as fare;
+            """
+        for passenger in passengers:
+            BackEndQuerier(bookPassenger,[pnr,passenger["name"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
+
+
+        return Response(status=status.HTTP_200_OK)
