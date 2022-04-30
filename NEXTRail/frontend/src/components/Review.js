@@ -8,28 +8,19 @@ import Grid from '@mui/material/Grid';
 const products = [
   {
     name: 'Jhelum Express',
-    desc: '1 Adult',
+    desc: '4 Passengers',
     price: 'Rs 1749',
-  },
-  {
-    name: 'Jhelum Express',
-    desc: '1 Child',
-    price: 'Rs 1300',
-  },
-  {
-    name: 'Taxes',
-    desc: 'SGST, CGST',
-    price: 'Rs 499',
-  },
-  { name: 'Convenience', desc: '', price: 'Free' },
+  }
 ];
 
 const addresses = ['306 Mahagun Maple', 'Sector-50', 'Noida', '201301'];
 const payments = [
-  { name: 'Card type', detail: 'Visa' },
   { name: 'Card holder', detail: 'Mr Abhik S Basu' },
   { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
   { name: 'Expiry date', detail: '04/2024' },
+];
+const paymentsUpi = [
+  { name: 'UPI ID', detail: 'basuabhik@oksbi' },
 ];
 
 export default function Review() {
@@ -42,9 +33,24 @@ export default function Review() {
         {products.map((product) => (
           <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
             <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+            <Typography variant="subtitle1" sx={{ fontWeight: 400}}>{product.price}</Typography>
           </ListItem>
         ))}
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Departure" secondary="30/04/2022"/>
+          <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
+            New Delhi
+          </Typography>
+        </ListItem>
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Arrival" secondary="01/05/2022"/>
+          <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
+            Mumbai
+          </Typography>
+        </ListItem>
+
 
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
@@ -52,6 +58,8 @@ export default function Review() {
             Rs. 3189
           </Typography>
         </ListItem>
+
+
       </List>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
