@@ -32,7 +32,7 @@ CREATE TABLE ticket (
     FOREIGN KEY (going_to) REFERENCES station(st_code),
     FOREIGN KEY (boarding_from) REFERENCES station(st_code),   
     FOREIGN KEY (train_no) REFERENCES train(id)            
---     FOREIGN KEY (user_name) REFERENCES auth_user(id)     -- Buys
+    -- FOREIGN KEY (user_id) REFERENCES auth_user(id)     -- Buys
 );
 
 CREATE TABLE receipt (
@@ -42,7 +42,7 @@ CREATE TABLE receipt (
     pnr VARCHAR(10) NOT NULL,
 	username VARCHAR(50) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),  -- generates
-  --   FOREIGN KEY (user_name) REFERENCES auth_user(id), -- keeps 
+    -- FOREIGN KEY (user_id) REFERENCES auth_user(id), -- keeps 
     CHECK(payment_mode in ('UPI', 'Credit Card', 'Debit Card','Bank Transfer','Pending'))
 );
 
@@ -63,7 +63,7 @@ CREATE TABLE passenger (
 	meal_option VARCHAR(10),
     class_type VARCHAR(2) NOT NULL,
     FOREIGN KEY (pnr) REFERENCES ticket(pnr),       -- Belongs To 
-	CHECK (meal_option in ('veg','non-veg',null)),
+	CHECK (meal_option in ('veg','non-veg','none',null)),
     CHECK (stat in ('CNF','WL','CAN')),
     CHECK (age >= 0),
     CHECK (gender in ('Male','Female','Other'))
@@ -133,3 +133,4 @@ CREATE INDEX receipt_index ON receipt (pnr);
 CREATE INDEX passenger_index ON passenger(pnr);
 CREATE INDEX class_layout_index ON class_layout (class_name);
 CREATE INDEX time_table_index ON time_table (train_no);
+-- ----------------------------

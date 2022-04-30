@@ -10,7 +10,7 @@ TO 'Employees'@'localhost', 'Ministry'@'localhost', 'Passenger'@'localhost';
 
 GRANT SELECT 
 ON waiting_list
-TO 'Employees'@'localhost', 'Ministry'@'localhost', 'Passenger'@'waiting_list';
+TO 'Employees'@'localhost', 'Ministry'@'localhost', 'Passenger'@'localhost';
 
 GRANT SELECT 
 ON ticket_view

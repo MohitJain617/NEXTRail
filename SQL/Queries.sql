@@ -71,34 +71,6 @@ WHERE T.st_code = @tempsrc
 ) ORDER BY T.departure;
 -- -------------------------------------------
 
--- 
-SET @tempdayno = get_dayNo(@tempdate);
--- Query for trains between two stations sorted by total time -- 
-SET @tempsrc = "HJP";
-SET @tempdest = "MFP";
-SET @tempdate = DATE('2022-03-05');
--- -------------------------------------------
-SELECT train_no FROM sched as S
-WHERE S.st_code = @tempsrc
-	AND DATE(S.departure) = @tempdate
-    AND EXISTS (
-		SELECT * FROM sched as S2
-        WHERE S2.trip_no = S.trip_no
-			AND S2.train_no = S.train_no
-            AND S2.arrival > S.departure
-            AND S2.st_code = @tempdest
-) ORDER BY ( 
-	TIMESTAMPDIFF (MINUTE, S.departure, (
-		SELECT arrival FROM sched as S2
-		WHERE S2.trip_no = S.trip_no
-			AND S2.train_no = S.train_no
-			AND S2.st_code = @tempdest
-		)
-    )
-);
-
--- TODO updated query for above
-
 -- 3)
 -- ------------------SETUP--------------------
 SET @temptrain = '11123';
@@ -432,13 +404,10 @@ AND (TIMESTAMP(Date_add(get_daytime(week_no,trip_no-1),
 -- -------------------------------------------
 
 
-select * from passenger where pnr = '3410383';
-
-select * from reserve where pnr = '3410383';
-
--- Given pid of passenger calculate the waiting list number if it's waiting listed
 SET @ppid = 163;
-
+-- 10)
+-- Given pid of passenger calculate the waiting list number if it's waiting listed
+-- ------------------QUERY--------------------
 SELECT count(*) as WL
 FROM waiting_list as W, waiting_list as W2
 WHERE W.train_no = W2.train_no
@@ -469,6 +438,9 @@ WHERE W.train_no = W2.train_no
 			AND TT2.st_code = W.going_to)
 		)
 	);
+-- -------------------------------------------
+
+-- Extras: 
 
 -- Calculate fare
 SET @pcnt = 1;
