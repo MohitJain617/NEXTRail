@@ -13,6 +13,8 @@ import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 import { ERROR, INFO } from "./AlertTypes";
 import Test from "./Test";
+import Review from "./Review";
+import TicketReceipt from "./TicketReceipt";
 
 function HomePage() {
   const defaultUser = "Stranger";
@@ -179,6 +181,7 @@ function HomePage() {
         />
         <Route path="/payment" element={<PayementPage />} />
         <Route path="/bookings" element={<BookingPage isAuth={isAuth} />} />
+        <Route path="/receipt" element={<TicketReceipt />} />
       </Routes>
     </div>
   );

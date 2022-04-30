@@ -18,4 +18,5 @@ urlpatterns = [
     path('bookings/', index),
     path('past/',index),
     path('upcoming/',index),
+    path('receipt/',index),
 ]

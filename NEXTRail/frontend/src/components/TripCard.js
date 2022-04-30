@@ -4,11 +4,30 @@ import TrainIcon from '@mui/icons-material/Train';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PassengerDetailsTicket from './PassengerDetailsTicket.js'
 import "../static/css/TripCard.css"
+import { useNavigate } from "react-router-dom";
 
 export default function TripCard(props) {
     const data = props.data
+    const navigate = useNavigate();
+
+    function popup(){
+        const receipt = {
+            train_name: data["train_name"],
+            pcount: data["passengers"].length,
+            fare: data["fare"],
+            src: data["boarding_from"],
+            dest: data["going_to"],
+            dod: data["srctime"].substr(0,10),
+            doa: data["desttime"].substr(0,10),
+            pnr: data["pnr"],
+            cancel: props.cancel
+        }
+        // console.log(receipt)
+        navigate("/receipt",{state:{data:receipt}})
+    }
+
     return (
-        <div className="zoom" style={{marginLeft: "10%", marginRight: "10%", marginTop: "25px"}}>
+        <div className="zoom" style={{marginLeft: "10%", marginRight: "10%", marginTop: "25px"}} onClick={popup}>
             <Card sx={{ maxWidth: 200 }}>
                 {/* <center><TrainIcon  align = "center"  fontSize = "large" style = {{width:60, height:60, color:"#606060", marginTop : "10px"}}></TrainIcon></center> */}
                 <CardContent>

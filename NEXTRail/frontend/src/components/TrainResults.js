@@ -18,7 +18,6 @@ import {
   Box,
   TextField,
 } from "@material-ui/core";
-import TripCard from "./TripCard";
 import TicketClassButton from "./TicketClassButton.js";
 
 import TrainCardAvailability from "./TrainAvailabilityCard";

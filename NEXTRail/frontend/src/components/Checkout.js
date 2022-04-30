@@ -165,7 +165,7 @@ export default function Checkout(props) {
                     onClick={handleNext}
                     sx={{ mt: 3, ml: 1 }}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                    {activeStep === steps.length - 1 ? 'Book Ticket' : 'Next'}
                   </Button>
                 </Box>
               </React.Fragment>

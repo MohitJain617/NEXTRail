@@ -4,14 +4,17 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
+import { useLocation } from 'react-router-dom';
 
 
 export default function Review(props) {
-      const products = [
+  const data = props.data;
+
+  const products = [
         {
-          name: props.data.train_name,
-          desc: props.data.pcount.toString().concat(' Passengers'),
-          price: '₹ '.concat(props.data.fare),
+          name: data.train_name,
+          desc: data.pcount.toString().concat(' Passengers'),
+          price: '₹ '.concat(data.fare),
         }
       ];
       
@@ -24,6 +27,7 @@ export default function Review(props) {
       const paymentsUpi = [
         { name: 'UPI ID', detail: 'basuabhik@oksbi' },
       ];
+      console.log(data)
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -38,16 +42,16 @@ export default function Review(props) {
         ))}
 
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Departure" secondary={props.data.dod}/>
+          <ListItemText primary="Departure" secondary={data.dod}/>
           <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
-            {props.data.src}
+            {data.src}
           </Typography>
         </ListItem>
 
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Arrival" secondary={props.data.doa}/>
+          <ListItemText primary="Arrival" secondary={data.doa}/>
           <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
-          {props.data.dest}
+          {data.dest}
           </Typography>
         </ListItem>
       </List>
