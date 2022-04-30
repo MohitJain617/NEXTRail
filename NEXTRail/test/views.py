@@ -652,84 +652,16 @@ class CancelTickets(APIView):
 	            AND W.trip_no = %s
 	            AND W.week_no = %s
                 AND W.class_type = %s
-            
-	            AND NOT EXISTS (
-		            SELECT * 
-		            FROM waiting_list as W2
-		            WHERE W.train_no = W2.train_no
-		            AND W.trip_no = W2.trip_no
-		            AND W.class_type = W2.class_type
-		            AND ((W.priority > W2.priority) OR ((W.priority = W2.priority) AND (W.pid > W2.pid)) )
-            
-		            AND(
-			            (
-				            (SELECT dist FROM time_table as TT1 
-				            WHERE TT1.train_no = W2.train_no 
-				            AND TT1.st_code = %s) 
-				            <=
-				            (SELECT dist FROM time_table as TT2 
-				            WHERE TT2.train_no = W2.train_no 
-				            AND TT2.st_code = W2.boarding_from)
-			            ) 
-			            AND
-			            (
-				            (SELECT dist FROM time_table as TT1 
-				            WHERE TT1.train_no = W2.train_no 
-				            AND TT1.st_code = %s) 
-				            >=
-				            (SELECT dist FROM time_table as TT2 
-				            WHERE TT2.train_no = W2.train_no 
-				            AND TT2.st_code = W2.going_to)
-			            )
-		            )
-		            AND NOT(
-			            (
-				            (SELECT dist FROM time_table as TT1 
-				            WHERE TT1.train_no = W2.train_no 
-				            AND TT1.st_code = W2.going_to) 
-				            <=
-				            (SELECT dist FROM time_table as TT2 
-				            WHERE TT2.train_no =W.train_no 
-				            AND TT2.st_code = W.boarding_from)
-			            ) 
-			            OR
-			            (
-				            (SELECT dist FROM time_table as TT1 
-				            WHERE TT1.train_no = W2.train_no 
-				            AND TT1.st_code = W2.boarding_from) 
-				            >=
-				            (SELECT dist FROM time_table as TT2 
-				            WHERE TT2.train_no = W.train_no 
-				            AND TT2.st_code = W.going_to)
-			            )
-		            )
-	            )
-	            AND(
-		            (
-			            (SELECT dist FROM time_table as TT1 
-			            WHERE TT1.train_no = W.train_no 
-			            AND TT1.st_code = %s) 
-			            <=
-			            (SELECT dist FROM time_table as TT2 
-			            WHERE TT2.train_no = W.train_no 
-			            AND TT2.st_code = W.boarding_from)
-		            ) 
-		            AND
-		            (
-			            (SELECT dist FROM time_table as TT1 
-			            WHERE TT1.train_no = W.train_no 
-			            AND TT1.st_code = %s) 
-			            >=
-			            (SELECT dist FROM time_table as TT2 
-			            WHERE TT2.train_no = W.train_no 
-			            AND TT2.st_code = W.going_to)
-		            )
-	            )
+                order by W.priority
 	            ;
             """
         bookPassenger = """INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
             (%s, %s, %s, %s, %s, %s,%s)"""
-            
+        
+        # delete from reserve
+        with connection.cursor() as cursor:
+            cursor.execute("delete from reserve where pnr = %s",[pnr])
+
         for person in passengers:
             # cancel this person's status
             class_type = person["class_type"]
@@ -737,20 +669,22 @@ class CancelTickets(APIView):
             with connection.cursor() as cursor:
                 cursor.execute("update passenger set stat='CAN' where pid = %s", [person["pid"]])
 
-            #update waiting list
-            updatePassengers = BackEndQuerier.cursor_querier(queryWLPassengers,[trainNo,tripno,weekno,class_type,src,dest,src,dest])
-            # remove these from the passengers and add them again
-            for person2 in updatePassengers:
-                details = BackEndQuerier.cursor_querier("select * from passenger where pid = %s",[person2["pid"]])[0]
-                #store fare before
-                fare = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[person2["pnr"]])[0]["fare"]
-                with connection.cursor() as cursor:
-                    cursor.execute("delete from passenger where pid = %s",[person2["pid"]])
-                #add it again and update fare
-                with connection.cursor() as cursor:
-                    cursor.execute(bookPassenger, [details["pid"],details["pname"],details["gender"],details["age"],details["stat"],details["meal_option"],details["class_type"]])
-                    cursor.execute("update ticket set fare = %s where pnr = %s",[fare,details["pnr"]])
-                
+        #update waiting list
+        updatePassengers = BackEndQuerier.cursor_querier(queryWLPassengers,[trainNo,tripno,weekno,class_type])
+        # remove these from the passengers and add them again
+        for person2 in updatePassengers:
+            details = BackEndQuerier.cursor_querier("select * from passenger where pid = %s",[person2["pid"]])[0]
+            #store fare before
+            fare = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[person2["pnr"]])[0]["fare"]
+            # delete from passenger
+            with connection.cursor() as cursor:
+                cursor.execute("delete from passenger where pid = %s",[person2["pid"]])
+
+            #add it again and update fare
+            with connection.cursor() as cursor:
+                cursor.execute(bookPassenger, [details["pnr"],details["pname"],details["gender"],details["age"],details["stat"],details["meal_option"],details["class_type"]])
+                cursor.execute("update ticket set fare = %s where pnr = %s",[fare,details["pnr"]])
+            
             
 
         return Response({"message":"Ticket Cancelled Successfully!"},status=status.HTTP_200_OK)
