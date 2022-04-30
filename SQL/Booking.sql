@@ -1,6 +1,6 @@
 use reservation_system;
 SET SQL_SAFE_UPDATES = 0;
-
+SET collation_connection = 'utf8_general_ci';
 -- while booking new tickets, the tables affected are :
 -- reserve(this is dynamic, changes if cancelled), ticket, passenger, receipt 
 

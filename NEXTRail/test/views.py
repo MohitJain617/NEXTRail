@@ -268,7 +268,7 @@ class SeatAvailibility(APIView):
         querySrcDayNo = """select day_no from time_table where train_no=%s and st_code=%s"""
         #calculation
         dayNo = BackEndQuerier.cursor_querier(querySrcDayNo,[trainNo,src])[0]["day_no"]
-        tripNo = DateFunctions.getDayNo(doj) - 1 + dayNo
+        tripNo = DateFunctions.getDayNo(doj) + 1 - dayNo
         if(tripNo < 1):
             tripNo = tripNo + 7
         
@@ -494,7 +494,7 @@ class TicketsView(APIView):
 class PnrView(APIView):
     def get(self, request,format=None):
         queryPnrTicket = """select * from ticket_view 
-         where T.pnr = %s"""
+         where pnr = %s"""
 
         pnr = request.GET.get('pnr')
 
@@ -571,6 +571,7 @@ class BookTickets(APIView):
         src = request.data.get('src')
         dest = request.data.get('dest')
         doj = request.data.get('doj')
+        print(doj)
         username = request.data.get('username')
         pcount = request.data.get("pcount")
         passengers = request.data.get('pass') #pname, age, gender, meal
@@ -582,20 +583,24 @@ class BookTickets(APIView):
             if(passengers[i]["meal"] == "none"):
                 passengers[i]["meal"] = "none"
 
-        print(passengers)
+        print(request.data)
 
         bookingMethod = passengers[0]["payment"]
 
         querySrcDayNo = """select day_no from time_table where train_no=%s and st_code=%s"""
         #calculation
         dayNo = BackEndQuerier.cursor_querier(querySrcDayNo,[trainNo,src])[0]["day_no"]
-        tripNo = DateFunctions.getDayNo(doj) - 1 + dayNo
+        tripNo = DateFunctions.getDayNo(doj) + 1 - dayNo
 
+        print("dayNo: ",dayNo)
+        print("tripNo: ",tripNo)
 
         if(tripNo < 1):
             tripNo = tripNo + 7
         
         weekNo = DateFunctions.getWeekNo(doj)
+
+        print("weekNo: ",weekNo)
         if(tripNo + dayNo - 1 > 7):
             weekNo = weekNo - 1
 
@@ -624,7 +629,7 @@ class BookTickets(APIView):
                 cursor.execute(bookPassenger,[pnr,passenger["name"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
 
         if(booked == True):
-            return Response(status=status.HTTP_200_OK)
+            return Response({"message":"Ticket Booked Successfully!"},status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -632,7 +637,7 @@ class CancelTickets(APIView):
     def post(self, request,format=None):
         pnr = request.data.get('pnr')
         ticketq = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[pnr])[0]
-        trainInfo = BackEndQuerier.cursor_querier("select * from train where train_no = %s",trainInfo["train_no"])[0]
+        trainInfo = BackEndQuerier.cursor_querier("select * from train where train_no = %s",ticketq["train_no"])[0]
 
         trainNo = trainInfo["train_no"]
         tripno = ticketq["trip_no"]

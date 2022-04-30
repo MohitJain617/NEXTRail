@@ -16,7 +16,8 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm.js';
 import Review from './Review';
 import {Typography, AppBar,MenuItem, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container, Button, Box, TextField} from "@material-ui/core";
-
+import {SUCCESS, ERROR} from "./AlertTypes";
+import { useNavigate } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -36,6 +37,7 @@ const steps = ['Passenger Details', 'Payment details', 'Review your Booking'];
 const theme = createTheme();
 
 export default function Checkout(props) {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
   const pass = [
     {
@@ -95,7 +97,7 @@ export default function Checkout(props) {
         throw new Error('Unknown step');
     }
   }
-  const handleNext = () => {
+  function handleNext() {
     if(activeStep === steps.length-1){
       rqstParam["class_type"] = props.data.classType
       rqstParam["train_no"] = props.data.train_no
@@ -103,8 +105,6 @@ export default function Checkout(props) {
       rqstParam["dest"] = props.data.dest
       rqstParam["doj"] = props.data.dod
       rqstParam["username"] = localStorage.getItem("user")
-      console.log("BOOK TICKET")
-      console.log(rqstParam)
       // fetch request
       
       const requestOptions = {
@@ -118,8 +118,13 @@ export default function Checkout(props) {
           if (!response.ok) {
             return Promise.reject(data.error);
           }
+          else{
+            props.sendAlert("Ticket Booked!", SUCCESS);
+            navigate("/");
+          }
         })
         .catch((error) => {
+          console.log("ERROR",error)
           props.sendAlert("Cannot Book Tickets", ERROR);
         });
       }

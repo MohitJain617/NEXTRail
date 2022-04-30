@@ -27,7 +27,6 @@ export default function Review(props) {
       const paymentsUpi = [
         { name: 'UPI ID', detail: 'basuabhik@oksbi' },
       ];
-      console.log(data)
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
