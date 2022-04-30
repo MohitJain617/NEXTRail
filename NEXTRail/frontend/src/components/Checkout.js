@@ -33,31 +33,84 @@ function Copyright() {
 
 const steps = ['Passenger Details', 'Payment details', 'Review your Booking'];
 
-
 const theme = createTheme();
 
 export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
-  
+  const pass = [
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    },
+    {
+      name: "",
+      age: 0,
+      gender: 0,
+      meal: "none",
+      payment: 0,
+    }
+  ]
+  const [rqstParam,setRqstParam] = React.useState({
+    pcount: props.data.pcount,
+    pass: pass,
+  });
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <AddressForm data={props.data} />;
-      case 1:
-        return <PaymentForm />;
+        return <AddressForm data={props.data} pass={pass}/>;
       case 2:
-        return <Review />;
+        return <Review data={props.data}/>;
       default:
         throw new Error('Unknown step');
     }
   }
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if(activeStep === steps.length-1){
+      rqstParam["class_type"] = props.data.classType
+      rqstParam["train_no"] = props.data.train_no
+      rqstParam["src"] = props.data.src
+      rqstParam["dest"] = props.data.dest
+      rqstParam["doj"] = props.data.dod
+      rqstParam["username"] = localStorage.getItem("user")
+      console.log("BOOK TICKET")
+      console.log(rqstParam)
+    }
+    else{
+      setActiveStep(activeStep + 2);
+    }
   };
   
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -90,12 +143,6 @@ export default function Checkout(props) {
               <React.Fragment>
                 {getStepContent(activeStep)}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: "20px"}}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                      Back
-                    </Button>
-                  )}
-
                   <Button
                     variant="contained"
                     onClick={handleNext}

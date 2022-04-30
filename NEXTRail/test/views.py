@@ -110,7 +110,7 @@ class TrainDetailView(APIView):
         queryset = BackEndQuerier.cursor_querier(query,params)
         queryClasses = """select distinct class_type as class_type from struct where train_no = %s;"""
         queryStationTime = """select arrival,departure,day_no,dist,st_code from time_table where train_no = %s and st_code=%s;"""
-        queryTrainName = """select train_name from train where id = %s;"""
+        queryTrainName = """select train_name,pantry_avl from train where id = %s;"""
         queryTrips = """select trip_no from sched where train_no = %s;"""
         
         # appending required values
@@ -118,7 +118,9 @@ class TrainDetailView(APIView):
             queryset[i]["pcount"] = pcnt
             #train name
             currId = queryset[i]["train_no"]
-            queryset[i]["train_name"] = BackEndQuerier.cursor_querier(queryTrainName,[currId])[0]["train_name"]
+            train_query = BackEndQuerier.cursor_querier(queryTrainName,[currId])[0]
+            queryset[i]["train_name"] =train_query["train_name"]
+            queryset[i]["pantry_avl"] =train_query["pantry_avl"]
 
             # classes in this train:
             varclasses = BackEndQuerier.cursor_querier(queryClasses,[currId])

@@ -25,27 +25,37 @@ import TrainCardAvailability from "./TrainAvailabilityCard";
 import "../static/css/TripCard.css";
 import { ERROR } from "./AlertTypes";
 import { useNavigate } from "react-router-dom";
+import { getFormLabelUtilityClasses } from "@mui/material";
 
 const TrainResults = (props) => {
   const data = props.data;
   const navigate = useNavigate();
   const [classType, setClassType] = React.useState("");
   const [classDetails, setClassDetails] = React.useState(data.class_types);
+
+  function getfare(code){
+    const item = classDetails.find(({class_type}) => class_type === code);
+    return item.fare;
+  }
+
   function bookTicket() {
     if (classType === "") {
       props.sendAlert("Please Select a Class!", ERROR);
     } else if (localStorage.getItem("isAuth") === "false") {
       navigate("/login");
     } else {
-		console.log(props.data)
       navigate("/payment", { state: { 
 		  classType: classType,
 		  train_no: data.train_no,
+      train_name: data.train_name,
 		  src: data.src.st_code,
-		  doj: data.src.date.substr(0,10),
+		  dod: data.src.date.substr(0,10),
 		  dest: data.dest.st_code,
+      doa: data.dest.date.substr(0,10),
 		  user: localStorage.getItem("user"),
-		  pcount: data.pcount
+		  pcount: data.pcount,
+		  pantry: data.pantry_avl,
+      fare: getfare(classType)
 	 } });
     }
   }
