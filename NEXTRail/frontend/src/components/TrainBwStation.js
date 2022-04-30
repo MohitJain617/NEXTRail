@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
-	Typography,
-	Grid,
-	Container,
-	Button,
-	Box,
-	TextField,
+  Typography,
+  Grid,
+  Container,
+  Button,
+  Box,
+  TextField,
 } from "@material-ui/core";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -13,8 +13,8 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import StnAutoComplete from "./StnAutoComplete";
 import TrainResults from "./TrainResults.js";
 import { ERROR, WARNING } from "./AlertTypes";
-import trainimg from "../static/img/train2.svg";
 import "../static/css/Transitions.css";
+import BgTrain from "./BgTrain";
 //Fix calendar size
 
 function TrainBwStation(props) {
@@ -79,7 +79,6 @@ function TrainBwStation(props) {
   const [data, setData] = React.useState("");
   const [moveUp, setMoveUp] = React.useState(0);
 
-
 	const [value, setValue] = React.useState(new Date());
 	const [stnList, setStnList] = React.useState([]);
 	const [rqstParam, setRqstParam] = React.useState({
@@ -91,22 +90,14 @@ function TrainBwStation(props) {
 	});
 	const [datePickerOpen, setDatePickerOpen] = React.useState(false);
 
-	function getSrc(e, val) {
-		if (val === null) {
-			rqstParam.src = null;
-		} else {
-			rqstParam.src = val.st_code;
-		}
-	}
+  function getDest(e, val) {
+    if (val === null) {
+      rqstParam.dest = null;
+    } else {
+      rqstParam.dest = val.st_code;
+    }
+  }
 
-	function getDest(e, val) {
-		if (val === null) {
-			rqstParam.dest = null;
-		} else {
-			rqstParam.dest = val.st_code;
-		}
-	}
-  
   function searchTrain() {
 		rqstParam.doj = value.toLocaleDateString("en-CA");
 		if (rqstParam.src === null || rqstParam.dest === null) {
@@ -150,13 +141,13 @@ function TrainBwStation(props) {
   useEffect(() => {
     getStns();
   }, []);
-  
-  return (
+
+return (
     <>
       <div>
         <Box className="box" moveDown={moveUp} maxWidth="sm"></Box>
       </div>
-    <div className="search_field" moveUp={moveUp}>
+      <div className="search_field" moveUp={moveUp}>
         <Container
           maxWidth="md"
           style={{
@@ -175,123 +166,127 @@ function TrainBwStation(props) {
             Your Journey starts here
           </Typography>
         </Container>
-      <Container align="center">
-        <div>
-          <Grid container spacing={0} align="center" justifyContent="center">
-            <Grid item xs={0}>
-              <StnAutoComplete
-                label="From"
-                stnList={stnList}
-                handler={getSrc}
-              />
-            </Grid>
-            <Grid item xs={0}>
-              <StnAutoComplete label="To" stnList={stnList} handler={getDest} />
-            </Grid>
-            <Grid item xs={0}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  views={["day"]}
-                  open={datePickerOpen}
-                  onClick={() => setDatePickerOpen(true)}
-                  onClose={() => setDatePickerOpen(false)}
-                  minDate={new Date()}
-                  maxDate={new Date().setMonth(new Date().getMonth() + 3)}
-                  label="Date of Journey"
-                  value={value}
-                  inputFormat="dd/MM/yyyy"
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      style={{ backgroundColor: "#FFFFFF" }}
-                      onKeyDown={(e) => {
-                        if (e.code !== "Tab" && !e.ctrlKey) {
-                          e.preventDefault();
-                        }
-                      }}
-                      variant="outlined"
-                      {...params}
-                      sx={{ width: "50%" }}
-                      value={value}
-                      onClick={() => setDatePickerOpen(true)}
-                    />
-                  )}
+        <Container align="center">
+          <div>
+            <Grid container spacing={0} align="center" justifyContent="center">
+              <Grid item xs={0}>
+                <StnAutoComplete
+                  label="From"
+                  stnList={stnList}
+                  handler={getSrc}
                 />
-              </LocalizationProvider>
+              </Grid>
+              <Grid item xs={0}>
+                <StnAutoComplete
+                  label="To"
+                  stnList={stnList}
+                  handler={getDest}
+                />
+              </Grid>
+              <Grid item xs={0}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    views={["day"]}
+                    open={datePickerOpen}
+                    onClick={() => setDatePickerOpen(true)}
+                    onClose={() => setDatePickerOpen(false)}
+                    minDate={new Date()}
+                    maxDate={new Date().setMonth(new Date().getMonth() + 3)}
+                    label="Date of Journey"
+                    value={value}
+                    inputFormat="dd/MM/yyyy"
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        style={{ backgroundColor: "#FFFFFF" }}
+                        onKeyDown={(e) => {
+                          if (e.code !== "Tab" && !e.ctrlKey) {
+                            e.preventDefault();
+                          }
+                        }}
+                        variant="outlined"
+                        {...params}
+                        sx={{ width: "50%" }}
+                        value={value}
+                        onClick={() => setDatePickerOpen(true)}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={0}>
+                <TextField
+                  id="outlined-select-class-type-native"
+                  select
+                  variant="outlined"
+                  label="Class Type"
+                  style={{ backgroundColor: "#FFFFFF" }}
+                  onChange={(e) => {
+                    rqstParam.classType = classes[e.target.value].code;
+                  }}
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  {classes.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={0}>
+                <TextField
+                  select
+                  variant="outlined"
+                  label="Passengers"
+                  style={{ backgroundColor: "#FFFFFF" }}
+                  onChange={(e) => {
+                    rqstParam.pass = passes[e.target.value].value+1;
+                  }}
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  {passes.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={0}>
+                <Button
+                  style={{
+                    backgroundColor: "#DC532D",
+                    color: "#FFFFFF",
+                    width: "88px",
+                    height: "55px",
+                    fontSize: "14px",
+                  }}
+                  variant="contained"
+                  onClick={searchTrain}
+                >
+                  Search
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={0}>
-              <TextField
-                id="outlined-select-class-type-native"
-                select
-                variant="outlined"
-                label="Class Type"
-                style={{ backgroundColor: "#FFFFFF" }}
-                onChange={(e) => {
-                  rqstParam.classType = classes[e.target.value].code;
-                }}
-                SelectProps={{
-                  native: true,
-                }}
-              >
-                {classes.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={0}>
-              <TextField
-                select
-                variant="outlined"
-                label="Passengers"
-                style={{ backgroundColor: "#FFFFFF" }}
-                onChange={(e) => {
-                  rqstParam.pass = passes[e.target.value].value+1;
-                }}
-                SelectProps={{
-                  native: true,
-                }}
-              >
-                {passes.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={0}>
-              <Button
-                style={{
-                  backgroundColor: "#DC532D",
-                  color: "#FFFFFF",
-                  width: "88px",
-                  height: "55px",
-                  fontSize: "14px",
-                }}
-                variant="contained"
-                onClick={searchTrain}
-              >
-                Search
-              </Button>
-            </Grid>
-          </Grid>
-        </div>
-      </Container>
-    <div
+          </div>
+        </Container>
+        <div
           style={{ marginTop: "50px" }}
           className="search_result"
           fadeIn={fadeIn}
         >
-    {result && data.map((val, index)=>(<TrainResults data={val} classes={classes}/>))}
-    </div>
-    </div>
-
-			<div>
-				<img src={trainimg} alt="trainimg" style={{width:"100%", position:"fixed"}}/>
-			</div>
+          {result &&
+            data.map((val, index) => (
+              <TrainResults data={val} classes={classes} />
+            ))}
+        </div>
+      </div>
+      <BgTrain />
     </>
   );
 }
