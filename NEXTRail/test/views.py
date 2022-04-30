@@ -11,6 +11,7 @@ from django.db import connection
 # Create your views here.
 
 from datetime import datetime,timedelta
+import random
 class DateFunctions():
 
     def getDayNo(doj):
@@ -42,6 +43,18 @@ class DateFunctions():
         timediff = timediff.replace(",","")
         return timediff
         
+
+def generatePnr():
+    while(True):
+        pnr = ""
+        for i in range(10):
+            pnr += str(random.randint(0,9))
+
+        temp =BackEndQuerier.cursor_querier("select distinct pnr from ticket where pnr = %s",[pnr])
+        if(len(temp) == 0):
+            break
+
+    return pnr
 
 class BackEndQuerier():
 
@@ -135,7 +148,7 @@ class TrainDetailView(APIView):
             varString = varString[:-1]
             queryset[i]["trip_nos"] = varString
 
-        print(queryset)
+        # print(queryset)
 
         if(len(queryset) >= 1):
             return Response(queryset,status=status.HTTP_200_OK)
@@ -188,7 +201,6 @@ class TrainSeatsView(APIView):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         train_no = request.data.get('id')
-        print(train_no)
         # train_no = '22210'
         query = """SELECT S.train_no,
          S.class_type as coach, SN2.num as coach_no, SN.num as seat_no FROM struct AS S,  
@@ -234,8 +246,8 @@ class RegisterUserView(APIView):
                 user.first_name = first_name
                 user.last_name = last_name
                 user.save()
-                print(user)
-                print(user_name,email,password,sep='\n')
+                # print(user)
+                # print(user_name,email,password,sep='\n')
                 return Response({"success":"User Registered"},status=status.HTTP_200_OK)
             return Response({"error":"Email in Use"},status=status.HTTP_409_CONFLICT)
 
@@ -545,5 +557,53 @@ class PnrView(APIView):
         if(len(queryset) >= 1):
             queryset = queryset[0]
             return Response(queryset,status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+class BookTickets(APIView):
+    def post(self, request,format=None):
+
+        class_type = request.data.get('class_type')
+        trainNo = request.data.get('train_no')
+        src = request.data.get('src')
+        dest = request.data.get('dest')
+        doj = request.data.get('doj')
+        username = request.data.get('username')
+        passengers = request.data.get('passengers') #pname, age, gender, meal
+
+        querySrcDayNo = """select day_no from time_table where train_no=%s and st_code=%s"""
+        #calculation
+        dayNo = BackEndQuerier.cursor_querier(querySrcDayNo,[trainNo,src])[0]["day_no"]
+        tripNo = DateFunctions.getDayNo(doj) - 1 + dayNo
+
+
+        if(tripNo < 1):
+            tripNo = tripNo + 7
+        
+        weekNo = DateFunctions.getWeekNo(doj)
+        if(tripNo + dayNo - 1 > 7):
+            weekNo = weekNo - 1
+
+        pnr = generatePnr()
+        bookTicket = """ insert into ticket values
+                    (%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+
+        # really book ticket
+        BackEndQuerier(bookTicket,[pnr,username,trainNo,tripNo,weekNo,src,dest,0,"details"])
+        booked = False
+        if(len(BackEndQuerier("select * from ticket where pnr = %s"),[pnr]) >= 1):
+            booked = True
+
+        # book passengers
+        bookPassenger = """INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VALUES
+            (%s, %s, %s, %s, %s, %s,%s)"""
+
+        for passenger in passengers:
+            BackEndQuerier(bookPassenger,[pnr,passenger["pname"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
+
+        if(booked == True):
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
