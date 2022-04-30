@@ -287,7 +287,7 @@ function TrainBwStation(props) {
     </div>
 
 			<div>
-				<img src={trainimg} alt="trainimg" style={{width:"100%", position:"absolute"}}/>
+				<img src={trainimg} alt="trainimg" style={{width:"100%", position:"fixed"}}/>
 			</div>
     </>
   );
