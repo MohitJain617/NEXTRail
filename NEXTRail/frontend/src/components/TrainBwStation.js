@@ -66,12 +66,12 @@ function TrainBwStation(props) {
 		},
 	  ];
 	const passes = [
-    { label: "1 Passenger", code: 1},
-    { label: "2 Passengers", code: 2},
-    { label: "3 Passengers", code: 3},
-    { label: "4 Passengers", code: 4},
-    { label: "5 Passengers", code: 5},
-    { label: "6 Passengers", code: 6},
+    { value: 0, label: "1 Passenger"},
+    { value: 1, label: "2 Passengers"},
+    { value: 2, label: "3 Passengers"},
+    { value: 3, label: "4 Passengers"},
+    { value: 4, label: "5 Passengers"},
+    { value: 5, label: "6 Passengers"},
   ]; 
   
   const [result, setResult] = React.useState(false);
@@ -84,6 +84,7 @@ function TrainBwStation(props) {
 	const [stnList, setStnList] = React.useState([]);
 	const [rqstParam, setRqstParam] = React.useState({
 		classType: "",
+    pass: 1,
 		dest: null,
 		src: null,
 		doj: null,
@@ -113,6 +114,7 @@ function TrainBwStation(props) {
 		} else if (rqstParam.src == rqstParam.dest) {
 			props.sendAlert("Source and Destination cannot be the same!", WARNING);
 		} else {
+      // console.log("GAY",rqstParam)
 			setFadeIn(0);
 			const requestOptions = {
 				method: "POST",
@@ -131,6 +133,7 @@ function TrainBwStation(props) {
 				}
 			})
 				.catch((error) => {
+          console.error()
 					props.sendAlert("No Trains Found!", ERROR)
 				});
 		}
@@ -246,7 +249,7 @@ function TrainBwStation(props) {
                 label="Passengers"
                 style={{ backgroundColor: "#FFFFFF" }}
                 onChange={(e) => {
-                  rqstParam.pass = passes[e.target.value].code;
+                  rqstParam.pass = passes[e.target.value].value+1;
                 }}
                 SelectProps={{
                   native: true,

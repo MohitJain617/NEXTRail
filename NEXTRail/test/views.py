@@ -84,6 +84,7 @@ class TrainDetailView(APIView):
         doj = request.data.get('doj')
         doja = DateFunctions.getDayNo(doj)
         srcdate = datetime.strptime(doj,'%Y-%m-%d')
+        pcnt = request.data.get('pass')
         #Write your queries here
 
         query = """SELECT T.train_no FROM time_table as T NATURAL JOIN sched as S
@@ -114,6 +115,7 @@ class TrainDetailView(APIView):
         
         # appending required values
         for i in range(len(queryset)):
+            queryset[i]["pcount"] = pcnt
             #train name
             currId = queryset[i]["train_no"]
             queryset[i]["train_name"] = BackEndQuerier.cursor_querier(queryTrainName,[currId])[0]["train_name"]
@@ -366,7 +368,10 @@ class SeatAvailibility(APIView):
                 queryset[i]["num"] = 1
         
         for i in range(len(queryset)):
-            queryset[i]["fare"] = BackEndQuerier(queryFare,[pcount,dist,queryset[i]["class_type"],trainNo])[0]["fare"]
+            queryset[i]["fare"] = BackEndQuerier.cursor_querier(queryFare,[int(pcount),int(dist),queryset[i]["class_type"],trainNo])[0]["fare"]
+            queryset[i]["fare"] = int(queryset[i]["fare"])
+        
+        print(queryset)
 
         if(len(queryset) >= 1):
             return Response(queryset,status=status.HTTP_200_OK)

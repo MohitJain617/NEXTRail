@@ -14,7 +14,7 @@ const TrainResults = (props) => {
 		console.log(data,classType)
 	}
 	function getSeatAvailability(){
-		console.log(data);
+		console.log(data)
       	const requestOptions = {
         	method: "POST",
         	headers: { "Content-Type": "application/json" },
@@ -22,7 +22,9 @@ const TrainResults = (props) => {
 				src: data.src.st_code ,
 				dest: data.dest.st_code, 
 				doj: data.src.date.substr(0,10),
-				train_no: data.train_no
+				pcount: data.pcount,
+				dist: data.dist,
+				train_no: data.train_no,
       		}),
       	};
     	fetch("/data/classdetails/", requestOptions).then(async (response) => {
@@ -31,7 +33,6 @@ const TrainResults = (props) => {
           	return Promise.reject(data.error);
         } else  {
         	setClassDetails(data)
-			console.log(data)
         }
       })
       .catch((error) => {
@@ -40,7 +41,7 @@ const TrainResults = (props) => {
 	}
   	useEffect(() => {
 		getSeatAvailability()
-  	}, []);
+  	}, [data]);
 	return (
 		<div className="zoom">
 			<Card sx={{ maxWidth: 200 }}>
@@ -49,7 +50,7 @@ const TrainResults = (props) => {
 					<TrainCardAvailability data={data}/>
 
 					{/* Class Wise Buttons */}
-					<Grid container spacing={2}  alignItems="center" justifyContent="center"  >
+					<Grid container spacing={4}  alignItems="center" justifyContent="center"  >
 						{classDetails.map((val, index)=>(<TicketClassButton trainClass={val} classes={props.classes} selected={classType} setSelected={setClassType}/>))}
 					</Grid>
 

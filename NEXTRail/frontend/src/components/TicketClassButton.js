@@ -23,7 +23,7 @@ function TicketClassButton(props) {
       display: "block",
       textAlign: "left",
       backgroundColor: "#BEE7EA",
-      borderColor: "#FFAD42",
+      borderColor: "#DC532D",
 	  borderWidth: "medium",
     },
     passive: {
@@ -51,11 +51,16 @@ function TicketClassButton(props) {
   const styles = useStyles();
   const classes = props.classes;
   const classType = props.trainClass.class_type;
-  function getName() {
+  
+  function getDetails() {
     const item = classes.find(({ code }) => code === classType);
-    const ret = item.label.concat(" (", item.code, ")");
-    return ret;
+    item['stat'] = props.trainClass.stat;
+    item['num'] = props.trainClass.num;
+    item['fare'] = props.trainClass.fare;
+    return item;
   }
+  const classDetails = getDetails();
+
   function handleSelection() {
     if (props.selected !== classType) {
       props.setSelected(classType);
@@ -80,13 +85,25 @@ function TicketClassButton(props) {
             textTransform: "none",
           }}
         >
-          {getName()}
+          {classDetails.label.concat(' (',classDetails.code,') ')}
         </Typography>
         <Typography
-          className={styles.available}
+          className={classDetails.stat === "AV" ? styles.available : styles.waitList}
         >
           {" "}
-          AVAILABLE{" "}
+          {classDetails.stat === "AV" ? "AVAILABLE : " : "WAITING : "}{" "}{classDetails.num}
+        </Typography>
+        <Typography
+          style={{
+            fontSize: 15,
+            fontWeight: "light",
+            float: "right",
+            clear: "both",
+            marginLeft: 5,
+            textTransform: "none",
+          }}
+        >
+          ₹ {classDetails.fare}
         </Typography>
       </Button>
     </Grid>
