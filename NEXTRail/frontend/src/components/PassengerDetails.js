@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function PassengerDetails() {
+export default function PassengerDetails(props) {
     const gen = [
         { label: "Male", code: 1 },
         { label: "Female", code: 2 },
@@ -20,7 +20,7 @@ export default function PassengerDetails() {
             <Grid item xs={12} sm={12} marginBottom="-30px">
                 {/* add passenger number dynamically */}
                 <Typography variant="h6" gutterBottom align='left'>
-                    Passenger 1
+                    Passenger {props.index}
                 </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>

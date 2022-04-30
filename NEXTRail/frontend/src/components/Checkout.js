@@ -33,28 +33,28 @@ function Copyright() {
 
 const steps = ['Passenger Details', 'Payment details', 'Review your Booking'];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
 
 const theme = createTheme();
 
-export default function Checkout() {
+export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
-
+  
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <AddressForm data={props.data} />;
+      case 1:
+        return <PaymentForm />;
+      case 2:
+        return <Review />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
-
+  
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };

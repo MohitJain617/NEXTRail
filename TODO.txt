@@ -43,9 +43,11 @@ remove booking status, seat type from tickets
 add meal option pass name for tickets 
 
 
-veg non veg
-completed cancelled
-error card not found generic
 runs on
+meal pref pantry avl
+veg non veg
 
 low low low low: redirect on login
+error card not found generic
+completed cancelled
+login register page redirect
