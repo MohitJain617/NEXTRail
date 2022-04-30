@@ -14,19 +14,21 @@ import {
   Paper,
 } from "@material-ui/core";
 import { ThemeProvider } from "@mui/material";
+import { ERROR, SUCCESS } from "./AlertTypes";
 
-export default function TicketReceipt(props) {
+export default function TicketReceipt() {
   const { state } = useLocation();
   const theme = createTheme();
-  const data = state.data;
   const navigate = useNavigate();
+  console.log(state.data)
+
   function handleNext(){
-    console.log("CANCEL TICKET",data.pnr)
+    console.log("CANCEL TICKET",state.data.pnr)
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          pnr:data.pnr,
+          pnr:state.data.pnr,
         }),
       };
       fetch("/data/cancel/", requestOptions)
@@ -37,18 +39,19 @@ export default function TicketReceipt(props) {
           }
           else{
             navigate("/");
+            //  state.data.sendAlert("Ticket Cancelled!",SUCCESS)
           }
         })
         .catch((error) => {
           console.log("ERROR",error)
-          navigate("/");
+          // state.data.sendAlert("Failed to Cancel Ticket!",ERROR)
         });
       }
   const products = [
     {
-      name: data.train_name,
-      desc: data.pcount.toString().concat(" Passengers"),
-      price: "₹ ".concat(data.fare),
+      name: state.data.train_name,
+      desc: state.data.pcount.toString().concat(" Passengers"),
+      price: "₹ ".concat(state.data.fare),
     },
   ];
   return (
@@ -78,20 +81,20 @@ export default function TicketReceipt(props) {
               ))}
 
               <ListItem sx={{ py: 1, px: 0 }}>
-                <ListItemText primary="Departure" secondary={data.dod} />
+                <ListItemText primary="Departure" secondary={state.data.dod} />
                 <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
-                  {data.src}
+                  {state.data.src}
                 </Typography>
               </ListItem>
 
               <ListItem sx={{ py: 1, px: 0 }}>
-                <ListItemText primary="Arrival" secondary={data.doa} />
+                <ListItemText primary="Arrival" secondary={state.data.doa} />
                 <Typography variant="subtitle1" sx={{ fontWeight: 400 }}>
-                  {data.dest}
+                  {state.data.dest}
                 </Typography>
               </ListItem>
             </List>
-            {data.cancel && (
+            {state.data.cancel && (
               <Box
                 sx={{
                   display: "flex",

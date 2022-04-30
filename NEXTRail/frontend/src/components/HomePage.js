@@ -180,8 +180,8 @@ function HomePage() {
           }
         />
         <Route path="/payment" element={<PayementPage sendAlert={sendAlert}/>} />
-        <Route path="/bookings" element={<BookingPage isAuth={isAuth} />} />
-        <Route path="/receipt" element={<TicketReceipt sendAlert={sendAlert}/>} />
+        <Route path="/bookings" element={<BookingPage isAuth={isAuth} sendAlert={sendAlert} />} />
+        <Route path="/receipt" element={<TicketReceipt />} />
       </Routes>
     </div>
   );
