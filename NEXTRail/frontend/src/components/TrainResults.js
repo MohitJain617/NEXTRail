@@ -30,16 +30,6 @@ const TrainResults = (props) => {
 								<Typography style={{ color: "#ffffff", fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Book Now</Typography>
 							</Button>
 						</Grid>
-
-						<Grid item>
-							<Button variant="outlined" style={{ display: "block", textAlign: "left", borderRadius: 5 }}>
-								<Typography style={{ fontSize: 20, fontWeight: 'bold', float: "right", clear: "both", textTransform: "none" }}>Seat Availability</Typography>
-							</Button>
-						</Grid>	
-
-						<Grid item>
-							<TextField label="Passengers" variant="outlined"size="small"/>
-						</Grid>	
 					</Grid>
 				</CardContent>
 
