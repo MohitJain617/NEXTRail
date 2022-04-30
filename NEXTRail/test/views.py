@@ -632,7 +632,7 @@ class CancelTickets(APIView):
     def post(self, request,format=None):
         pnr = request.data.get('pnr')
         ticketq = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[pnr])[0]
-        trainInfo = BackEndQuerier.cursor_querier("select * from train where train_no = %s",trainInfo["train_no"])[0]
+        trainInfo = BackEndQuerier.cursor_querier("select * from train where train_no = %s",ticketq["train_no"])[0]
 
         trainNo = trainInfo["train_no"]
         tripno = ticketq["trip_no"]
