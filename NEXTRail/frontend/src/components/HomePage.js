@@ -179,7 +179,7 @@ function HomePage() {
             />
           }
         />
-        <Route path="/payment" element={<PayementPage />} />
+        <Route path="/payment" element={<PayementPage sendAlert={sendAlert}/>} />
         <Route path="/bookings" element={<BookingPage isAuth={isAuth} />} />
         <Route path="/receipt" element={<TicketReceipt />} />
       </Routes>

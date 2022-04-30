@@ -7,7 +7,7 @@ export default function PaymentPage(props) {
   const {state} = useLocation();
   return (
     <div>
-        <Checkout marginTop="-500px" data={state}/>
+        <Checkout marginTop="-500px" data={state} sendAlert={props.sendAlert}/>
     </div>
   );
 }; 
