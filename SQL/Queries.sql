@@ -78,14 +78,14 @@ SET @temptrain = '11123';
 -- all the seats given a train
 -- ------------------QUERY-------------------
 SELECT S.train_no, S.class_type as coach, SN2.num as coach_no, SN.num as seat_no
-FROM structure AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
+FROM struct AS S,  class_layout as C, seat_no AS SN2, seat_no as SN
 WHERE S.train_no = @temptrain
 	AND S.class_type = C.class_type
     AND SN2.num <= S.size
 	AND SN.num <= C.capacity
-	ORDER BY (coach_no,seat_no);
+	ORDER BY SN2.num,SN.num;
 -- -------------------------------------------
-    
+   
 
 -- 4)
 -- ------------------SETUP--------------------
@@ -451,3 +451,5 @@ select  @pcnt*(@dist)*(select distinct cost_per_km from class_layout as C where 
 (SELECT DISTINCT FL.additional_cost FROM fare_lookup as FL, train as T WHERE T.id=@trainno AND T.train_type=FL.train_type) as fare;
 
 select * from receipt;
+
+select get_daytime(2730,3);
