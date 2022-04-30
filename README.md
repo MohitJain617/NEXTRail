@@ -80,10 +80,10 @@ Run the queries located in Queries.sql script located at the below path to run t
 <br>
 
 ## <B> Project Report </B> 📜 <br>
-The report of the Project with all the all relevant information like Table Creation, identification of Stake-Holders, etc. 
+The report of the Project with all the all relevant information like Table Creation, identification of Stake-Holders,Triggers, Views, Queries,Grants, Trigers etc. 
 
     Railway-Reservation-System/NEXTRAIL_ProjectReport.pdf
-
+    Railway-Reservation-System/NEXTrail Final Report.pdf
 
 ***
 Made with ❤️ by 
