@@ -4,7 +4,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -15,13 +15,35 @@ import {
 } from "@material-ui/core";
 import { ThemeProvider } from "@mui/material";
 
-export default function TicketReceipt() {
+export default function TicketReceipt(props) {
   const { state } = useLocation();
   const theme = createTheme();
   const data = state.data;
+  const navigate = useNavigate();
   function handleNext(){
     console.log("CANCEL TICKET",data.pnr)
-  }
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pnr:data.pnr,
+        }),
+      };
+      fetch("/data/cancel/", requestOptions)
+        .then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) {
+            return Promise.reject(data.error);
+          }
+          else{
+            navigate("/");
+          }
+        })
+        .catch((error) => {
+          console.log("ERROR",error)
+          navigate("/");
+        });
+      }
   const products = [
     {
       name: data.train_name,

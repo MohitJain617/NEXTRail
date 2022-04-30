@@ -637,9 +637,9 @@ class CancelTickets(APIView):
     def post(self, request,format=None):
         pnr = request.data.get('pnr')
         ticketq = BackEndQuerier.cursor_querier("select * from ticket where pnr = %s",[pnr])[0]
-        trainInfo = BackEndQuerier.cursor_querier("select * from train where train_no = %s",ticketq["train_no"])[0]
+        trainInfo = BackEndQuerier.cursor_querier("select * from train where id = %s",ticketq["train_no"])[0]
 
-        trainNo = trainInfo["train_no"]
+        trainNo = trainInfo["id"]
         tripno = ticketq["trip_no"]
         weekno = ticketq["week_no"]
         src = ticketq["boarding_from"]
@@ -753,14 +753,4 @@ class CancelTickets(APIView):
                 
             
 
-
-        # book passengers
-
-        queryFare = """select  %s*%s*(select distinct cost_per_km from class_layout as C where C.class_type=%s) + 
-            (SELECT DISTINCT FL.additional_cost FROM fare_lookup as FL, train as T WHERE T.id=%s AND T.train_type=FL.train_type) as fare;
-            """
-        for passenger in passengers:
-            BackEndQuerier(bookPassenger,[pnr,passenger["name"],passenger["gender"],passenger["age"],"CNF",passenger["meal"],class_type])
-
-
-        return Response(status=status.HTTP_200_OK)
+        return Response({"message":"Ticket Cancelled Successfully!"},status=status.HTTP_200_OK)
