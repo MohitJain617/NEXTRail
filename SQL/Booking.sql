@@ -110,4 +110,3 @@ INSERT INTO passenger(pnr, pname, gender, age, stat, meal_option, class_type) VA
 ('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
 ('1010101010', 'Sohum', 'Male', 20, 'CNF', null,'A'),
 ('1010101010', 'Abhik', 'Male', 19, 'CNF', null,'A');
-
